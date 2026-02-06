@@ -13,6 +13,7 @@ return [
     'supplier_name',
     'purchase_date',
     'cost_price',
+    'margin',
     'selling_price',
     'currency',
     'quantity_in_stock',
