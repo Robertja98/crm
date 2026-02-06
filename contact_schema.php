@@ -1,0 +1,21 @@
+<?php
+return [
+    'id',
+    'first_name',
+    'last_name',
+    'company',
+    'email',
+    'phone',
+    'address',
+    'city',
+    'province',
+    'postal_code',
+    'country',
+    'notes',
+    'created_at',
+    'last_modified',
+    'is_customer',
+    'tank_number',
+    'delivery_date'
+];
+?>
