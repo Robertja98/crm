@@ -1,0 +1,353 @@
+/* ===============================
+   🧭 NAVBAR STYLES - Updated for clarity and accessibility
+   =============================== */
+.navbar {
+  background-color: #0099A8;
+  padding: 10px 20px;
+}
+.navbar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.navbar li {
+  display: inline;
+}
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+.navbar a.active {
+  background-color: #007c8a;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+.navbar a:hover {
+  background-color: #00b5c0;
+}
+
+.calendar-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  th, td {
+    border: 1px solid #ccc;
+    text-align: center;
+    padding: 20px;
+    vertical-align: top;
+    word-wrap: break-word;
+  }
+
+  th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+  .has-task {
+    background-color: #ffeeba;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .task-popup {
+    display: none;
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    z-index: 100;
+    top: 100%;
+    left: 0;
+    width: 250px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+/* ===============================
+   🎯 GLOBAL VARIABLES & FONT CONTROL
+   =============================== */
+:root {
+  --crm-font-size: 0.85rem;
+  --crm-font-color: #333;
+  --crm-border-color: #ddd;
+  --crm-accent: #0099A8;
+  --crm-bg-light: #f9f9f9;
+  --crm-bg-panel: #fcfcfc;
+}
+body {
+  font-size: var(--crm-font-size);
+  color: var(--crm-font-color);
+  font-family: 'Open Sans', sans-serif;
+  background-color: #fff;
+  margin: 0;
+}
+
+/* ===============================
+   🧑‍💼 LAYOUT CONTAINER
+   =============================== */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
+}
+.page-contacts {
+  font-size: var(--crm-font-size);
+}
+
+/* ===============================
+   📝 CONTACT FORM - 3 COLUMN GRID
+   =============================== */
+.contact-form {
+  margin-bottom: 2rem;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+.form-group {
+  margin-bottom: 15px;
+}
+.contact-form label {
+  font-weight: bold;
+  font-size: var(--crm-font-size);
+}
+.contact-form select,
+.contact-form input,
+.contact-form textarea {
+  font-size: var(--crm-font-size);
+  padding: 6px;
+  border: 1px solid var(--crm-border-color);
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ===============================
+   ⚙️ ACTION BUTTONS
+   =============================== */
+.contact-form button {
+  font-size: var(--crm-font-size);
+  padding: 6px 12px;
+  background-color: var(--crm-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.contact-form button:hover {
+  background-color: #00b5c0;
+}
+.btn-outline {
+  border: 1px solid var(--crm-accent);
+  background: transparent;
+  color: var(--crm-accent);
+  padding: 4px 8px;
+  font-size: 0.85em;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background-color: var(--crm-accent);
+  color: white;
+}
+
+/* ===============================
+   📊 CONTACT TABLE
+   =============================== */
+.contact-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--crm-font-size);
+}
+.contact-table th {
+  background-color: #f3f3f3;
+  text-transform: uppercase;
+  font-weight: 600;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--crm-border-color);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.contact-table td {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--crm-border-color);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.contact-table tr:nth-child(even) td {
+  background-color: var(--crm-bg-light);
+}
+.contact-table tr:hover {
+  background-color: #eef9fc;
+}
+
+/* ===============================
+   🔍 EXPANDABLE DETAIL ROW
+   =============================== */
+.details-row {
+  display: none;
+  background-color: var(--crm-bg-panel);
+  font-size: calc(var(--crm-font-size) - 0.05rem);
+}
+.details-row.expanded {
+  display: table-row;
+}
+.details-row td {
+  padding: 10px;
+}
+
+/* ===============================
+   💬 DISCUSSION MODULE
+   =============================== */
+.discussion-entry {
+  background-color: #eef;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  font-size: var(--crm-font-size);
+  white-space: pre-wrap;
+}
+
+/* ===============================
+   ✅ TASK LIST PANEL
+   =============================== */
+#task-list-panel {
+  background-color: var(--crm-bg-panel);
+  border: 1px solid var(--crm-border-color);
+  border-radius: 6px;
+  padding: 20px;
+  margin-top: 30px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+#task-list-panel h3 {
+  margin-top: 0;
+  color: var(--crm-accent);
+  font-size: 1.1rem;
+}
+
+/* ===============================
+   📋 TASK LIST ITEMS
+   =============================== */
+#task-list {
+  list-style: none;
+  padding: 0;
+  margin: 15px 0;
+}
+#task-list li {
+  padding: 10px;
+  border-bottom: 1px solid var(--crm-border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--crm-font-size);
+}
+#task-list li:last-child {
+  border-bottom: none;
+}
+#task-list li span {
+  flex-grow: 1;
+}
+
+/* ===============================
+   ➕ TASK INPUT & BUTTON
+   =============================== */
+#new-task {
+  width: 70%;
+  padding: 8px;
+  font-size: var(--crm-font-size);
+  border: 1px solid var(--crm-border-color);
+  border-radius: 4px;
+  margin-right: 10px;
+  box-sizing: border-box;
+}
+#task-list-panel button {
+  padding: 8px 14px;
+  font-size: var(--crm-font-size);
+  background-color: var(--crm-accent);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#task-list-panel button:hover {
+  background-color: #00b5c0;
+}
+
+/* ===============================
+   🔧 LABEL OVERRIDES
+   =============================== */
+.contact-form label {
+  color: #333 !important;
+  font-weight: bold !important;
+  font-size: var(--crm-font-size) !important;
+  display: block !important;
+  margin-bottom: 4px !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 100 !important;
+}
+
+
+#letter-output {
+  display: none;
+  margin-top: 20px;
+}
+
+#generated-letter {
+  border: 1px solid #ccc;
+  padding: 15px;
+  background: #f9f9f9;
+}
+
+body {
+  background: #f0f0f0;
+}
+
+
+<style>
+.termination-table {
+    float: right;
+    width: 45%;
+}
+.cancellation-table {
+    width: 45%;
+}
+
+<style>
+.table-container {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+.table-container table:last-child {
+    margin-left: auto; /* pushes termination table to the right */
+}
+</style>
+
+<div class="table-container">
+    <!-- Cancellation Entry Table -->
+    <table>
+        <caption>Cancellation Entry</caption>
+        <!-- rows -->
+    </table>
+
+    <!-- Termination Reason Table -->
+    <table>
+        <caption>Termination Reason Options</caption>
+        <!-- rows -->
+    </table>
+</div>
