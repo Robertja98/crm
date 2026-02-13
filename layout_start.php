@@ -1,4 +1,7 @@
 <?php
+// Initialize authentication
+require_once __DIR__ . '/simple_auth/middleware.php';
+
 $pageTitle = $pageTitle ?? 'CRM';
 $currentPage = basename($_SERVER['SCRIPT_NAME']);
 header('Content-Type: text/html; charset=UTF-8');
