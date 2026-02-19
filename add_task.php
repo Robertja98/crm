@@ -1,5 +1,6 @@
+
 <?php
-require_once 'csv_handler.php';
+require_once 'tasks_mysql.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $title = trim($_POST['title']);
@@ -19,9 +20,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $filename = 'tasks.csv';
-    $newTask = [$title, $due_date, $status, date('Y-m-d H:i:s')];
-    appendCSV($filename, $newTask);
+    $id = uniqid('task_', true);
+    $priority = '';
+    $assigned_to = '';
+    $timestamp = date('Y-m-d H:i:s');
+    $task = [
+        'id' => $id,
+        'title' => $title,
+        'status' => $status,
+        'priority' => $priority,
+        'assigned_to' => $assigned_to,
+        'due_date' => $due_date,
+        'timestamp' => $timestamp
+    ];
+    insert_task_mysql($task);
     header('Location: index.php');
     exit;
 }

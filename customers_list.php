@@ -5,16 +5,20 @@ header('Content-Type: text/html; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
 include_once(__DIR__ . '/layout_start.php');
-include_once(__DIR__ . '/navbar.php');
-require_once __DIR__ . '/csv_handler.php';
+require_once 'db_mysql.php';
 
-$schema = require __DIR__ . '/contact_schema.php';
-$contacts = readCSV('contacts.csv', $schema);
-
-// Filter only customers
-$customers = array_filter($contacts, function($c) {
-    return in_array(strtolower(trim($c['is_customer'] ?? '')), ['yes', 'true', '1']);
-});
+// Load customers from MySQL
+$conn = get_mysql_connection();
+$sql = "SELECT * FROM customers";
+$result = $conn->query($sql);
+$customers = [];
+if ($result) {
+  while ($row = $result->fetch_assoc()) {
+    $customers[] = $row;
+  }
+  $result->free();
+}
+$conn->close();
 ?>
 
 <div class="container">
@@ -23,38 +27,31 @@ $customers = array_filter($contacts, function($c) {
   <table class="table-grid">
     <thead>
       <tr>
+		<th>Company</th>
         <th>First Name</th>
-        <th>Last Name</th>
-        <th>Company</th>
         <th>Email</th>
-        <th>Phone</th>
-        <th>City</th>
-        <th>Last Modified</th>
+        <th>Customer Status</th>
         <th>Actions</th>
       </tr>
     </thead>
     <tbody>
       <?php foreach ($customers as $contact): ?>
         <tr>
-          <td><?= htmlspecialchars($contact['first_name'] ?? '') ?></td>
-          <td><?= htmlspecialchars($contact['last_name'] ?? '') ?></td>
           <td><?= htmlspecialchars($contact['company'] ?? '') ?></td>
+		  <td><?= htmlspecialchars($contact['first_name'] ?? '') ?></td>
           <td><?= htmlspecialchars($contact['email'] ?? '') ?></td>
-          <td><?= htmlspecialchars($contact['phone'] ?? '') ?></td>
-          <td><?= htmlspecialchars($contact['city'] ?? '') ?></td>
-          <td><?= htmlspecialchars($contact['last_modified'] ?? '') ?></td>
+          <td><?= htmlspecialchars($contact['is_customer'] ?? '') ?></td>
           <td>
-            <a href="contact_view.php?id=<?= urlencode($contact['id']) ?>" class="btn-primary">👁 View</a>
+            <a href="customer_view.php?id=<?= urlencode($contact['id']) ?>" class="btn-primary">👁 View</a>
+            <?php
+              $deliveryFile = "{$contact['id']}_deliveries.csv";
+              if (file_exists(__DIR__ . "/$deliveryFile")):
+            ?>
+              <a href="<?= htmlspecialchars($deliveryFile) ?>" class="btn-secondary" target="_blank">📦 Delivery Archive</a>
+            <?php endif; ?>
           </td>
         </tr>
       <?php endforeach; ?>
-    </tbody>
-  </table>
-
-  <div style="margin-top: 20px;">
-    <a href="contact_form.php" class="btn-outline">➕ Add New Contact</a>
-  </div>
-</div>
     </tbody>
   </table>
 

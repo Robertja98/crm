@@ -1,24 +1,10 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require_once 'tasks_pgsql.php';
 
 $title = $_POST['title'] ?? '';
 if (trim($title) === '') {
     echo 'error: empty title';
     exit;
-}
-
-$filename = 'tasks.csv';
-$headers = ['id','title','status','priority','assigned_to','due_date','timestamp'];
-
-if (!file_exists($filename)) {
-    $fp = fopen($filename, 'w');
-    if ($fp === false) {
-        echo 'error: cannot create file';
-        exit;
-    }
-    fputcsv($fp, $headers);
-    fclose($fp);
 }
 
 $id = uniqid('task_', true);
@@ -28,12 +14,18 @@ $assigned_to = '';
 $due_date = '';
 $timestamp = date('Y-m-d H:i:s');
 
-$fp = fopen($filename, 'a');
-if ($fp !== false) {
-    fputcsv($fp, [$id, $title, $status, $priority, $assigned_to, $due_date, $timestamp]);
-    fclose($fp);
+$task = [
+    'id' => $id,
+    'title' => $title,
+    'status' => $status,
+    'priority' => $priority,
+    'assigned_to' => $assigned_to,
+    'due_date' => $due_date,
+    'timestamp' => $timestamp
+];
+if (insert_task_pgsql($task)) {
     echo 'success';
 } else {
-    echo 'error: cannot open file for appending';
+    echo 'error: could not insert task';
 }
 ?>

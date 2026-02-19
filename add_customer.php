@@ -1,159 +1,183 @@
 <?php
-// DEBUG: Show all errors and log to /tmp/add_customer_php_error.log
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-ini_set('log_errors', 1);
-ini_set('error_log', '/tmp/add_customer_php_error.log');
-
 include_once(__DIR__ . '/layout_start.php');
-include_once(__DIR__ . '/navbar.php');
-require_once 'csv_handler.php';
-require_once 'contact_validator.php';
+require_once 'db_mysql.php';
 
-$contactFile = 'contacts.csv';
-$contactSchema = require __DIR__ . '/contact_schema.php';
+$schema = require __DIR__ . '/customer_schema.php';
+$itemFields = require __DIR__ . '/customer_item_config.php';
 $errors = [];
+$success = false;
+$newCustomer = [];
 
-$timestamp = date('Y-m-d H:i:s');
+// Get next customer ID from MySQL
+$conn = get_mysql_connection();
+$result = $conn->query('SELECT MAX(customer_id) AS max_id FROM customers');
+$row = $result ? $result->fetch_assoc() : null;
+$lastId = $row && $row['max_id'] ? intval($row['max_id']) : 0;
+$nextId = str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
 
 // Handle POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $newContact = [
-        'id' => uniqid(),
-        'first_name' => trim($_POST['first_name'] ?? ''),
-        'last_name' => trim($_POST['last_name'] ?? ''),
-        'company' => trim($_POST['company'] ?? ''),
-        'email' => trim($_POST['email'] ?? ''),
-        'phone' => trim($_POST['phone'] ?? ''),
-        'address' => trim($_POST['address'] ?? ''),
-        'city' => trim($_POST['city'] ?? ''),
-        'province' => trim($_POST['province'] ?? ''),
-        'postal_code' => trim($_POST['postal_code'] ?? ''),
-        'country' => trim($_POST['country'] ?? ''),
-        'notes' => trim($_POST['notes'] ?? ''),
-        'created_at' => $timestamp,
-        'last_modified' => $timestamp,
-        'is_customer' => 'yes'
-    ];
-
-    // Fill in any missing schema fields
-    foreach ($contactSchema as $field) {
-        if (!isset($newContact[$field])) {
-            $newContact[$field] = '';
-        }
+  foreach ($schema as $field) {
+    if ($field === 'customer_id') {
+      $newCustomer[$field] = $nextId;
+    } elseif ($field === 'tank_count') {
+      $val = trim($_POST[$field] ?? '');
+      $newCustomer[$field] = ($val === '' || !is_numeric($val)) ? null : (int)$val;
+    } elseif ($field === 'last_delivery') {
+      $val = trim($_POST[$field] ?? '');
+      // Accept only valid YYYY-MM-DD or set to null
+      if ($val === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $val)) {
+        $newCustomer[$field] = null;
+      } else {
+        $newCustomer[$field] = $val;
+      }
+    } elseif ($field === 'last_modified') {
+      $val = trim($_POST[$field] ?? '');
+      // Accept only valid YYYY-MM-DD HH:MM:SS or set to null
+      if ($val === '' || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $val)) {
+        $newCustomer[$field] = null;
+      } else {
+        $newCustomer[$field] = $val;
+      }
+    } else {
+      $newCustomer[$field] = trim($_POST[$field] ?? '');
     }
+  }
 
-    // Validate contact
-    $validationErrors = validateContact($newContact);
-    if (!empty($validationErrors)) {
-        foreach ($validationErrors as $field => $msg) {
-            $errors[] = "$field: $msg";
-        }
+  // Validate main fields
+  if ($newCustomer['contact_name'] === '') $errors[] = 'Contact name is required.';
+  if ($newCustomer['address'] === '') $errors[] = 'Address is required.';
+
+  // Parse line items
+  $items = [];
+  if (isset($_POST['items']) && is_array($_POST['items'])) {
+    foreach ($_POST['items'] as $item) {
+      $clean = ['customer_id' => $nextId];
+      foreach ($itemFields as $f) {
+        $clean[$f] = trim($item[$f] ?? '');
+      }
+      $items[] = $clean;
     }
+  }
 
-    // Check for duplicate email
-    if (!empty($newContact['email'])) {
-        $contacts = readCSV($contactFile, $contactSchema);
-        foreach ($contacts as $contact) {
-            if ($contact['email'] === $newContact['email']) {
-                $errors[] = 'A contact with this email already exists.';
-                break;
-            }
-        }
+  if (empty($errors)) {
+    // Insert customer
+    $fieldsStr = implode(", ", $schema);
+    $placeholders = implode(", ", array_fill(0, count($schema), '?'));
+    // Set types: s for string, i for int, d for double
+    $types = '';
+    foreach ($schema as $field) {
+      if ($field === 'tank_count') {
+        $types .= 'i';
+      } else {
+        $types .= 's';
+      }
     }
-
-    if (empty($errors)) {
-        $contacts = readCSV($contactFile, $contactSchema);
-        if (!is_array($contacts)) {
-            $contacts = [];
-        }
-        $contacts[] = $newContact;
-        writeCSV($contactFile, $contacts, $contactSchema);
-
-        // Redirect to the new contact
-        header('Location: contact_view.php?id=' . urlencode($newContact['id']));
-        exit;
+    $stmt = $conn->prepare("INSERT INTO customers ($fieldsStr) VALUES ($placeholders)");
+    $params = array_values($newCustomer);
+    // Convert nulls for tank_count
+    foreach ($schema as $i => $field) {
+      if ($field === 'tank_count' && $params[$i] === null) {
+        $params[$i] = null;
+      }
     }
+    $stmt->bind_param($types, ...$params);
+    if (!$stmt->execute()) {
+      $errors[] = 'Failed to add customer: ' . $stmt->error;
+    } else {
+      // Insert items
+      foreach ($items as $item) {
+        $itemFieldsFull = array_merge(['customer_id'], $itemFields);
+        $fieldsStr2 = implode(", ", $itemFieldsFull);
+        $placeholders2 = implode(", ", array_fill(0, count($itemFieldsFull), '?'));
+        $types2 = str_repeat('s', count($itemFieldsFull));
+        $stmt2 = $conn->prepare("INSERT INTO customer_items ($fieldsStr2) VALUES ($placeholders2)");
+        $stmt2->bind_param($types2, ...array_values($item));
+        if (!$stmt2->execute()) {
+          $errors[] = 'Failed to add item: ' . $stmt2->error;
+        }
+        $stmt2->close();
+      }
+      if (empty($errors)) {
+        $success = true;
+      }
+    }
+    $stmt->close();
+  }
 }
+$conn->close();
 ?>
 
 <div class="container">
   <h2>Add New Customer</h2>
 
-  <?php if (!empty($errors)): ?>
-    <div style="background-color: #ffe6e6; border: 1px solid red; padding: 10px; margin-bottom: 20px; border-radius: 4px;">
-      <strong style="color:red;">❌ Validation Errors:</strong>
-      <ul style="color:red; margin-top: 10px;">
-        <?php foreach ($errors as $e): ?>
-          <li><?= htmlspecialchars($e) ?></li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
+  <?php if ($success): ?>
+    <p style="color:green;">✅ Customer added successfully. ID: <?= $nextId ?></p>
   <?php endif; ?>
 
-  <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($errors)): ?>
-    <div style="background-color: #e6ffe6; border: 1px solid green; padding: 10px; margin-bottom: 20px; border-radius: 4px;">
-      <strong style="color:green;">✅ Customer saved successfully! Redirecting...</strong>
-    </div>
+  <?php if (!empty($errors)): ?>
+    <ul style="color:red;">
+      <?php foreach ($errors as $e): ?>
+        <li><?= htmlspecialchars($e) ?></li>
+      <?php endforeach; ?>
+    </ul>
   <?php endif; ?>
 
   <form method="POST">
     <fieldset style="margin-bottom:20px;">
-      <legend><strong>Customer Details</strong></legend>
+      <legend><strong>Main Customer Info</strong></legend>
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
         <div>
-          <label for="first_name"><strong>First Name:</strong></label><br>
-          <input type="text" name="first_name" id="first_name" value="<?= htmlspecialchars($_POST['first_name'] ?? '') ?>">
+          <label><strong>Customer ID:</strong></label><br>
+          <input type="text" value="<?= $nextId ?>" readonly>
         </div>
-        <div>
-          <label for="last_name"><strong>Last Name:</strong></label><br>
-          <input type="text" name="last_name" id="last_name" value="<?= htmlspecialchars($_POST['last_name'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="company"><strong>Company:</strong></label><br>
-          <input type="text" name="company" id="company" value="<?= htmlspecialchars($_POST['company'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="email"><strong>Email:</strong></label><br>
-          <input type="email" name="email" id="email" value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="phone"><strong>Phone:</strong></label><br>
-          <input type="text" name="phone" id="phone" value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="address"><strong>Address:</strong></label><br>
-          <input type="text" name="address" id="address" value="<?= htmlspecialchars($_POST['address'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="city"><strong>City:</strong></label><br>
-          <input type="text" name="city" id="city" value="<?= htmlspecialchars($_POST['city'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="province"><strong>Province:</strong></label><br>
-          <input type="text" name="province" id="province" value="<?= htmlspecialchars($_POST['province'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="postal_code"><strong>Postal Code:</strong></label><br>
-          <input type="text" name="postal_code" id="postal_code" value="<?= htmlspecialchars($_POST['postal_code'] ?? '') ?>">
-        </div>
-        <div>
-          <label for="country"><strong>Country:</strong></label><br>
-          <input type="text" name="country" id="country" value="<?= htmlspecialchars($_POST['country'] ?? '') ?>">
-        </div>
-        <div style="grid-column: 1 / -1;">
-          <label for="notes"><strong>Notes:</strong></label><br>
-          <textarea name="notes" id="notes" rows="3"><?= htmlspecialchars($_POST['notes'] ?? '') ?></textarea>
-        </div>
+        <?php foreach ($schema as $field): ?>
+          <?php if ($field === 'customer_id') continue; ?>
+          <div>
+            <label for="<?= $field ?>"><strong><?= ucfirst(str_replace('_', ' ', $field)) ?>:</strong></label><br>
+            <input type="text" name="<?= $field ?>" id="<?= $field ?>" value="<?= htmlspecialchars($_POST[$field] ?? '') ?>">
+          </div>
+        <?php endforeach; ?>
       </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><strong>Tank & Delivery Line Items</strong></legend>
+      <div id="lineItems"></div>
+      <button type="button" onclick="addLineItem()" class="btn-outline">➕ Add Line Item</button>
     </fieldset>
 
     <div style="margin-top:20px;">
       <button type="submit" class="btn-outline">💾 Save Customer</button>
-      <a href="customers_list.php" class="btn-outline">⬅ Back to Customer List</a>
     </div>
   </form>
 </div>
+
+<script>
+function addLineItem() {
+  const container = document.getElementById('lineItems');
+  const index = container.children.length;
+  const fields = <?= json_encode($itemFields) ?>;
+  const row = document.createElement('div');
+  row.style.marginBottom = '12px';
+  row.style.border = '1px solid #ccc';
+  row.style.padding = '10px';
+  row.style.borderRadius = '6px';
+  row.style.background = '#f9f9f9';
+
+  let html = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">';
+  fields.forEach(f => {
+    html += `
+      <div>
+        <label><strong>${f.replace(/_/g, ' ')}:</strong></label><br>
+        <input type="text" name="items[${index}][${f}]" />
+      </div>
+    `;
+  });
+  html += '</div>';
+  row.innerHTML = html;
+  container.appendChild(row);
+}
+</script>
 
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

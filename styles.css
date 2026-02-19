@@ -1,3 +1,18 @@
+/* GLOBAL: Remove any top margin/padding from first child of main-content and content-container */
+.main-content > *:first-child,
+.content-container > *:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+/* Remove top margin from first heading/card in .content-container for all pages */
+.content-container > h1:first-child,
+.content-container > h2:first-child,
+.content-container > h3:first-child,
+.content-container > .card:first-child,
+.content-container > .section:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 /* ===============================
    🧭 NAVBAR STYLES - Updated for clarity and accessibility
    =============================== */
@@ -78,7 +93,36 @@
    🎯 GLOBAL VARIABLES & FONT CONTROL
    =============================== */
 :root {
-  --crm-font-size: 0.85rem;
+  --primary-color: #0099A8;
+  --primary-hover: #007c8a;
+  --primary-light: #e6f7f9;
+  --sidebar-bg: #1a1d29;
+  --sidebar-text: #a8adb7;
+  --sidebar-active: #ffffff;
+  --sidebar-hover-bg: rgba(255, 255, 255, 0.05);
+  --content-bg: #f8f9fa;
+  --card-bg: #ffffff;
+  --border-color: #e0e3e7;
+  --text-primary: #1a1d29;
+  --text-secondary: #6c757d;
+  --font-base: 15px;
+  --font-sm: 13px;
+  --font-lg: 18px;
+  --font-xl: 24px;
+  --spacing-xs: 8px;
+  --spacing-sm: 12px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 24px rgba(0, 0, 0, 0.1);
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --crm-font-size: 15px;
   --crm-font-color: #333;
   --crm-border-color: #ddd;
   --crm-accent: #0099A8;
@@ -86,11 +130,42 @@
   --crm-bg-panel: #fcfcfc;
 }
 body {
-  font-size: var(--crm-font-size);
-  color: var(--crm-font-color);
-  font-family: 'Open Sans', sans-serif;
-  background-color: #fff;
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: var(--content-bg);
   margin: 0;
+  padding: 0;
+  line-height: 1.6;
+}
+/* Main content area for layout */
+.main-content {
+  flex: 1;
+  margin-left: 260px !important;
+  transition: margin-left var(--transition-base);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0 !important;
+  }
+}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Remove any top margin/padding from .content-container */
+.content-container {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
 
 /* ===============================
@@ -98,8 +173,18 @@ body {
    =============================== */
 .container {
   max-width: 1200px;
-  margin: auto;
-  padding: 20px;
+  margin: 8px auto 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+/* Unified form container for all pages */
+.form-container {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  max-width: 900px;
+  margin: 0 auto 32px auto;
 }
 .page-contacts {
   font-size: var(--crm-font-size);
@@ -113,12 +198,25 @@ body {
 }
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
   width: 100%;
 }
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+}
 .form-group {
-  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 16px;
+}
+/* Full-width form group for spanning columns */
+.form-group.full-width {
+  grid-column: 1 / -1;
 }
 .contact-form label {
   font-weight: bold;
@@ -313,41 +411,120 @@ body {
   background: #f9f9f9;
 }
 
-body {
-  background: #f0f0f0;
+/* Admin Dashboard & Tools - Unified Layout Styles */
+.admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+.stat-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.stat-card h4 {
+  margin: 0 0 10px 0;
+  color: #0099A8;
+  font-size: 14px;
+  text-transform: uppercase;
+}
+.stat-card .value {
+  font-size: 28px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+.stat-card .subtext {
+  font-size: 12px;
+  color: #666;
+}
+.admin-tools {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+.tool-btn {
+  padding: 15px;
+  text-align: center;
+  background: #0099A8;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.tool-btn:hover {
+  background: #007880;
+  text-decoration: none;
+  color: white;
+}
+.alert-warning {
+  background: #fff3cd;
+  border: 1px solid #ffc107;
+  color: #856404;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+.alert-danger {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+.alert-success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+  padding: 15px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+.section {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.section h3 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 2px solid #0099A8;
+  padding-bottom: 10px;
+}
+table.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+table.admin-table th {
+  background: #f5f5f5;
+  padding: 10px;
+  text-align: left;
+  font-weight: bold;
+  border-bottom: 2px solid #ddd;
+}
+table.admin-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #eee;
+}
+table.admin-table tr:hover {
+  background: #f9f9f9;
+}
+
+/* FINAL OVERRIDE: Remove all padding from .content-container on all pages */
+.content-container {
+  padding: 0 !important;
 }
 
 
-<style>
-.termination-table {
-    float: right;
-    width: 45%;
-}
-.cancellation-table {
-    width: 45%;
-}
 
-<style>
-.table-container {
-    display: flex;
-    gap: 20px;
-    align-items: flex-start;
-}
-.table-container table:last-child {
-    margin-left: auto; /* pushes termination table to the right */
-}
-</style>
 
-<div class="table-container">
-    <!-- Cancellation Entry Table -->
-    <table>
-        <caption>Cancellation Entry</caption>
-        <!-- rows -->
-    </table>
 
-    <!-- Termination Reason Table -->
-    <table>
-        <caption>Termination Reason Options</caption>
-        <!-- rows -->
-    </table>
-</div>

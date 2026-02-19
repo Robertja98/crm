@@ -1,4 +1,3 @@
-
 <?php
 return [
   'id',
@@ -8,3 +7,4 @@ return [
   'probability',
   'expected_close'
 ];
+

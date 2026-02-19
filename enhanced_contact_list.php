@@ -1,7 +1,6 @@
 <?php
 include_once(__DIR__ . '/layout_start.php');
 $currentPage = basename(__FILE__);
-include_once(__DIR__ . '/navbar.php');
 require_once 'csv_handler.php';
 
 $schemaFile = __DIR__ . '/contact_schema.php';

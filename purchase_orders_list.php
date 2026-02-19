@@ -1,11 +1,50 @@
 <?php
 include_once(__DIR__ . '/layout_start.php');
-include_once(__DIR__ . '/navbar.php');
-require_once 'csv_handler.php';
-
+require_once 'db_mysql.php';
 $schema = require __DIR__ . '/purchase_order_schema.php';
-$poFile = __DIR__ . '/purchase_orders.csv';
-$orders = readCSV($poFile, $schema);
+// Fetch purchase orders and items from MySQL (LEFT JOIN to show all POs)
+function fetch_purchase_orders_with_items($schema) {
+  $conn = get_mysql_connection();
+  // Split header and item fields
+  $headerFields = [
+    'po_number','date','status','supplier_id','supplier_name','supplier_contact','supplier_address','billing_address','shipping_address','subtotal','total_discount','total_tax','shipping_cost','other_fees','grand_total','currency','expected_delivery','payment_terms','notes','created_by','created_at','updated_at'
+  ];
+  $itemFields = [
+    'item_id','item_name','quantity','unit','unit_price','discount','tax_rate','tax_amount','total'
+  ];
+  $selectFields = [];
+  foreach ($headerFields as $f) {
+    $selectFields[] = 'h.`' . $f . '` AS `h_' . $f . '`';
+  }
+  foreach ($itemFields as $f) {
+    $selectFields[] = 'i.`' . $f . '` AS `i_' . $f . '`';
+  }
+  $sql = "SELECT " . implode(',', $selectFields) . " FROM purchase_orders h LEFT JOIN purchase_order_items i ON h.po_number = i.po_number ORDER BY h.created_at DESC, i.id ASC";
+  $result = $conn->query($sql);
+  $orders = [];
+  if ($result) {
+    while ($row = $result->fetch_assoc()) {
+      $orders[] = $row;
+    }
+    $result->free();
+  }
+  $conn->close();
+  return $orders;
+}
+$orders = fetch_purchase_orders_with_items($schema);
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_po'])) {
+  $poToDelete = trim($_POST['po_number'] ?? '');
+  if ($poToDelete !== '') {
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("DELETE FROM purchase_orders WHERE po_number = ?");
+    $stmt->bind_param('s', $poToDelete);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+  }
+  header('Location: purchase_orders_list.php');
+  exit;
+}
 
 function to_float($value) {
   return is_numeric($value) ? (float)$value : 0.0;
@@ -164,8 +203,13 @@ $poGroups = array_values($poGroups);
             <div class="po-detail-title"><?= htmlspecialchars($poNumber) ?><?= $supplier !== '' ? ' - ' . htmlspecialchars($supplier) : '' ?></div>
             <div class="po-actions">
               <a href="purchase_order_summary.php?po=<?= $poLink ?>" class="btn-outline">View Supplier Form</a>
-              <button type="button" disabled title="Edit not set up yet">Edit</button>
-              <button type="button" disabled title="Delete not set up yet">Delete</button>
+              <a href="purchase_order_receive.php?po=<?= $poLink ?>" class="btn-outline">Receive</a>
+              <a href="purchase_order_edit.php?po=<?= $poLink ?>" class="btn-outline">Edit</a>
+              <form method="post" onsubmit="return confirm('Delete purchase order <?= htmlspecialchars($poNumber) ?>?');">
+                <input type="hidden" name="delete_po" value="1">
+                <input type="hidden" name="po_number" value="<?= htmlspecialchars($poNumber) ?>">
+                <button type="submit" class="btn-outline">Delete</button>
+              </form>
             </div>
             <div class="po-section">
               <div class="po-section-title">Summary</div>

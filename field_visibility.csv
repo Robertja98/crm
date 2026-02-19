@@ -11,7 +11,7 @@ postal_code,false
 country,false
 notes,false
 created_at,false
-last_modified,false
+last_modified,true
 is_customer,false
 tank_number,false
 delivery_date,false

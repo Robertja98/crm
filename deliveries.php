@@ -1,5 +1,4 @@
 <?php
-include_once 'navbar.php';
 include_once 'layout_start.php';
 
 // Get customer ID from GET

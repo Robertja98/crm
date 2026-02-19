@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/simple_auth/middleware.php';
 $currentPage = basename(__FILE__); // Dynamically sets active tab
 ?>
 
@@ -34,8 +34,8 @@ $currentPage = basename(__FILE__); // Dynamically sets active tab
     <li class="<?= $currentPage === 'contacts_list.php' ? 'active' : '' ?>">
       <a href="contacts_list.php">View Contacts</a>
     </li>
-    <li class="<?= $currentPage === 'opportunity_form.php' ? 'active' : '' ?>">
-      <a href="opportunity_form.php">Add Opportunity</a>
+    <li class="<?= $currentPage === 'add_opportunity.php' ? 'active' : '' ?>">
+      <a href="add_opportunity.php">Add Opportunity</a>
     </li>
     <li class="<?= $currentPage === 'opportunities_list.php' ? 'active' : '' ?>">
       <a href="opportunities_list.php">View Opportunities</a>

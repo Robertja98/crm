@@ -1,11 +1,10 @@
 <?php
-require_once 'csv_handler.php';
+require_once 'tasks_mysql.php';
 
-$filename = 'tasks.csv';
-$schema = ['title', 'due_date', 'status', 'timestamp'];
-
-if (isset($_GET['timestamp'])) {
-    deleteTask($filename, $schema, $_GET['timestamp']);
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    // Use update to set status to archived (soft delete)
+    archive_task_mysql($id);
 }
 header('Location: index.php');
 exit;

@@ -1,32 +1,24 @@
+
 <?php
-require_once 'csv_handler.php';
+require_once 'tasks_mysql.php';
 
-$filename = 'tasks.csv';
-$schema = ['title', 'due_date', 'status', 'timestamp'];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $updatedTask = [
-        $_POST['title'],
-        $_POST['due_date'],
-        $_POST['status'],
-        $_POST['timestamp']
-    ];
-    updateTask($filename, $schema, $_POST['timestamp'], $updatedTask);
-    header('Location: index.php');
+$timestamp = $_GET['timestamp'] ?? '';
+$tasks = fetch_tasks_mysql(['timestamp' => $timestamp]);
+$taskToEdit = $tasks ? $tasks[0] : null;
+if (!$taskToEdit) {
+    echo "Task not found.";
     exit;
 }
 
-$timestamp = $_GET['timestamp'] ?? '';
-$tasks = readCSV($filename, $schema);
-$taskToEdit = null;
-foreach ($tasks as $task) {
-    if ($task['timestamp'] === $timestamp) {
-        $taskToEdit = $task;
-        break;
-    }
-}
-if (!$taskToEdit) {
-    echo "Task not found.";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $fields = [
+        'title' => $_POST['title'],
+        'due_date' => $_POST['due_date'],
+        'status' => $_POST['status'],
+        'timestamp' => $_POST['timestamp']
+    ];
+    update_task_mysql($taskToEdit['id'], $fields);
+    header('Location: index.php');
     exit;
 }
 ?>

@@ -3,10 +3,8 @@ $cid = $contact['id'] ?? '';
 if (empty($cid)) return;
 
 $discussionSchema = require __DIR__ . '/discussion_schema.php';
-$discussionLog = readCSV('discussion_log.csv', $discussionSchema) ?: [];
-
-$entries = array_filter($discussionLog, fn($e) => trim($e['contact_id']) === trim($cid));
-usort($entries, fn($a, $b) => strtotime($b['timestamp']) <=> strtotime($a['timestamp']));
+require_once __DIR__ . '/discussion_mysql.php';
+$entries = fetch_discussions_mysql($cid, $discussionSchema);
 ?>
 
 <div style="margin-top:40px;">

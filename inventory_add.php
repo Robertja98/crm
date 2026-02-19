@@ -1,25 +1,52 @@
 <?php
 include_once(__DIR__ . '/layout_start.php');
-include_once(__DIR__ . '/navbar.php');
-require_once 'csv_handler.php';
+require_once 'db_mysql.php';
 
 $schema = require __DIR__ . '/inventory_schema.php';
-$inventoryFile = __DIR__ . '/inventory.csv';
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $newItem = [];
+  // List of integer fields in inventory
+  $intFields = ['supplier_id', 'quantity_in_stock', 'reorder_level', 'reorder_quantity', 'created_by', 'updated_by'];
+  // List of date/datetime fields in inventory
+  $dateFields = ['purchase_date', 'last_service_date', 'next_service_date', 'warranty_expiry', 'created_at', 'updated_at'];
+  // List of decimal fields in inventory
+  $decimalFields = ['cost_price', 'margin', 'selling_price'];
   foreach ($schema as $f) {
-    $newItem[$f] = trim($_POST[$f] ?? '');
+    $val = trim($_POST[$f] ?? '');
+    if (in_array($f, $intFields)) {
+      $newItem[$f] = ($val === '' ? null : (int)$val);
+    } elseif (in_array($f, $decimalFields)) {
+      $newItem[$f] = ($val === '' ? null : (float)$val);
+    } elseif (in_array($f, $dateFields)) {
+      $newItem[$f] = ($val === '' ? null : $val);
+    } else {
+      $newItem[$f] = $val;
+    }
   }
   // Always auto-generate item_id
   $newItem['item_id'] = uniqid('ITM_');
   $newItem['created_at'] = date('Y-m-d H:i:s');
   $newItem['updated_at'] = date('Y-m-d H:i:s');
-  // Load and append
-  $items = readCSV($inventoryFile, $schema);
-  $items[] = $newItem;
-  writeCSV($inventoryFile, $items, $schema);
+
+  // Build insert
+  $fields = array_keys($newItem);
+  $placeholders = implode(',', array_fill(0, count($fields), '?'));
+  // Set types: i for int fields, s for others
+  $types = '';
+  foreach ($fields as $f) {
+    $types .= in_array($f, $intFields) ? 'i' : 's';
+  }
+  $values = array_values($newItem);
+
+  $conn = get_mysql_connection();
+  $sql = 'INSERT INTO inventory (' . implode(',', $fields) . ') VALUES (' . $placeholders . ')';
+  $stmt = $conn->prepare($sql);
+  $stmt->bind_param($types, ...$values);
+  $stmt->execute();
+  $stmt->close();
+  $conn->close();
   header('Location: inventory_list.php');
   exit;
 }

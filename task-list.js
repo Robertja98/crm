@@ -1,4 +1,4 @@
-console.log('task-list.js loaded');
+// ...existing code...
 document.addEventListener('DOMContentLoaded', loadTasks);
 
 
@@ -17,7 +17,7 @@ function addTask() {
   const input = document.getElementById('new-task');
   const title = input.value.trim();
 
-  console.log('Task title:', title); // Add this for debugging
+  // ...existing code...
 
   if (!title) {
     showMessage('Task title cannot be empty.', true);
@@ -33,7 +33,7 @@ function addTask() {
   })
   .then(response => response.text())
   .then(result => {
-    console.log('Server response:', result); // Add this too
+    // ...existing code...
     if (result.trim() === 'success') {
       showMessage('Task added successfully.');
       input.value = '';

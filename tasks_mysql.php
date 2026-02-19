@@ -1,0 +1,60 @@
+<?php
+// tasks_mysql.php - MySQL handler for tasks
+require_once 'db_mysql.php';
+
+function fetch_tasks_mysql($filters = []) {
+    $conn = get_mysql_connection();
+    $where = [];
+    foreach ($filters as $key => $value) {
+        $key = $conn->real_escape_string($key);
+        $value = $conn->real_escape_string($value);
+        $where[] = "`$key` = '" . $value . "'";
+    }
+    $whereSql = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
+    $sql = "SELECT * FROM tasks $whereSql ORDER BY due_date ASC, timestamp DESC";
+    $result = $conn->query($sql);
+    $tasks = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $tasks[] = $row;
+        }
+        $result->free();
+    }
+    $conn->close();
+    return $tasks;
+}
+
+function insert_task_mysql($task) {
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("INSERT INTO tasks (id, title, status, priority, assigned_to, due_date, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param('sssssss', $task['id'], $task['title'], $task['status'], $task['priority'], $task['assigned_to'], $task['due_date'], $task['timestamp']);
+    $result = $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return $result;
+}
+
+function update_task_mysql($id, $fields) {
+    $conn = get_mysql_connection();
+    $set = [];
+    $params = [];
+    $types = '';
+    foreach ($fields as $key => $value) {
+        $set[] = "`$key` = ?";
+        $params[] = $value;
+        $types .= 's';
+    }
+    $params[] = $id;
+    $types .= 's';
+    $sql = "UPDATE tasks SET " . implode(', ', $set) . " WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param($types, ...$params);
+    $result = $stmt->execute();
+    $stmt->close();
+    $conn->close();
+    return $result;
+}
+
+function archive_task_mysql($id) {
+    return update_task_mysql($id, ['status' => 'archived']);
+}

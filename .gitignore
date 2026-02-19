@@ -1,0 +1,11 @@
+.venv/
+backups/
+logs/
+debug_log.txt
+error_log.txt
+*.bak
+GODADDY_DEPLOYMENT_CHECKLIST.md
+.env
+node_modules/
+.DS_Store
+*.csv

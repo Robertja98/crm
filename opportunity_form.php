@@ -1,11 +1,37 @@
 <?php
-require_once 'csv_handler.php';
+require_once 'db_mysql.php';
+require_once 'sanitize_helper.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
-$contacts = readCSV('contacts.csv', require __DIR__ . '/contact_schema.php');
+
+// Load contacts from MySQL
+$conn = get_mysql_connection();
+$contacts = [];
+$result = $conn->query('SELECT * FROM contacts');
+if ($result) {
+  while ($row = $result->fetch_assoc()) {
+    $contacts[] = $row;
+  }
+  $result->free();
+}
+$conn->close();
+
+// Build contact lookup map
+$contactMap = [];
+foreach ($contacts as $contact) {
+  $fullName = trim(($contact['first_name'] ?? '') . ' ' . ($contact['last_name'] ?? ''));
+  $company = $contact['company'] ?? '';
+  $contactMap[trim($contact['id'] ?? '')] = [
+    'name' => $fullName ?: 'Unnamed Contact',
+    'company' => $company
+  ];
+}
+
+// Calculate statistics
+$totalValue = 0;
 ?>
 
 <?php include_once(__DIR__ . '/layout_start.php'); ?>
-<?php $currentPage = basename(__FILE__); include_once(__DIR__ . '/navbar.php'); ?>
+<?php $currentPage = basename(__FILE__); ?>
 
 <div class="container">
   <h2>Add New Opportunity</h2>

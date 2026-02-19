@@ -1,22 +1,18 @@
+
 <?php
 $pageTitle = 'Task Calendar';
 header('Content-Type: text/html; charset=UTF-8');
 
-// Load tasks from handler
 require_once 'layout_start.php';
-require_once 'csv_handler.php'; // or whatever file defines readCSV()
+require_once 'tasks_mysql.php';
 
-$filename = 'tasks.csv';
-$schema = ['title', 'due_date', 'status', 'timestamp']; // adjust based on your actual CSV columns
-$tasks = readCSV($filename, $schema);
-
+$tasks = fetch_tasks_mysql();
 $tasksByDate = [];
 foreach ($tasks as $task) {
-    if ($task['status'] !== 'archived' && !empty($task['due_date'])) {
-        $tasksByDate[$task['due_date']][] = $task;
-    }
+  if ($task['status'] !== 'archived' && !empty($task['due_date'])) {
+    $tasksByDate[$task['due_date']][] = $task;
+  }
 }
-
 ?>
 
 

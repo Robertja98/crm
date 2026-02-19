@@ -7,22 +7,49 @@ header('X-Content-Type-Options: nosniff');
 
 // Includes
 include_once(__DIR__ . '/layout_start.php');
-include_once(__DIR__ . '/navbar.php');
-require_once __DIR__ . '/csv_handler.php';
+require_once 'db_mysql.php';
 require_once 'discussion_validator.php';
 
 // Load schemas and data
-$schema = require __DIR__ . '/contact_schema.php';
-$contacts = readCSV('contacts.csv', $schema);
 
-// Helper: find contact by ID
-function findContactById($contacts, $id) {
+$schema = require __DIR__ . '/contact_schema.php';
+
+// Helper: fetch contact by ID from MySQL
+function fetchContactById($id, $schema) {
     if ($id === '') return null;
-    foreach ($contacts as $c) {
-        if ($c['id'] === $id) return $c;
-    }
-    return null;
+    $conn = get_mysql_connection();
+    $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
+    $stmt = $conn->prepare("SELECT $fields FROM contacts WHERE id = ? LIMIT 1");
+    $stmt->bind_param('s', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $contact = $result ? $result->fetch_assoc() : null;
+    $stmt->close();
+    $conn->close();
+    return $contact;
 }
+
+// Helper: update contact in MySQL
+function updateContactById($id, $schema, $postData) {
+    $conn = get_mysql_connection();
+    $fields = [];
+    $values = [];
+    foreach ($schema as $f) {
+        if ($f === 'id') continue;
+        $fields[] = "`$f` = ?";
+        $values[] = $postData[$f] ?? null;
+    }
+    $values[] = $id;
+    $sql = "UPDATE contacts SET " . implode(',', $fields) . ", last_modified = NOW() WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $types = str_repeat('s', count($values));
+    $stmt->bind_param($types, ...$values);
+    $stmt->execute();
+    $stmt->close();
+    $conn->close();
+}
+
+// ...existing code...
 
 // Helper: create delivery file
 function createDeliveryFileIfNeeded($contactId) {
@@ -44,53 +71,33 @@ function createDeliveryFileIfNeeded($contactId) {
 // Handle contact update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
     $id = $_POST['id'];
-    foreach ($contacts as &$c) {
-        if ($c['id'] === $id) {
-            foreach ($schema as $f) {
-                $c[$f] = $_POST[$f] ?? $c[$f];
-            }
-
-            // Create delivery file if marked as customer
-            if (isset($_POST['is_customer']) && strtolower(trim($_POST['is_customer'])) === 'yes') {
-                if (!createDeliveryFileIfNeeded($id)) {
-                    echo "<div class='alert-error'>⚠️ Delivery file could not be created for customer ID: $id</div>";
-                }
-            }
-
-            break;
+    updateContactById($id, $schema, $_POST);
+    // Create delivery file if marked as customer
+    if (isset($_POST['is_customer']) && strtolower(trim($_POST['is_customer'])) === 'yes') {
+        if (!createDeliveryFileIfNeeded($id)) {
+            echo "<div class='alert-error'>⚠️ Delivery file could not be created for customer ID: $id</div>";
         }
     }
-    writeCSV('contacts.csv', $contacts, $schema);
     header("Location: customer_view.php?id=" . urlencode($id));
     exit;
 }
 
-// Load contact
+
+// Load contact from MySQL
 $id = $_GET['id'] ?? '';
-$contact = findContactById($contacts, $id);
+$contact = fetchContactById($id, $schema);
 
 if (!$contact) {
     echo "<div class='container'><h2>Contact not found</h2></div>";
     include_once(__DIR__ . '/layout_end.php');
     exit;
 }
-// Delivery of the tanks to database
-
-$deliveryFile = "{$contact['id']}_deliveries.csv";
-if (file_exists(__DIR__ . "/$deliveryFile")) {
-    echo '<a href="' . htmlspecialchars($deliveryFile) . '" class="btn-secondary" target="_blank">📦 View Deliveries</a>';
-} else {
-    echo '<p>No deliveries found for this customer.</p>';
-}
-?>
-
 ?>
 
 <div class="container">
-  <h2>Customer Details</h2>
+    <h2>Customer Details</h2>
   
-
-  <form method="post" class="contact-form">
+    <form method="post" class="contact-form" id="edit">
     <input type="hidden" name="id" value="<?= htmlspecialchars($contact['id']) ?>">
 
     <div class="form-grid">
@@ -108,33 +115,28 @@ if (file_exists(__DIR__ . "/$deliveryFile")) {
       <?php endforeach; ?>
     </div>
 
-    <div class="form-actions">
-  <button type="submit" class="btn-primary">💾 Save Changes</button>
-	</div>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">💾 Save Changes</button>
+        </div>
+    </form>
 
-<div class="customer-actions">
-    <a href="edit_customer.php?id=code($contact[" class="btn-primary">✏️ Edit</a>
-    index.php⬅ Back</a>
-    <?php
-    $deliveryFile = "{$contact['id']}_deliveries.csv";
-    if (file_exists(__DIR__ . "/$deliveryFile")) {
-        echo '<a href="' . htmlspecialchars($deliveryFile) . '" class="btn-secondary" target="_blank">📦 View Deliveries</a>';
-    }
-    ?>
+    <div class="customer-actions">
+        <a href="customers_list.php" class="btn-outline">⬅ Back to Customers</a>
+        <a href="index.php" class="btn-outline">⬅ Back to Home</a>
+        <?php
+        $deliveryFile = "{$contact['id']}_deliveries.csv";
+        if (file_exists(__DIR__ . "/$deliveryFile")) {
+                echo '<a href="' . htmlspecialchars($deliveryFile) . '" class="btn-secondary" target="_blank">📦 View Deliveries</a>';
+        }
+
+        $isCustomer = strtolower(trim($contact['is_customer'] ?? '')) === 'yes';
+        $deliveryFilePath = __DIR__ . "/$deliveryFile";
+        if ($isCustomer && file_exists($deliveryFilePath)) {
+                $deliveryUrl = "deliveries.php?id=" . urlencode($contact['id']);
+                echo '<a href="' . $deliveryUrl . '" class="btn-primary">📦 View Delivery Archive</a>';
+        }
+        ?>
+    </div>
 </div>
-
-<?php
-if (strtolower(trim($contact['is_customer'] ?? '')) === 'yes') {
-    $deliveryFile = "{$contact['id']}_deliveries.csv";
-    $deliveryFilePath = __DIR__ . "/$deliveryFile";
-    if (file_exists($deliveryFilePath)) {
-        $deliveryUrl = "deliveries.php?id=" . urlencode($contact['id']);
-        echo '<a href="' . $deliveryUrl . '" class="btn-primary">📦 View Delivery Archive</a>';
-    }
-}
-?>
-
-
-
 
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

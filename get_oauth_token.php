@@ -52,8 +52,6 @@ if (!isset($_GET['code']) && !isset($_POST['provider'])) {
     ?>
 <html>
 <body>
-<?php include_once 'navbar.php'; ?>
-<?php include 'navbar.php'; ?>
 <form method="post">
     <h1>Select Provider</h1>
     <input type="radio" name="provider" value="Google" id="providerGoogle">

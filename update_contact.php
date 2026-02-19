@@ -1,5 +1,5 @@
 <?php include_once(__DIR__ . '/layout_start.php'); ?>
-<?php $currentPage = basename(__FILE__); include_once(__DIR__ . '/navbar.php'); ?>
+<?php $currentPage = basename(__FILE__); ?>
 <?php
 
 require_once 'contact_validator.php';require_once 'csv_handler.php';
