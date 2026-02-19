@@ -1,0 +1,16 @@
+# cPanel Git Deployment Configuration
+---
+repository: ssh://hp6xh47j1ds2@eclipsewatertechnologies.com/home/hp6xh47j1ds2/repositories/crm
+branch: main
+deployment:
+  directory: /home/hp6xh47j1ds2/public_html/crm
+  post_deploy:
+    - php composer.phar install --no-dev --optimize-autoloader || true
+    - php artisan migrate --force || true
+    - echo "Deployment complete!"
+
+# Notes:
+# - Adjust 'directory' to match your subdomain's web root.
+# - Add any post_deploy commands needed for your project (e.g., composer, migrations).
+# - Remove or comment out lines not needed for your PHP CRM.
+# - This file should be placed in your repo root as cpanel.yml.
