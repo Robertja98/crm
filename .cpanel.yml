@@ -5,5 +5,5 @@ hooks:
   pre_deploy:
     - echo "Starting deployment..."
   post_deploy:
-    - /bin/cp -r * /home/hp6xh47j1ds2/public_html/
+    - /bin/cp -r * /home/hp6xh47j1ds2/public_html/crm/
     - echo "Deployment complete!"
