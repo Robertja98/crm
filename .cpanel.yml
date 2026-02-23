@@ -6,5 +6,6 @@ hooks:
     - echo "Starting deployment..."
   post_deploy:
     - git submodule update --init --recursive
+    - rm -rf /home/hp6xh47j1ds2/public_html/crm/*
     - /bin/cp -r * /home/hp6xh47j1ds2/public_html/crm/
     - echo "Deployment complete!"
