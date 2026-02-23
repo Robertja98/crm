@@ -12,7 +12,20 @@ require_once 'discussion_validator.php';
 
 // Load schemas and data
 
-$schema = require __DIR__ . '/contact_schema.php';
+$customerSchema = require __DIR__ . '/customer_schema.php';
+$contactSchema = require __DIR__ . '/contact_schema.php';
+
+// Fetch all contacts for dropdown/lookup
+$conn = get_mysql_connection();
+$contacts = [];
+$contactResult = $conn->query("SELECT id, company FROM contacts");
+if ($contactResult) {
+    while ($row = $contactResult->fetch_assoc()) {
+        $contacts[$row['id']] = $row['company'];
+    }
+    $contactResult->free();
+}
+$conn->close();
 
 // Helper: fetch contact by ID from MySQL
 function fetchContactById($id, $schema) {
@@ -84,36 +97,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 
 
 // Load contact from MySQL
+// Load customer by id
 $id = $_GET['id'] ?? '';
-$contact = fetchContactById($id, $schema);
-
-if (!$contact) {
-    echo "<div class='container'><h2>Contact not found</h2></div>";
-    include_once(__DIR__ . '/layout_end.php');
-    exit;
+$customer = null;
+if ($id !== '') {
+    $conn = get_mysql_connection();
+    $stmt = $conn->prepare("SELECT * FROM customers WHERE customer_id = ? LIMIT 1");
+    $stmt->bind_param('s', $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $customer = $result ? $result->fetch_assoc() : null;
+    $stmt->close();
+    $conn->close();
+}
+if (!$customer) {
+        echo "<div class='container'><h2>Customer not found</h2></div>";
+        include_once(__DIR__ . '/layout_end.php');
+        exit;
 }
 ?>
 
 <div class="container">
     <h2>Customer Details</h2>
   
-    <form method="post" class="contact-form" id="edit">
-    <input type="hidden" name="id" value="<?= htmlspecialchars($contact['id']) ?>">
 
-    <div class="form-grid">
-      <?php foreach ($schema as $f): ?>
-        <div class="form-group">
-          <label for="<?= $f ?>"><strong><?= ucfirst(str_replace('_', ' ', $f)) ?>:</strong></label><br>
-          <?php if ($f === 'notes' || str_contains($f, 'description')): ?>
-            <textarea name="<?= $f ?>" id="<?= $f ?>" rows="3"><?= htmlspecialchars($contact[$f] ?? '') ?></textarea>
-          <?php elseif ($f === 'id'): ?>
-            <input type="text" id="<?= $f ?>" value="<?= htmlspecialchars($contact[$f] ?? '') ?>" disabled>
-          <?php else: ?>
-            <input type="text" name="<?= $f ?>" id="<?= $f ?>" value="<?= htmlspecialchars($contact[$f] ?? '') ?>">
-          <?php endif; ?>
+        <form method="post" class="contact-form" id="edit">
+        <input type="hidden" name="customer_id" value="<?= htmlspecialchars($customer['customer_id']) ?>">
+
+        <div class="form-grid">
+            <?php foreach ($customerSchema as $f): ?>
+                <div class="form-group">
+                    <label for="<?= $f ?>"><strong><?= ucfirst(str_replace('_', ' ', $f)) ?>:</strong></label><br>
+                    <?php if ($f === 'contact_id'): ?>
+                        <select name="contact_id" id="contact_id" required>
+                            <option value="">Select Company...</option>
+                            <?php foreach ($contacts as $cid => $cname): ?>
+                                <option value="<?= htmlspecialchars($cid) ?>" <?= ($customer['contact_id'] == $cid) ? 'selected' : '' ?>><?= htmlspecialchars($cname) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php elseif ($f === 'customer_id'): ?>
+                        <input type="text" id="<?= $f ?>" value="<?= htmlspecialchars($customer[$f] ?? '') ?>" disabled>
+                    <?php else: ?>
+                        <input type="text" name="<?= $f ?>" id="<?= $f ?>" value="<?= htmlspecialchars($customer[$f] ?? '') ?>">
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
         </div>
-      <?php endforeach; ?>
-    </div>
 
         <div class="form-actions">
             <button type="submit" class="btn-primary">💾 Save Changes</button>

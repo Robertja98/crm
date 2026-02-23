@@ -1,47 +1,36 @@
 <?php
 require_once 'layout_start.php';
 
-require_once 'db_pgsql.php';
+require_once 'db_mysql.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
 $contactSchema = require __DIR__ . '/contact_schema.php';
 
-function fetch_contacts_pgsql($schema) {
-  $conn = get_pgsql_connection();
-  $fields = implode(',', array_map(function($f) { return '"' . $f . '"'; }, $schema));
-  $result = pg_query($conn, "SELECT $fields FROM contacts");
-  if (!$result) return [];
-  $rows = [];
-  while ($row = pg_fetch_assoc($result)) {
-    $rows[] = $row;
-  }
-  pg_free_result($result);
-  return $rows;
-}
 
-function fetch_opportunity_pgsql($id, $schema) {
-  $conn = get_pgsql_connection();
+function fetch_opportunity_mysql($id, $schema) {
+  $conn = get_mysql_connection();
   $fields = implode(',', array_map(function($f) { return '"' . $f . '"'; }, $schema));
-  $idEsc = pg_escape_string($id);
-  $result = pg_query($conn, "SELECT $fields FROM opportunities WHERE id='$idEsc'");
+    $idEsc = mysqli_real_escape_string($conn, $id);
+    $result = mysqli_query($conn, "SELECT $fields FROM opportunities WHERE id='$idEsc'");
   if (!$result) return null;
-  $row = pg_fetch_assoc($result);
-  pg_free_result($result);
+    $row = mysqli_fetch_assoc($result);
+    mysqli_free_result($result);
   return $row;
 }
 
-function update_opportunity_pgsql($id, $fields) {
-  $conn = get_pgsql_connection();
+function update_opportunity_mysql($id, $fields) {
+  $conn = get_mysql_connection();
   $set = [];
   foreach ($fields as $k => $v) {
-    $set[] = '"' . pg_escape_string($k) . '"=' . (is_null($v) ? 'NULL' : "'" . pg_escape_string($v) . "'");
+    $set[] = '`' . mysqli_real_escape_string($conn, $k) . '`=' . (is_null($v) ? 'NULL' : "'" . mysqli_real_escape_string($conn, $v) . "'");
   }
   $setStr = implode(',', $set);
-  $idEsc = pg_escape_string($id);
+  $idEsc = mysqli_real_escape_string($conn, $id);
   $sql = "UPDATE opportunities SET $setStr WHERE id='$idEsc'";
-  return pg_query($conn, $sql);
+  $result = mysqli_query($conn, $sql);
+  return $result !== false;
 }
 
-$contacts = fetch_contacts_pgsql($contactSchema);
+// No CSV or contacts array used; all company data is fetched directly from the SQL database for the dropdown below.
 
 // Get opportunity ID
 $opportunityId = $_GET['id'] ?? $_POST['id'] ?? null;
@@ -52,7 +41,7 @@ if (!$opportunityId) {
 }
 
 
-$opportunity = fetch_opportunity_pgsql($opportunityId, $schema);
+$opportunity = fetch_opportunity_mysql($opportunityId, $schema);
 if (!$opportunity) {
   header('Location: opportunities_list.php?error=' . urlencode('Opportunity not found'));
   exit;
@@ -63,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate inputs
     $errors = [];
     
-    if (empty($_POST['contact_id'])) {
-        $errors[] = 'Contact is required';
+    if (empty($_POST['company_id'])) {
+      $errors[] = 'Company is required';
     }
     
     if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
@@ -86,13 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         // Update opportunity
         $fields = [
-          'contact_id' => $_POST['contact_id'],
+          'company_id' => $_POST['company_id'],
           'value' => $_POST['value'],
           'stage' => $_POST['stage'],
           'probability' => $_POST['probability'],
           'expected_close' => $_POST['expected_close'],
         ];
-        $result = update_opportunity_pgsql($opportunityId, $fields);
+        $result = update_opportunity_mysql($opportunityId, $fields);
         if ($result) {
           header('Location: opportunities_list.php?success=2');
           exit;
@@ -385,30 +374,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="form-section">
       <div class="form-section-title">
         <span>👤</span>
-        <span>Contact Information</span>
+        <span>Company Information</span>
       </div>
-      
+
       <div class="form-grid">
         <div class="form-group full-width">
-          <label for="contact_id">Contact *</label>
-          <select name="contact_id" id="contact_id" required>
-            <option value="">Select a contact...</option>
-            <?php foreach ($contacts as $contact): ?>
-              <?php
-                $fullName = trim($contact['first_name'] . ' ' . $contact['last_name']);
-                $company = $contact['company'] ?? '';
-                $displayName = $fullName ?: 'Unnamed Contact';
-                if ($company) {
-                  $displayName .= ' (' . $company . ')';
+          <label for="company_id">Company *</label>
+          <select name="company_id" id="company_id" required>
+            <option value="">Select a company...</option>
+            <?php
+            // Load contacts with company names for dropdown
+            $conn = get_mysql_connection();
+            $result = $conn->query("SELECT id, company, first_name, last_name FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY company, last_name, first_name");
+            if ($result) {
+              while ($row = $result->fetch_assoc()) {
+                $companyLabel = $row['company'];
+                // Optionally append contact name for clarity
+                if (!empty($row['first_name']) || !empty($row['last_name'])) {
+                  $companyLabel .= ' (' . trim($row['first_name'] . ' ' . $row['last_name']) . ')';
                 }
-                $selected = ($contact['id'] == $opportunity['contact_id']) ? 'selected' : '';
-              ?>
-              <option value="<?= htmlspecialchars($contact['id']) ?>" <?= $selected ?>>
-                <?= htmlspecialchars($displayName) ?>
-              </option>
-            <?php endforeach; ?>
+                $selected = ($row['id'] == $opportunity['company_id']) ? 'selected' : '';
+            ?>
+                <option value="<?= htmlspecialchars($row['id']) ?>" <?= $selected ?>>
+                  <?= htmlspecialchars($companyLabel) ?>
+                </option>
+            <?php
+              }
+              $result->free();
+            }
+            $conn->close();
+            ?>
           </select>
-          <div class="form-help">Select the contact associated with this opportunity</div>
+          <div class="form-help">Select the company associated with this opportunity</div>
         </div>
       </div>
     </div>
@@ -441,7 +438,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             type="date" 
             name="expected_close" 
             id="expected_close"
-            value="<?= htmlspecialchars($opportunity['expected_close']) ?>"
+            value="<?= isset($opportunity['expected_close']) ? htmlspecialchars($opportunity['expected_close']) : '' ?>"
             required
           >
           <div class="form-help">When do you expect to close this deal?</div>

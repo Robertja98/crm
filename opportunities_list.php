@@ -92,7 +92,7 @@ usort($filteredOpportunities, function($a, $b) use ($sortBy, $sortOrder, $contac
     $bVal = $b[$sortBy] ?? '';
     
     // Special handling for contact name sorting
-    if ($sortBy === 'contact_name') {
+    if ($sortBy === 'contact_id') {
         $aVal = $contactMap[trim($a['contact_id'] ?? '')]['name'] ?? '';
         $bVal = $contactMap[trim($b['contact_id'] ?? '')]['name'] ?? '';
     }
@@ -120,7 +120,23 @@ function getStageColor($stage) {
 }
 ?>
 
-<?php include_once(__DIR__ . '/layout_start.php'); ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CRM Opportunities Pipeline: Filter, search, and manage sales opportunities.">
+  <title>Opportunities Pipeline</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    ...existing code...
+  </style>
+</head>
+<body>
+<header>
+  <!-- Navigation can be included here if layout_start.php provides it -->
+</header>
+<main>
 
 <style>
   .opportunities-header {
@@ -660,7 +676,7 @@ function getStageColor($stage) {
       <thead>
         <tr>
           <th class="sortable <?= $sortBy === 'id' ? 'sorted-' . $sortOrder : '' ?>" onclick="sortTable('id')">ID</th>
-          <th class="sortable <?= $sortBy === 'contact_name' ? 'sorted-' . $sortOrder : '' ?>" onclick="sortTable('contact_name')">Contact</th>
+          <th class="sortable <?= $sortBy === 'contact_id' ? 'sorted-' . $sortOrder : '' ?>" onclick="sortTable('contact_id')">Contact</th>
           <th>Company</th>
           <th class="sortable <?= $sortBy === 'value' ? 'sorted-' . $sortOrder : '' ?>" onclick="sortTable('value')">Value</th>
           <th class="sortable <?= $sortBy === 'probability' ? 'sorted-' . $sortOrder : '' ?>" onclick="sortTable('probability')">Probability</th>
@@ -727,4 +743,7 @@ function getStageColor($stage) {
   }
 </script>
 
-<?php include_once(__DIR__ . '/layout_end.php'); ?>
+<!-- Footer can be included here if layout_end.php provides it -->
+</main>
+</body>
+</html>

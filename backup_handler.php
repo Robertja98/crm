@@ -4,11 +4,14 @@
  * Creates automatic backups before modifications and allows restore
  */
 
-require_once __DIR__ . '/error_handler.php';
 
-define('BACKUP_DIR', __DIR__ . '/backups');
-define('BACKUP_RETENTION_DAYS', 30);
-define('BACKUP_RETENTION_COUNT', 50);
+require_once __DIR__ . '/error_handler.php';
+require_once __DIR__ . '/env_loader.php';
+load_env();
+$crmConfig = require __DIR__ . '/config.local.php';
+define('BACKUP_DIR', getenv('BACKUP_DIR') ?: ($crmConfig['backup_dir'] ?? (__DIR__ . '/backups')));
+define('BACKUP_RETENTION_DAYS', getenv('BACKUP_RETENTION_DAYS') ?: ($crmConfig['backup_retention_days'] ?? 30));
+define('BACKUP_RETENTION_COUNT', getenv('BACKUP_RETENTION_COUNT') ?: ($crmConfig['backup_retention_count'] ?? 50));
 
 /**
  * Initialize backup directory

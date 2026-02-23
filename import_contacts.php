@@ -1,4 +1,25 @@
 <?php
+// Debug output for session troubleshooting
+echo "<div style='background:#ffc;border:1px solid #c90;padding:8px;margin-bottom:8px;'>";
+echo "<strong>DEBUG:</strong> Session status: " . session_status() . "<br>";
+echo "Session name: " . session_name() . "<br>";
+echo "Headers sent: " . (headers_sent() ? 'yes' : 'no') . "<br>";
+echo "Session ID: " . session_id() . "<br>";
+echo "</div>";
+
+// Ensure session and CSRF token are initialized before any output
+if (session_status() === PHP_SESSION_NONE) {
+    session_name('CRM_SESSION');
+    session_start();
+}
+
+require_once 'csrf_helper.php';
+initializeCSRFToken();
+echo "<div style='background:#cfc;border:1px solid #090;padding:8px;margin-bottom:8px;'>";
+echo "<strong>DEBUG:</strong> After initializeCSRFToken. Session CSRF token: " . htmlspecialchars($_SESSION['csrf_token'] ?? '(none)') . "<br>";
+echo "Session ID: " . session_id() . "<br>";
+echo "</div>";
+
 $pageTitle = 'Import Contacts';
 $currentPage = basename(__FILE__);
 include_once 'layout_start.php';
@@ -17,8 +38,12 @@ define('MAX_FILE_SIZE', 5242880); // 5MB
   <h2>Import Contacts</h2>
 
   <!-- Upload Form with CSRF Token -->
-  <form method="POST" enctype="multipart/form-data" class="contact-form">
-    <?php echo renderCSRFInput(); ?>
+    <form method="POST" enctype="multipart/form-data" class="contact-form">
+        <?php echo renderCSRFInput(); ?>
+        <div style="background:#eef; color:#333; padding:8px; margin-bottom:8px; font-size:12px;">
+            <strong>Debug:</strong> CSRF token in session: <code><?= htmlspecialchars($_SESSION['csrf_token'] ?? 'unset') ?></code><br>
+            CSRF token in form: <code><?= htmlspecialchars($_POST['csrf_token'] ?? 'not submitted') ?></code>
+        </div>
     <label for="csv_file">Upload CSV File:</label>
     <input type="file" name="csv_file" accept=".csv" required>
     <small style="display:block; margin-top:5px; color:#666;">Max size: 5MB, Max rows: <?php echo MAX_BATCH_SIZE; ?></small>
@@ -49,26 +74,33 @@ define('MAX_FILE_SIZE', 5242880); // 5MB
           
           // Read CSV and validate structure
           $rows = array_map('str_getcsv', file($tmp));
-          if (empty($rows)) {
-              showError('CSV file is empty.');
-          } else {
-              $header = array_map('trim', array_shift($rows));
-              
-              // Check batch size
-              if (count($rows) > MAX_BATCH_SIZE) {
-                  showError('Import contains ' . count($rows) . ' rows. Maximum allowed: ' . MAX_BATCH_SIZE . ' rows.');
-              } else {
-                  // Validate each contact
-                  $preview = [];
-                  $validation_errors = [];
-                  $duplicate_emails = [];
-                  $existing_emails = [];
-                  $row_number = 2; // CSV rows start at 2 (after header)
-                  
-                  // Load existing emails for duplicate checking
-                  if (file_exists('contacts.csv')) {
-                      $existing_contacts = readCSV('contacts.csv', $schema);
-                      $existing_emails = array_column($existing_contacts, 'email');
+                  if (!empty($preview)) {
+                      echo "<h3 style='margin-top: 20px;'>Preview - Valid Contacts (" . count($preview) . ")</h3>";
+                      echo "<form method='POST' action='commit_import.php' id='commitForm'>";
+                      // Ensure CSRF token is initialized before rendering input
+                      require_once 'csrf_helper.php';
+                      initializeCSRFToken();
+                      echo renderCSRFInput();
+                      echo "<div style='background:#eef; color:#333; padding:8px; margin-bottom:8px; font-size:12px;'>";
+                      echo "<strong>Debug:</strong> CSRF token in session: <code>" . htmlspecialchars($_SESSION['csrf_token'] ?? 'unset') . "</code><br>";
+                      echo "CSRF token in form: <code>" . htmlspecialchars(getCSRFToken()) . "</code>";
+                      echo "</div>";
+                      echo "<table class='spec-table' style='font-size: 12px;'><thead><tr>";
+                      foreach ($schema as $col) {
+                          echo "<th>" . htmlspecialchars(ucfirst(str_replace('_', ' ', $col))) . "</th>";
+                      }
+                      echo "</tr></thead><tbody>";
+                      foreach ($preview as $contact) {
+                          echo "<tr>";
+                          foreach ($schema as $col) {
+                              $value = $contact[$col] ?? '';
+                              echo "<td>" . htmlspecialchars(substr($value, 0, 50)) . (strlen($value) > 50 ? '...' : '') . "</td>";
+                          }
+                          echo "</tr>";
+                      }
+                      echo "</tbody></table>";
+                      echo "</form>";
+                      $_SESSION['import_preview'] = $preview;
                   }
                   
                   foreach ($rows as $row) {

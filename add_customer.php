@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   // Validate main fields
-  if ($newCustomer['contact_name'] === '') $errors[] = 'Contact name is required.';
+  if ($newCustomer['contact_id'] === '') $errors[] = 'Contact ID is required.';
   if ($newCustomer['address'] === '') $errors[] = 'Address is required.';
 
   // Parse line items

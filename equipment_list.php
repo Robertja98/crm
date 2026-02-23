@@ -388,7 +388,7 @@ foreach ($equipment as &$item) {
                     $customerName = 'Unknown';
                     foreach ($customers as $c) {
                         if ($c['customer_id'] === $item['customer_id']) {
-                            $customerName = $c['contact_name'];
+                            $customerName = $c['contact_id'];
                             break;
                         }
                     }

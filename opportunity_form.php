@@ -3,28 +3,17 @@ require_once 'db_mysql.php';
 require_once 'sanitize_helper.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
 
-// Load contacts from MySQL
+// Load unique company names from contacts for dropdown
 $conn = get_mysql_connection();
-$contacts = [];
-$result = $conn->query('SELECT * FROM contacts');
+$companies = [];
+$result = $conn->query("SELECT DISTINCT company FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY company");
 if ($result) {
   while ($row = $result->fetch_assoc()) {
-    $contacts[] = $row;
+    $companies[] = $row['company'];
   }
   $result->free();
 }
 $conn->close();
-
-// Build contact lookup map
-$contactMap = [];
-foreach ($contacts as $contact) {
-  $fullName = trim(($contact['first_name'] ?? '') . ' ' . ($contact['last_name'] ?? ''));
-  $company = $contact['company'] ?? '';
-  $contactMap[trim($contact['id'] ?? '')] = [
-    'name' => $fullName ?: 'Unnamed Contact',
-    'company' => $company
-  ];
-}
 
 // Calculate statistics
 $totalValue = 0;
@@ -49,12 +38,12 @@ $totalValue = 0;
       <div class="form-group">
         <label for="<?= $field ?>"><?= ucwords(str_replace('_', ' ', $field)) ?>:</label>
 
-        <?php if ($field === 'contact_id'): ?>
-          <select name="contact_id" id="contact_id" class="form-control" required>
-            <option value="">Select Contact</option>
-            <?php foreach ($contacts as $contact): ?>
-              <option value="<?= $contact['id'] ?>">
-                <?= trim($contact['first_name'] . ' ' . $contact['last_name']) ?: 'Unnamed Contact' ?>
+        <?php if ($field === 'company_id'): ?>
+          <select name="company_id" id="company_id" class="form-control" required>
+            <option value="">Select Company</option>
+            <?php foreach ($companies as $company): ?>
+              <option value="<?= htmlspecialchars($company) ?>">
+                <?= htmlspecialchars($company) ?>
               </option>
             <?php endforeach; ?>
           </select>

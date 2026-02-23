@@ -8,10 +8,13 @@
  * - Provides audit trail queries
  */
 
+
 require_once __DIR__ . '/db_mysql.php';
 require_once __DIR__ . '/backup_handler.php';
-
-define('AUDIT_BACKUP_DIR', 'backups/audit/');
+require_once __DIR__ . '/env_loader.php';
+load_env();
+$crmConfig = require __DIR__ . '/config.local.php';
+define('AUDIT_BACKUP_DIR', getenv('AUDIT_BACKUP_DIR') ?: ($crmConfig['audit_backup_dir'] ?? 'backups/audit/'));
 
 // Ensure audit backup directory exists
 if (!is_dir(AUDIT_BACKUP_DIR)) {

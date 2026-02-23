@@ -1295,29 +1295,22 @@ function getAuditByUser($user_id, $limit = 100) {
  * Get audit logs within date range
  */
 function getAuditByDateRange($start_date, $end_date) {
-    if (!file_exists(AUDIT_LOG_FILE)) {
-        return [];
+    $conn = get_mysql_connection();
+    $entries = [];
+    $sql = "SELECT * FROM audit_log WHERE timestamp >= ? AND timestamp <= ? ORDER BY timestamp DESC";
+    $stmt = $conn->prepare($sql);
+    $start_dt = $start_date . ' 00:00:00';
+    $end_dt = $end_date . ' 23:59:59';
+    $stmt->bind_param('ss', $start_dt, $end_dt);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    while ($row = $result->fetch_assoc()) {
+      $row['changes'] = json_decode($row['changes'] ?? '{}', true);
+      $entries[] = $row;
     }
-    
-    $entries = readCSV(AUDIT_LOG_FILE);
-    $filtered = [];
-    
-    $start_ts = strtotime($start_date . ' 00:00:00');
-    $end_ts = strtotime($end_date . ' 23:59:59');
-    
-    foreach ($entries as $entry) {
-        $entry_ts = strtotime($entry['timestamp'] ?? '');
-        if ($entry_ts >= $start_ts && $entry_ts <= $end_ts) {
-            $entry['changes'] = json_decode($entry['changes'] ?? '{}', true);
-            $filtered[] = $entry;
-        }
-    }
-    
-    usort($filtered, function($a, $b) {
-        return strtotime($b['timestamp']) - strtotime($a['timestamp']);
-    });
-    
-    return $filtered;
+    $stmt->close();
+    $conn->close();
+    return $entries;
 }
 
 /**
@@ -17772,22 +17765,17 @@ function getActivityByUser($user_id, $limit = 50) {
  * Get unique users from audit log
  */
 function getActiveUsers() {
-    if (!file_exists('activity_log.csv')) {
-        return [];
-    }
-    
-    $activitySchema = ['id','timestamp','user_id','ip_address','action','entity_type','entity_id','changes','summary','status','error_msg'];
-    $entries = readCSV('activity_log.csv', $activitySchema);
-    $users = array_unique(array_column($entries, 'user_id'));
-    
-    // Count actions per user
+    $conn = get_mysql_connection();
     $user_stats = [];
-    foreach ($users as $user) {
-        $count = count(array_filter($entries, fn($e) => $e['user_id'] === $user));
-        $user_stats[$user] = $count;
+    $sql = "SELECT user_id, COUNT(*) as action_count FROM audit_log WHERE user_id IS NOT NULL AND user_id != '' GROUP BY user_id ORDER BY action_count DESC";
+    $result = $conn->query($sql);
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $user_stats[$row['user_id']] = (int)$row['action_count'];
+      }
+      $result->free();
     }
-    
-    arsort($user_stats);
+    $conn->close();
     return $user_stats;
 }
 
@@ -17828,17 +17816,18 @@ function generateActivityReport($start_date, $end_date) {
  * Get contact statistics by category
  */
 function getContactStatsByCategory($field) {
-    $schema = require __DIR__ . '/contact_schema.php';
-    $contacts = readCSV('contacts.csv', $schema);
+    $conn = get_mysql_connection();
+    $field = $conn->real_escape_string($field);
+    $sql = "SELECT IFNULL(NULLIF($field, ''), '(empty)') AS category, COUNT(*) AS count FROM contacts GROUP BY category ORDER BY count DESC";
+    $result = $conn->query($sql);
     $stats = [];
-    
-    foreach ($contacts as $contact) {
-        $value = $contact[$field] ?? '(empty)';
-        if (empty($value)) $value = '(empty)';
-        $stats[$value] = ($stats[$value] ?? 0) + 1;
+    if ($result) {
+      while ($row = $result->fetch_assoc()) {
+        $stats[$row['category']] = (int)$row['count'];
+      }
+      $result->free();
     }
-    
-    arsort($stats);
+    $conn->close();
     return $stats;
 }
 
@@ -27461,28 +27450,29 @@ function injectIdsIntoCsv($inputFile, $outputFile, $idPrefix = 'CNT') {
 include_once(__DIR__ . '/layout_start.php');
 require_once 'csv_handler.php';
 
-$schema = require __DIR__ . '/inventory_schema.php';
-$inventoryFile = __DIR__ . '/inventory.csv';
-$errors = [];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $newItem = [];
-  foreach ($schema as $f) {
-    $newItem[$f] = trim($_POST[$f] ?? '');
+  $conn = get_mysql_connection();
+  $duplicates = [];
+  $sql = "SELECT LOWER(TRIM(email)) AS email, GROUP_CONCAT(id) AS ids, COUNT(*) AS count FROM contacts WHERE email IS NOT NULL AND email != '' GROUP BY email HAVING count > 1";
+  $result = $conn->query($sql);
+  if ($result) {
+    while ($row = $result->fetch_assoc()) {
+      // Fetch all contacts with this duplicate email
+      $email = $row['email'];
+      $ids = explode(',', $row['ids']);
+      $contacts = [];
+      foreach ($ids as $id) {
+        $contact_res = $conn->query("SELECT * FROM contacts WHERE id = '" . $conn->real_escape_string($id) . "'");
+        if ($contact_res && $contact_res->num_rows > 0) {
+          $contacts[] = $contact_res->fetch_assoc();
+          $contact_res->free();
+        }
+      }
+      $duplicates[$email] = $contacts;
+    }
+    $result->free();
   }
-  // Always auto-generate item_id
-  $newItem['item_id'] = uniqid('ITM_');
-  $newItem['created_at'] = date('Y-m-d H:i:s');
-  $newItem['updated_at'] = date('Y-m-d H:i:s');
-  // Load and append
-  $items = readCSV($inventoryFile, $schema);
-  $items[] = $newItem;
-  writeCSV($inventoryFile, $items, $schema);
-  header('Location: inventory_list.php');
-  exit;
-}
-?>
-<div class="container">
+  $conn->close();
+  return $duplicates;
   <h2>Add Inventory Item</h2>
   <form method="post" style="max-width:900px; margin:auto;">
     <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:18px;">

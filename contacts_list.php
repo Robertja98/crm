@@ -1,63 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CRM Contacts List: Search, filter, and manage contacts.">
+  <title>Contacts List</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Add responsive and accessibility styles here or keep existing */
+    ...existing code...
+  </style>
+</head>
+<body>
+<header>
+  <!-- Navigation can be included here if layout_start.php provides it -->
+</header>
+<main>
 <?php
 require_once __DIR__ . '/simple_auth/middleware.php';
 define('DEFAULT_CONTACTS_PER_PAGE', 25); // Default number of contacts per page
 define('ALLOWED_PER_PAGE_OPTIONS', [10, 25, 50, 100]);
-include_once(__DIR__ . '/layout_start.php');
 $currentPage = basename(__FILE__);
 require_once 'db_mysql.php';
-
 $schema = require __DIR__ . '/contact_schema.php';
-
-
-
 // ...existing code...
-
-if (!is_array($schema)) {
-    die('Error: contact_schema.php must return an array.');
-}
-
-// Load field visibility preferences from MySQL
-$fieldSaveError = '';
-function loadDisplayFieldsFromDB($schema) {
-  $conn = get_mysql_connection();
-  $fields = [];
-  $sql = "SELECT field_name FROM contact_field_visibility WHERE is_visible = 1 ORDER BY id ASC";
-  $result = $conn->query($sql);
-  if ($result) {
-    while ($row = $result->fetch_assoc()) {
-      if (in_array($row['field_name'], $schema)) {
-        $fields[] = $row['field_name'];
-      }
-    }
-    $result->free();
-  }
-  $conn->close();
-  return $fields;
-}
-$displayFields = loadDisplayFieldsFromDB($schema);
-
-// Save field visibility preferences to MySQL only when Apply is clicked
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply'])) {
-  $selectedFields = isset($_POST['display']) ? (array)$_POST['display'] : [];
-  $selectedFields = array_values(array_intersect($schema, $selectedFields));
-  $conn = get_mysql_connection();
-  // Clear previous settings
-  $conn->query("DELETE FROM contact_field_visibility");
-  // Insert new settings
-  $stmt = $conn->prepare("INSERT INTO contact_field_visibility (field_name, is_visible) VALUES (?, ?)");
-  foreach ($schema as $field) {
-    $isVisible = in_array($field, $selectedFields) ? 1 : 0;
-    $stmt->bind_param('si', $field, $isVisible);
-    $stmt->execute();
-  }
-  $stmt->close();
-  $conn->close();
-  $displayFields = loadDisplayFieldsFromDB($schema);
-  // Check if saved correctly
-  if (array_values(array_intersect($schema, $displayFields)) !== $selectedFields) {
-    $fieldSaveError = 'Field visibility did not persist. Please refresh and try again.';
-  }
-}
+?>
 
 // Fallback if displayFields is empty
 if (empty($displayFields)) {
@@ -1018,4 +985,7 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
   </a>
 </div>
 
-<?php include_once(__DIR__ . '/layout_end.php'); ?>
+<!-- Footer can be included here if layout_end.php provides it -->
+</main>
+</body>
+</html>

@@ -18,6 +18,15 @@ if ($result) {
   }
   $result->free();
 }
+// Fetch all contacts for lookup
+$contacts = [];
+$contactResult = $conn->query("SELECT id, company FROM contacts");
+if ($contactResult) {
+  while ($row = $contactResult->fetch_assoc()) {
+    $contacts[$row['id']] = $row['company'];
+  }
+  $contactResult->free();
+}
 $conn->close();
 ?>
 
@@ -37,7 +46,7 @@ $conn->close();
     <tbody>
       <?php foreach ($customers as $contact): ?>
         <tr>
-          <td><?= htmlspecialchars($contact['company'] ?? '') ?></td>
+          <td><?= htmlspecialchars($contacts[$contact['contact_id']] ?? '') ?></td>
 		  <td><?= htmlspecialchars($contact['first_name'] ?? '') ?></td>
           <td><?= htmlspecialchars($contact['email'] ?? '') ?></td>
           <td><?= htmlspecialchars($contact['is_customer'] ?? '') ?></td>

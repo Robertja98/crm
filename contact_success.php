@@ -3,12 +3,15 @@ require_once __DIR__ . '/simple_auth/middleware.php';
 $currentPage = basename(__FILE__); // Dynamically sets active tab
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Contact successfully saved in CRM. Return to dashboard or manage contacts and opportunities.">
   <title>Contact Saved</title>
-  <link rel="stylesheet" href="styles.css"> <!-- Optional external CSS -->
+  <link rel="stylesheet" href="styles.css">
   <style>
     body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9; }
     .navbar { background: #333; padding: 10px 20px; }
@@ -22,38 +25,39 @@ $currentPage = basename(__FILE__); // Dynamically sets active tab
   </style>
 </head>
 <body>
-
-<nav class="navbar">
-  <ul class="nav-list">
-    <li class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>">
-      <a href="dashboard.php">Dashboard</a>
-    </li>
-    <li class="<?= $currentPage === 'contact_form.php' ? 'active' : '' ?>">
-      <a href="contact_form.php">Add Contact</a>
-    </li>
-    <li class="<?= $currentPage === 'contacts_list.php' ? 'active' : '' ?>">
-      <a href="contacts_list.php">View Contacts</a>
-    </li>
-    <li class="<?= $currentPage === 'add_opportunity.php' ? 'active' : '' ?>">
-      <a href="add_opportunity.php">Add Opportunity</a>
-    </li>
-    <li class="<?= $currentPage === 'opportunities_list.php' ? 'active' : '' ?>">
-      <a href="opportunities_list.php">View Opportunities</a>
-    </li>
-    <li class="<?= $currentPage === 'import_contacts.php' ? 'active' : '' ?>">
-      <a href="import_contacts.php">Import Contacts</a>
-    </li>
-    <li class="<?= $currentPage === 'export_contacts.php' ? 'active' : '' ?>">
-      <a href="export_contacts.php">Export Contacts</a>
-    </li>
-  </ul>
-</nav>
-
-<div class="container">
-  <h2>✅ Contact Saved Successfully</h2>
-  <p>Your new contact has been added to the system and logged for audit.</p>
-  <a href="dashboard.php" class="btn">Return to Dashboard</a>
-</div>
-
+  <header>
+    <nav class="navbar" aria-label="Main navigation" role="navigation">
+      <ul class="nav-list" role="menubar">
+        <li class="<?= $currentPage === 'dashboard.php' ? 'active' : '' ?>" role="none">
+          <a href="dashboard.php" role="menuitem" tabindex="0">Dashboard</a>
+        </li>
+        <li class="<?= $currentPage === 'contact_form.php' ? 'active' : '' ?>" role="none">
+          <a href="contact_form.php" role="menuitem" tabindex="0">Add Contact</a>
+        </li>
+        <li class="<?= $currentPage === 'contacts_list.php' ? 'active' : '' ?>" role="none">
+          <a href="contacts_list.php" role="menuitem" tabindex="0">View Contacts</a>
+        </li>
+        <li class="<?= $currentPage === 'add_opportunity.php' ? 'active' : '' ?>" role="none">
+          <a href="add_opportunity.php" role="menuitem" tabindex="0">Add Opportunity</a>
+        </li>
+        <li class="<?= $currentPage === 'opportunities_list.php' ? 'active' : '' ?>" role="none">
+          <a href="opportunities_list.php" role="menuitem" tabindex="0">View Opportunities</a>
+        </li>
+        <li class="<?= $currentPage === 'import_contacts.php' ? 'active' : '' ?>" role="none">
+          <a href="import_contacts.php" role="menuitem" tabindex="0">Import Contacts</a>
+        </li>
+        <li class="<?= $currentPage === 'export_contacts.php' ? 'active' : '' ?>" role="none">
+          <a href="export_contacts.php" role="menuitem" tabindex="0">Export Contacts</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main role="main" aria-labelledby="contactSavedTitle">
+    <div class="container">
+      <h2 id="contactSavedTitle">✅ Contact Saved Successfully</h2>
+      <p>Your new contact has been added to the system and logged for audit.</p>
+      <a href="dashboard.php" class="btn" aria-label="Return to Dashboard">Return to Dashboard</a>
+    </div>
+  </main>
 </body>
 </html>

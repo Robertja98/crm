@@ -9,29 +9,28 @@ require_once 'layout_start.php';
 require_once 'db_mysql.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
 $contactSchema = require __DIR__ . '/contact_schema.php';
-function fetch_contacts_mysql($contactSchema) {
+function fetch_companies_mysql() {
   $conn = get_mysql_connection();
-  $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $contactSchema));
-  $sql = "SELECT $fields FROM contacts";
+  $sql = "SELECT DISTINCT company FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY company";
   $result = $conn->query($sql);
   $rows = [];
   if ($result) {
     while ($row = $result->fetch_assoc()) {
-      $rows[] = $row;
+      $rows[] = $row['company'];
     }
     $result->free();
   }
   $conn->close();
   return $rows;
 }
-$contacts = fetch_contacts_mysql($contactSchema);
+$companies = fetch_companies_mysql();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Validate inputs
   $errors = [];
-  if (empty($_POST['contact_id'])) {
-    $errors[] = 'Contact is required';
+  if (empty($_POST['company_id'])) {
+    $errors[] = 'Company is required';
   }
   if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
     $errors[] = 'Valid opportunity value is required';
@@ -47,16 +46,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   if (empty($errors)) {
     $conn = get_mysql_connection();
-    $stmt = $conn->prepare("INSERT INTO opportunities (contact_id, value, stage, probability, expected_close) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO opportunities (company_id, value, stage, probability, expected_close) VALUES (?, ?, ?, ?, ?)");
     if (!$stmt) {
       $error = 'Failed to prepare statement: ' . $conn->error;
     } else {
-      $contact_id = $_POST['contact_id'];
+      $company_id = $_POST['company_id'];
       $value = number_format((float)$_POST['value'], 2, '.', '');
       $stage = $_POST['stage'];
       $probability = (int)$_POST['probability'];
       $expected_close = $_POST['expected_close'];
-      $stmt->bind_param('sdsss', $contact_id, $value, $stage, $probability, $expected_close);
+      $stmt->bind_param('sdsss', $company_id, $value, $stage, $probability, $expected_close);
       if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
@@ -361,25 +360,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
       <div class="form-grid">
         <div class="form-group full-width">
-          <label for="contact_id">Contact *</label>
-          <select name="contact_id" id="contact_id" required>
-            <option value="">Select a contact...</option>
-            <?php foreach ($contacts as $contact): ?>
-              <?php
-                $fullName = trim($contact['first_name'] . ' ' . $contact['last_name']);
-                $company = $contact['company'] ?? '';
-                $displayName = $fullName ?: 'Unnamed Contact';
-                if ($company) {
-                  $displayName .= ' (' . $company . ')';
-                }
-                $selected = (isset($_POST['contact_id']) && $_POST['contact_id'] == $contact['id']) ? 'selected' : '';
-              ?>
-              <option value="<?= htmlspecialchars($contact['id']) ?>" <?= $selected ?>>
-                <?= htmlspecialchars($displayName) ?>
+          <label for="company_id">Company *</label>
+          <select name="company_id" id="company_id" required>
+            <option value="">Select a company...</option>
+            <?php foreach ($companies as $company): ?>
+              <option value="<?= htmlspecialchars($company) ?>">
+                <?= htmlspecialchars($company) ?>
               </option>
             <?php endforeach; ?>
           </select>
-          <div class="form-help">Select the contact associated with this opportunity</div>
+          <div class="form-help">Select the company associated with this opportunity</div>
         </div>
       </div>
     </div>

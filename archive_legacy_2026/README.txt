@@ -1,0 +1,1 @@
+This folder contains legacy scripts and utilities (CSV handlers, migration tools, backup scripts) archived on 2026-02-19 after CRM migration to full SQL. These are retained for reference or rollback only.

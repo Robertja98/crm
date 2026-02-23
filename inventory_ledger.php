@@ -156,7 +156,7 @@ function build_customer_pairs($customers) {
   $pairs = [];
   foreach ($customers as $row) {
     $id = trim($row['customer_id'] ?? '');
-    $name = trim($row['contact_name'] ?? '');
+    $name = trim($row['contact_id'] ?? '');
     if ($id === '' && $name === '') {
       continue;
     }

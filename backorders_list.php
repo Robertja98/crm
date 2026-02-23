@@ -128,27 +128,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['receive_backorder']))
       $updated[] = $row;
     }
   }
-
-  if ($itemId !== '') {
-    $stillBackordered = false;
-    foreach ($updated as $row) {
-      if (($row['item_id'] ?? '') === $itemId) {
-        $stillBackordered = true;
-        break;
-      }
-    }
-    if (!$stillBackordered) {
-      update_inventory_status_pgsql($itemId, 'Stock');
-    }
-  }
-
+  // After updating, write backorders and redirect if needed
   write_backorders($backorderFile, $updated);
   header('Location: backorders_list.php');
   exit;
 }
-
-$backorders = read_backorders($backorderFile);
+// End PHP processing, begin HTML output
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CRM Backorders: Manage and receive inventory backorders.">
+  <title>Backorders</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<?php include_once(__DIR__ . '/layout_start.php'); ?>
 <div class="container">
   <h2>Backorders</h2>
   <?php if (empty($backorders)): ?>
@@ -188,4 +185,6 @@ $backorders = read_backorders($backorderFile);
     </table>
   <?php endif; ?>
 </div>
+</body>
+</html>
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

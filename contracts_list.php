@@ -1,5 +1,24 @@
 
 <?php
+$basePath = __DIR__ . DIRECTORY_SEPARATOR;
+require_once $basePath . 'layout_start.php';
+
+// ...existing PHP code...
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CRM Service Contracts: Manage agreements and equipment rentals.">
+    <title>Service Contracts</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- ...existing HTML output... -->
+<?php include_once(__DIR__ . '/layout_end.php'); ?>
+</body>
+</html>
 
 
 $basePath = __DIR__ . DIRECTORY_SEPARATOR;

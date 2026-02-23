@@ -1,3 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CRM Contact Details: View and edit contact information.">
+  <title>Contact Details</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
 <?php
 // Security headers
 header('Content-Type: text/html; charset=utf-8');
@@ -10,51 +20,14 @@ $pageTitle = 'Contact Details';
 require_once('layout_start.php');
 require_once 'db_mysql.php';
 
-// DEBUG: Show session and request state for troubleshooting (after headers and includes)
-
-// Load schemas and data
-
-// Load schema
-$schema = require 'contact_schema.php';
-$contactId = $_GET['id'] ?? '';
-$contact = null;
-$conn = get_mysql_connection();
-if ($contactId) {
-  $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
-  $safeId = mysqli_real_escape_string($conn, $contactId);
-  $result = mysqli_query($conn, "SELECT $fields FROM contacts WHERE id = '$safeId'");
-  if ($result && ($row = mysqli_fetch_assoc($result))) {
-    $contact = $row;
-  }
-  if ($result) {
-    mysqli_free_result($result);
-  }
-}
-
-// Handle POST requests for updating contact
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
-  $id = mysqli_real_escape_string($conn, $_POST['id']);
-  $fields = [];
-  foreach ($schema as $f) {
-    $fields[$f] = isset($_POST[$f]) ? trim($_POST[$f]) : null;
-  }
-  // Special handling for is_customer
-  $fields['is_customer'] = isset($_POST['is_customer']) ? 'yes' : 'no';
-  $fields['last_modified'] = date('Y-m-d H:i:s');
-  $setClause = [];
-  foreach ($fields as $k => $v) {
-    $setClause[] = '"' . $k . '" = ' . ($v !== null ? "'" . pg_escape_string($v) . "'" : 'NULL');
-  }
-  $sql = "UPDATE contacts SET " . implode(', ', $setClause) . " WHERE id = '" . $id . "'";
-  $updateResult = pg_query($conn, $sql);
-  if ($updateResult) {
-    $saveSuccess = true;
-    // Reload contact
-    $result = pg_query($conn, "SELECT $fields FROM contacts WHERE id = '" . $id . "'");
-    if ($result && ($row = pg_fetch_assoc($result))) {
+// ...existing code...
+?>
+    if ($result && ($row = mysqli_fetch_assoc($result))) {
       $contact = $row;
     }
-    pg_free_result($result);
+    if ($result) {
+      mysqli_free_result($result);
+    }
   } else {
     $saveSuccess = false;
   }
@@ -63,26 +36,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'])) {
 // Safety: verify contact was loaded
 if (!$contact) {
   // Try to fetch the record even if fields are missing
-  $result = pg_query($conn, "SELECT * FROM contacts WHERE id = '" . pg_escape_string($contactId) . "'");
-  if ($result && ($row = pg_fetch_assoc($result))) {
+  $safeContactId = mysqli_real_escape_string($conn, $contactId);
+  $result = mysqli_query($conn, "SELECT * FROM contacts WHERE id = '" . $safeContactId . "'");
+  if ($result && ($row = mysqli_fetch_assoc($result))) {
     $contact = $row;
     echo '<div style="background:#fffbe6;border:2px solid #ffc;padding:10px;margin:10px 0;">';
     echo '<strong>Warning:</strong> This contact record is incomplete. Some fields may be missing or blank.';
     echo '</div>';
-    pg_free_result($result);
+    mysqli_free_result($result);
   } else {
     // Diagnostic: Show all available contact IDs
-    $result = pg_query($conn, "SELECT id, first_name, last_name FROM contacts ORDER BY id LIMIT 20");
+    $result = mysqli_query($conn, "SELECT id, first_name, last_name FROM contacts ORDER BY id LIMIT 20");
     echo '<div style="background:#fee;border:2px solid #c33;padding:10px;margin:10px 0;">';
     echo '<strong>Error: Contact not found.</strong><br>';
     echo 'Available Contact IDs:<br><ul>';
-    while ($row = pg_fetch_assoc($result)) {
+    while ($row = mysqli_fetch_assoc($result)) {
       echo '<li>ID: ' . htmlspecialchars($row['id']) . ' - ' . htmlspecialchars($row['first_name']) . ' ' . htmlspecialchars($row['last_name']) . '</li>';
     }
     echo '</ul>';
     echo 'Try <code>contact_view.php?id=&lt;ID&gt;</code> with one of the above.';
     echo '</div>';
-    pg_free_result($result);
+    if ($result) {
+      mysqli_free_result($result);
+    }
     exit;
   }
 }
@@ -485,7 +461,26 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
             <div class="form-grid">
               <div class="form-group" style="grid-column: 1 / -1;">
                 <label>Company</label>
-                <input type="text" name="company" value="<?= htmlspecialchars($contact['company'] ?? '') ?>">
+                <?php
+                // Fetch all unique companies for the dropdown
+                $companyOptions = [];
+                $companyResult = mysqli_query($conn, "SELECT DISTINCT company FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY LOWER(company)");
+                if ($companyResult) {
+                  while ($row = mysqli_fetch_assoc($companyResult)) {
+                    $companyOptions[] = $row['company'];
+                  }
+                  mysqli_free_result($companyResult);
+                }
+                ?>
+                <select name="company">
+                  <option value="">-- Select Company --</option>
+                  <?php foreach ($companyOptions as $company): ?>
+                    <option value="<?= htmlspecialchars($company) ?>" <?= (isset($contact['company']) && $contact['company'] === $company) ? 'selected' : '' ?>><?= htmlspecialchars($company) ?></option>
+                  <?php endforeach; ?>
+                  <?php if (!empty($contact['company']) && !in_array($contact['company'], $companyOptions)): ?>
+                    <option value="<?= htmlspecialchars($contact['company']) ?>" selected><?= htmlspecialchars($contact['company']) ?> (not in list)</option>
+                  <?php endif; ?>
+                </select>
               </div>
               <div class="form-group">
                 <label>Tank Number</label>
@@ -762,4 +757,6 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
   });
 </script>
 
+</body>
+</html>
 <?php include_once('layout_end.php'); ?>

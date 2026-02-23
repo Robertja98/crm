@@ -1,5 +1,5 @@
 <?php
-// Include backup system if available
+// This file has been archived to archive_legacy_2026/csv_handler.php as of 2026-02-19. See archive_legacy_2026/README.txt for details.
 if (file_exists(__DIR__ . '/backup_handler.php')) {
 	require_once __DIR__ . '/backup_handler.php';
 }

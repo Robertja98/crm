@@ -1,15 +1,24 @@
 <?php
+
 session_start();
 require_once 'csv_handler.php';
 require_once 'error_handler.php';
 require_once 'contact_validator.php';
+require_once 'csrf_helper.php';
 
 $schema = require __DIR__ . '/contact_schema.php';
 $targetFile = 'contacts.csv';
 
 // CSRF token verification
+// Debug output for CSRF troubleshooting
+echo "<div style='background:#fee;border:1px solid #c00;padding:8px;margin-bottom:8px;'>";
+echo "<strong>DEBUG:</strong> Received CSRF token: " . htmlspecialchars($_POST['csrf_token'] ?? '(none)') . "<br>";
+echo "Session CSRF token: " . htmlspecialchars($_SESSION['csrf_token'] ?? '(none)') . "<br>";
+echo "Session ID: " . session_id() . "<br>";
+echo "</div>";
+
 if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
-    showError('CSRF token validation failed. Import cancelled.');
+    showError('CSRF Error', 'CSRF token validation failed. Import cancelled.');
     logError('CSRF token validation failed during import', ['ip' => $_SERVER['REMOTE_ADDR']]);
     exit;
 }
@@ -19,7 +28,7 @@ $contacts = $_SESSION['import_preview'] ?? [];
 
 if (!is_array($contacts) || empty($contacts)) {
     echo "<div class='container'>";
-    showError('No import data received or session expired. <a href="import_contacts.php">Try again</a>');
+    showError('Import Error', 'No import data received or session expired. <a href=\"import_contacts.php\">Try again</a>');
     logWarning('Import failed: no data in session', ['ip' => $_SERVER['REMOTE_ADDR']]);
     echo "</div>";
     exit;
@@ -42,13 +51,12 @@ foreach ($contacts as $index => $contact) {
 }
 
 if (!empty($importErrors)) {
-    showError('Some contacts failed final validation. Import aborted.');
-    echo "<p><strong>Failed contacts:</strong></p>";
+    showError('Import Error', 'Some contacts failed final validation. Import aborted.');
     echo "<ul>";
     foreach ($importErrors as $idx => $errors) {
         echo "<li>Contact " . ($idx + 1) . ": " . implode(", ", $errors) . "</li>";
     }
-    echo "</ul>";
+        echo "</ul>";
     logError('Import failed during validation', ['count' => count($importErrors), 'total' => count($contacts)]);
     echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
     echo "</div>";

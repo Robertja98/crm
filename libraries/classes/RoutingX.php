@@ -1,10 +1,10 @@
 <?php
-echo 'TOP OF RoutingX.php<br>';
-// Temporary RoutingX.php for stepwise debugging
-
 declare(strict_types=1);
 
 namespace PhpMyAdmin;
+
+echo 'TOP OF RoutingX.php<br>';
+// Temporary RoutingX.php for stepwise debugging
 
 // Comment out all use statements for now
 use FastRoute\DataGenerator\GroupCountBased as DataGeneratorGroupCountBased;

@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$idToDelete = $_POST['id'] ?? null;
+// Use contact_id for consistency
+$idToDelete = $_POST['contact_id'] ?? null;
 if (!$idToDelete) {
     showError('No contact ID provided');
     exit;
@@ -30,7 +31,7 @@ try {
         // Find and capture contact before deletion (for audit log)
         $deleted_contact = null;
         foreach ($contacts as $contact) {
-            if ($contact['id'] === $idToDelete) {
+            if ($contact['contact_id'] === $idToDelete) {
                 $deleted_contact = $contact;
                 break;
             }
@@ -38,12 +39,11 @@ try {
         
         // Filter out the contact to delete
         $filtered = array_filter($contacts, function($c) use ($idToDelete) {
-            return $c['id'] !== $idToDelete;
+            return $c['contact_id'] !== $idToDelete;
         });
         
         // Reindex array to maintain clean structure
         return array_values($filtered);
-    });
     
     // ✅ AUDIT: Log contact deletion
     if ($deleted_contact) {

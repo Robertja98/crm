@@ -1,10 +1,7 @@
 
 
 
-/**
- * Export filtered rows to a CSV file.
- *
- * @param string $filename Output CSV file path
+// This file has been archived to archive_legacy_2026/csv_export.php as of 2026-02-19. See archive_legacy_2026/README.txt for details.
  * @param array  $rows     Data rows (array of associative arrays)
  * @param array  $filters  Key-value pairs to filter rows (optional)
  * @param array  $schema   Column order/schema (optional, recommended)
