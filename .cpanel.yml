@@ -6,6 +6,5 @@ hooks:
     - echo "Starting deployment..."
   post_deploy:
     - git submodule update --init --recursive
-    - rm -rf /home/hp6xh47j1ds2/public_html/crm/*
-    - /bin/cp -r * /home/hp6xh47j1ds2/public_html/crm/
+    - /bin/bash -lc 'TARGET="/home/hp6xh47j1ds2/public_html/crm"; mkdir -p "$TARGET"; if command -v rsync >/dev/null 2>&1; then rsync -a --delete --exclude=".git/" --exclude=".cpanel.yml" ./ "$TARGET/"; else rm -rf "$TARGET"/* "$TARGET"/.[!.]* "$TARGET"/..?*; /bin/cp -a . "$TARGET/"; rm -rf "$TARGET/.git" "$TARGET/.gitmodules"; fi'
     - echo "Deployment complete!"
