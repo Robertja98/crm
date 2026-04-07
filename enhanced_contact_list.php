@@ -1,37 +1,64 @@
+// This file has been removed as requested. All functionality is now in contacts_list.php.
+// Unconditional execution log for troubleshooting
+file_put_contents(__DIR__ . '/enhanced_contact_list_exec.txt', 'Executed at ' . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
 <?php
+session_start();
+
 include_once(__DIR__ . '/layout_start.php');
 $currentPage = basename(__FILE__);
-require_once 'csv_handler.php';
+require_once 'db_mysql.php';
 
 $schemaFile = __DIR__ . '/contact_schema.php';
 if (!file_exists($schemaFile)) {
-    die('Error: contact_schema.php not found.');
+  die('Error: contact_schema.php not found.');
+// DEBUG: Log state for troubleshooting (moved to very top)
 }
 $schema = require $schemaFile;
 if (!is_array($schema)) {
-    die('Error: contact_schema.php must return an array.');
+  die('Error: contact_schema.php must return an array.');
 }
 
-$contacts = readCSV('contacts.csv', $schema);
-if (!is_array($contacts)) {
-    $contacts = [];
+
+// Handle custom column selection (session + cookie + GET)
+function getColumnsFromGet($schema) {
+  if (!empty($_GET['columns'])) {
+    $cols = $_GET['columns'];
+    if (!is_array($cols)) $cols = [$cols];
+    return array_values(array_intersect($schema, $cols));
+  }
+  return null;
 }
 
-// Extract unique values for dynamic filters
-$statusOptions = [];
-$tagOptions = [];
-foreach ($contacts as $c) {
-    if (!empty($c['status'])) {
-        $statusOptions[$c['status']] = true;
-    }
-    if (!empty($c['tags'])) {
-        foreach (explode(',', $c['tags']) as $tag) {
-            $tagOptions[trim($tag)] = true;
-        }
-    }
+if (isset($_POST['custom_columns']) && is_array($_POST['custom_columns'])) {
+  $selected = array_values(array_intersect($schema, $_POST['custom_columns']));
+  $_SESSION['custom_columns'] = $selected;
+  setcookie('custom_columns', json_encode($selected), time() + 60*60*24*30, '/');
+  // Redirect to GET with columns[] in URL
+  $colParams = '';
+  foreach ($selected as $col) { $colParams .= '&columns[]=' . urlencode($col); }
+  header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?') . '?' . ltrim($colParams, '&'));
+  exit;
 }
-ksort($statusOptions);
-ksort($tagOptions);
+if (isset($_POST['reset_columns'])) {
+  unset($_SESSION['custom_columns']);
+  setcookie('custom_columns', '', time() - 3600, '/');
+  header('Location: ' . strtok($_SERVER['REQUEST_URI'], '?'));
+  exit;
+}
+$activeColumns = getColumnsFromGet($schema);
+if (!$activeColumns) {
+  if (isset($_SESSION['custom_columns'])) {
+    $activeColumns = $_SESSION['custom_columns'];
+  } elseif (!empty($_COOKIE['custom_columns'])) {
+    $decoded = json_decode($_COOKIE['custom_columns'], true);
+    $activeColumns = is_array($decoded) ? array_values(array_intersect($schema, $decoded)) : $schema;
+    $_SESSION['custom_columns'] = $activeColumns;
+  } else {
+    $activeColumns = $schema;
+  }
+}
+
 
 // Handle query parameters
 $query = strtolower(trim($_GET['query'] ?? ''));
@@ -42,56 +69,118 @@ $sortDirection = $_GET['direction'] ?? 'asc';
 $page = max(1, intval($_GET['page'] ?? 1));
 $perPage = 25;
 
-// Filter contacts
-$contacts = array_filter($contacts, function($c) use ($query, $statusFilter, $tagFilter) {
-    $matchQuery = $query === '' || (
-        stripos($c['first_name'] ?? '', $query) !== false ||
-        stripos($c['last_name'] ?? '', $query) !== false ||
-        stripos($c['email'] ?? '', $query) !== false ||
-        stripos($c['company'] ?? '', $query) !== false
-    );
-    $matchStatus = $statusFilter === '' || ($c['status'] ?? '') === $statusFilter;
-    $matchTag = $tagFilter === '' || in_array($tagFilter, array_map('trim', explode(',', $c['tags'] ?? '')));
-    return $matchQuery && $matchStatus && $matchTag;
-});
+$conn = get_mysql_connection();
 
-// Sort contacts
+// Build WHERE clause
+$where = [];
+if ($query !== '') {
+  $q = mysqli_real_escape_string($conn, $query);
+  $where[] = "(LOWER(first_name) LIKE '%$q%' OR LOWER(last_name) LIKE '%$q%' OR LOWER(email) LIKE '%$q%' OR LOWER(company) LIKE '%$q%')";
+}
+if ($statusFilter !== '') {
+  $sf = mysqli_real_escape_string($conn, $statusFilter);
+  $where[] = "status = '$sf'";
+}
+if ($tagFilter !== '') {
+  $tf = mysqli_real_escape_string($conn, $tagFilter);
+  $where[] = "FIND_IN_SET('$tf', tags)";
+}
+$whereClause = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
+
+// Build ORDER BY
 if ($sortField && in_array($sortField, $schema)) {
-    usort($contacts, function($a, $b) use ($sortField, $sortDirection) {
-        $valA = $a[$sortField] ?? '';
-        $valB = $b[$sortField] ?? '';
-        $cmp = is_numeric($valA) && is_numeric($valB) ? ($valA <=> $valB) : strnatcasecmp($valA, $valB);
-        return $sortDirection === 'desc' ? -$cmp : $cmp;
-    });
+  $orderBy = "ORDER BY `$sortField` " . ($sortDirection === 'desc' ? 'DESC' : 'ASC');
+} else {
+  $orderBy = '';
 }
 
-// Pagination
-$total = count($contacts);
-$contacts = array_slice($contacts, ($page - 1) * $perPage, $perPage);
+// Get total count for pagination
+$countSql = "SELECT COUNT(*) as cnt FROM contacts $whereClause";
+$countRes = $conn->query($countSql);
+$total = ($countRes && ($row = $countRes->fetch_assoc())) ? intval($row['cnt']) : 0;
+if ($countRes) $countRes->free();
+
+// Build SELECT
+$selectCols = implode(',', array_map(function($col) { return "`$col`"; }, $activeColumns));
+$offset = ($page - 1) * $perPage;
+$sql = "SELECT $selectCols FROM contacts $whereClause $orderBy LIMIT $perPage OFFSET $offset";
+$contacts = [];
+$res = $conn->query($sql);
+if ($res) {
+  while ($row = $res->fetch_assoc()) {
+    $contacts[] = $row;
+  }
+  $res->free();
+}
+
+// Extract unique values for dynamic filters (status, tags)
+$statusOptions = [];
+$tagOptions = [];
+$statusRes = $conn->query("SELECT DISTINCT status FROM contacts WHERE status IS NOT NULL AND status != ''");
+if ($statusRes) {
+  while ($row = $statusRes->fetch_assoc()) {
+    $statusOptions[$row['status']] = true;
+  }
+  $statusRes->free();
+}
+$tagRes = $conn->query("SELECT tags FROM contacts WHERE tags IS NOT NULL AND tags != ''");
+if ($tagRes) {
+  while ($row = $tagRes->fetch_assoc()) {
+    foreach (explode(',', $row['tags']) as $tag) {
+      $tagOptions[trim($tag)] = true;
+    }
+  }
+  $tagRes->free();
+}
+ksort($statusOptions);
+ksort($tagOptions);
 
 // Export CSV
 if (isset($_GET['export']) && $_GET['export'] === '1') {
-    $filename = 'contacts_export_' . date('Ymd_His') . '.csv';
-    header('Content-Type: text/csv');
-    header("Content-Disposition: attachment; filename="$filename"");
-    $output = fopen('php://output', 'w');
-    fputcsv($output, $schema);
-    foreach ($contacts as $contact) {
-        $row = [];
-        foreach ($schema as $f) {
-            $row[] = $contact[$f] ?? '';
-        }
-        fputcsv($output, $row);
+  $filename = 'contacts_export_' . date('Ymd_His') . '.csv';
+  header('Content-Type: text/csv');
+  header("Content-Disposition: attachment; filename=\"$filename\"");
+  $output = fopen('php://output', 'w');
+  fputcsv($output, $activeColumns);
+  foreach ($contacts as $contact) {
+    $row = [];
+    foreach ($activeColumns as $f) {
+      $row[] = $contact[$f] ?? '';
     }
-    fclose($output);
-    exit;
+    fputcsv($output, $row);
+  }
+  fclose($output);
+  exit;
 }
 ?>
 
+<?php if (!empty($GLOBALS['debug_log_error'])): ?>
+  <div style="background:#ffdddd;color:#a00;padding:10px;margin:10px 0;border:1px solid #a00;font-weight:bold;">
+    <?= htmlspecialchars($GLOBALS['debug_log_error']) ?>
+  </div>
+<?php endif; ?>
 <div class="container">
   <h2>Contact List</h2>
 
+
+  <!-- Custom Columns Form -->
+
+  <form method="post" class="filter-form" style="margin-bottom:18px;">
+    <label style="font-weight:600;">Customize Columns:</label>
+    <?php foreach ($schema as $col): ?>
+      <label style="margin-right:10px;">
+        <input type="checkbox" name="custom_columns[]" value="<?= htmlspecialchars($col) ?>" <?= in_array($col, $activeColumns) ? 'checked' : '' ?>>
+        <?= htmlspecialchars(ucwords(str_replace('_', ' ', $col))) ?>
+      </label>
+    <?php endforeach; ?>
+    <button type="submit" style="margin-left:10px;">Apply</button>
+    <button type="submit" name="reset_columns" value="1" style="margin-left:5px;">Reset</button>
+  </form>
+
   <form method="get" class="filter-form">
+    <?php foreach ($activeColumns as $col): ?>
+      <input type="hidden" name="columns[]" value="<?= htmlspecialchars($col) ?>">
+    <?php endforeach; ?>
     <input type="text" name="query" placeholder="Search..." value="<?= htmlspecialchars($_GET['query'] ?? '') ?>">
     <select name="status">
       <option value="">-- Status --</option>
@@ -106,15 +195,25 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
       <?php endforeach; ?>
     </select>
     <button type="submit">🔍 Filter</button>
-    <a href="?export=1" class="btn-outline">⬇ Export CSV</a>
+    <a href="?export=1<?php foreach ($activeColumns as $col) { echo '&columns[]=' . urlencode($col); } ?>" class="btn-outline">⬇ Export CSV</a>
   </form>
 
   <table class="table-grid">
     <thead>
       <tr>
-        <?php foreach ($schema as $field): ?>
+        <?php foreach ($activeColumns as $field): ?>
           <th>
-            <a href="?<?= http_build_query(array_merge($_GET, ['sort' => $field, 'direction' => ($sortField === $field && $sortDirection === 'asc') ? 'desc' : 'asc'])) ?>">
+            <?php
+              // Build sort link with all columns[] as columns[]=...
+              $sortParams = $_GET;
+              $sortParams['sort'] = $field;
+              $sortParams['direction'] = ($sortField === $field && $sortDirection === 'asc') ? 'desc' : 'asc';
+              // Always build columns[] as repeated params
+              $colQuery = '';
+              foreach ($activeColumns as $col) { $colQuery .= '&columns[]=' . urlencode($col); }
+              $sortUrl = '?' . http_build_query($sortParams) . $colQuery;
+            ?>
+            <a href="<?= $sortUrl ?>">
               <?= htmlspecialchars(ucwords(str_replace('_', ' ', $field))) ?>
               <?= $sortField === $field ? ($sortDirection === 'asc' ? '↑' : '↓') : '' ?>
             </a>
@@ -125,7 +224,7 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
     <tbody>
       <?php foreach ($contacts as $c): ?>
         <tr>
-          <?php foreach ($schema as $f): ?>
+          <?php foreach ($activeColumns as $f): ?>
             <td><?= htmlspecialchars($c[$f] ?? '') ?></td>
           <?php endforeach; ?>
         </tr>

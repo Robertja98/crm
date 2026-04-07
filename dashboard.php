@@ -1,4 +1,17 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+  session_name('CRM_SESSION');
+}
+session_start();
+// Dashboard variable defaults
+$totalContacts = 0;
+$totalValue = 0;
+$totalForecast = 0;
+$accuracy = 0;
+$stages = [];
+$topStage = '';
+$forecastByStage = [];
+include_once(__DIR__ . '/layout_start.php');
 // ...existing code...
 ?>
 <!DOCTYPE html>

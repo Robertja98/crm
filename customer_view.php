@@ -18,10 +18,10 @@ $contactSchema = require __DIR__ . '/contact_schema.php';
 // Fetch all contacts for dropdown/lookup
 $conn = get_mysql_connection();
 $contacts = [];
-$contactResult = $conn->query("SELECT id, company FROM contacts");
+ $contactResult = $conn->query("SELECT contact_id, company FROM contacts");
 if ($contactResult) {
     while ($row = $contactResult->fetch_assoc()) {
-        $contacts[$row['id']] = $row['company'];
+        $contacts[$row['contact_id']] = $row['company'];
     }
     $contactResult->free();
 }
@@ -32,7 +32,7 @@ function fetchContactById($id, $schema) {
     if ($id === '') return null;
     $conn = get_mysql_connection();
     $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
-    $stmt = $conn->prepare("SELECT $fields FROM contacts WHERE id = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT $fields FROM contacts WHERE contact_id = ? LIMIT 1");
     $stmt->bind_param('s', $id);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -70,7 +70,7 @@ function createDeliveryFileIfNeeded($contactId) {
     if (!file_exists($deliveryFile)) {
         $fp = fopen($deliveryFile, 'w');
         if ($fp) {
-            fputcsv($fp, ['delivery_date', 'tank_number', 'tank_size']);
+            fputcsv($fp, ['delivery_date']);
             fclose($fp);
             return true;
         } else {
@@ -129,12 +129,21 @@ if (!$customer) {
                 <div class="form-group">
                     <label for="<?= $f ?>"><strong><?= ucfirst(str_replace('_', ' ', $f)) ?>:</strong></label><br>
                     <?php if ($f === 'contact_id'): ?>
-                        <select name="contact_id" id="contact_id" required>
-                            <option value="">Select Company...</option>
-                            <?php foreach ($contacts as $cid => $cname): ?>
-                                <option value="<?= htmlspecialchars($cid) ?>" <?= ($customer['contact_id'] == $cid) ? 'selected' : '' ?>><?= htmlspecialchars($cname) ?></option>
-                            <?php endforeach; ?>
-                        </select>
+                        <?php
+                        $companyName = '';
+                        if (!empty($customer['contact_id'])) {
+                            $conn = get_mysql_connection();
+                            $stmt = $conn->prepare("SELECT company FROM contacts WHERE contact_id = ? LIMIT 1");
+                            $stmt->bind_param('s', $customer['contact_id']);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+                            $row = $result ? $result->fetch_assoc() : null;
+                            $companyName = $row ? htmlspecialchars($row['company']) : '';
+                            $stmt->close();
+                            $conn->close();
+                        }
+                        echo '<input type="text" value="' . $companyName . '" readonly style="background:#eee;">';
+                        ?>
                     <?php elseif ($f === 'customer_id'): ?>
                         <input type="text" id="<?= $f ?>" value="<?= htmlspecialchars($customer[$f] ?? '') ?>" disabled>
                     <?php else: ?>

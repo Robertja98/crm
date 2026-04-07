@@ -5,5 +5,6 @@ return [
     'timestamp',
     'entry_text',
     'linked_opportunity_id',
-    'visibility'
+    'visibility',
+    'company'
 ];

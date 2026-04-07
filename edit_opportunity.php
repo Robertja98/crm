@@ -1,19 +1,104 @@
+
 <?php
-require_once 'layout_start.php';
+// ENSURE THIS IS THE VERY FIRST LINE, NO WHITESPACE OR BOM ABOVE
+// IMPORTANT: Do not output anything before header() redirects!
 
 require_once 'db_mysql.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
 $contactSchema = require __DIR__ . '/contact_schema.php';
 
+// Get opportunity ID
+$opportunityId = $_GET['id'] ?? $_POST['id'] ?? null;
+
+if (!$opportunityId) {
+    header('Location: opportunities_list.php?error=' . urlencode('No opportunity ID provided'));
+    exit;
+}
+
+$opportunity = fetch_opportunity_mysql($opportunityId, $schema);
+if (isset($opportunity) && is_array($opportunity)) {
+}
+if (!$opportunity) {
+  header('Location: opportunities_list.php?error=' . urlencode('Opportunity not found'));
+  exit;
+}
+
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validate inputs
+    $errors = [];
+    // Contact is now optional; only company is required
+    // Company is editable, but not required
+    if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
+        $errors[] = 'Valid opportunity value is required';
+    }
+    if (!isset($_POST['probability']) || $_POST['probability'] === '' || !is_numeric($_POST['probability']) || $_POST['probability'] < 0 || $_POST['probability'] > 100) {
+        $errors[] = 'Probability must be between 0 and 100';
+    }
+    if (empty($_POST['stage'])) {
+        $errors[] = 'Stage is required';
+    }
+    if (empty($_POST['expected_close'])) {
+        $errors[] = 'Expected close date is required';
+    }
+    if (empty($errors)) {
+        // Update opportunity
+        $fields = [
+          'value' => $_POST['value'],
+          'stage' => $_POST['stage'],
+          'probability' => $_POST['probability'],
+          'expected_close' => $_POST['expected_close'],
+        ];
+        // If company is changed, update it in the contacts table for all contacts linked to this opportunity
+        if (!empty($_POST['company_id'])) {
+          $conn = get_mysql_connection();
+          // Update all contacts for this opportunity to the new company
+          $stmt = $conn->prepare("UPDATE contacts SET company = ? WHERE contact_id = (SELECT contact_id FROM opportunities WHERE id = ?)");
+          $stmt->bind_param('si', $_POST['company_id'], $opportunityId);
+          $stmt->execute();
+          $stmt->close();
+          $conn->close();
+        }
+        $result = update_opportunity_mysql($opportunityId, $fields);
+        if ($result) {
+          header('Location: opportunities_list.php?success=2');
+          exit;
+        } else {
+          $error = 'Failed to update opportunity.';
+        }
+    } else {
+        $error = implode(', ', $errors);
+    }
+}
+
+// Now safe to include layout and output HTML
+require_once 'layout_start.php';
+
+// Error/debug handlers must be set AFTER any header() redirects to avoid breaking them
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+set_error_handler(function($errno, $errstr, $errfile, $errline) {
+  echo '<div style="position:fixed;top:0;left:0;right:0;z-index:2147483647;background:#fffbe6;color:#b45309;border-bottom:3px solid #f59e0b;padding:24px 40px;font-size:22px;font-family:monospace;box-shadow:0 4px 16px rgba(0,0,0,0.18);text-align:center;">'.
+    '<strong>PHP Error:</strong> '.htmlspecialchars($errstr).' in '.htmlspecialchars($errfile).' on line '.htmlspecialchars($errline).'</div>';
+  flush();
+  return false;
+});
+set_exception_handler(function($e) {
+  echo '<div style="position:fixed;top:0;left:0;right:0;z-index:2147483647;background:#fffbe6;color:#b45309;border-bottom:3px solid #f59e0b;padding:24px 40px;font-size:22px;font-family:monospace;box-shadow:0 4px 16px rgba(0,0,0,0.18);text-align:center;">'.
+    '<strong>Uncaught Exception:</strong> '.htmlspecialchars($e->getMessage()).' in '.htmlspecialchars($e->getFile()).' on line '.htmlspecialchars($e->getLine()).'</div>';
+  flush();
+});
+
 
 function fetch_opportunity_mysql($id, $schema) {
   $conn = get_mysql_connection();
-  $fields = implode(',', array_map(function($f) { return '"' . $f . '"'; }, $schema));
-    $idEsc = mysqli_real_escape_string($conn, $id);
-    $result = mysqli_query($conn, "SELECT $fields FROM opportunities WHERE id='$idEsc'");
+  $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
+  $idEsc = mysqli_real_escape_string($conn, $id);
+  $result = mysqli_query($conn, "SELECT $fields FROM opportunities WHERE id='$idEsc'");
   if (!$result) return null;
-    $row = mysqli_fetch_assoc($result);
-    mysqli_free_result($result);
+  $row = mysqli_fetch_assoc($result);
+  mysqli_free_result($result);
   return $row;
 }
 
@@ -42,6 +127,8 @@ if (!$opportunityId) {
 
 
 $opportunity = fetch_opportunity_mysql($opportunityId, $schema);
+if (isset($opportunity) && is_array($opportunity)) {
+}
 if (!$opportunity) {
   header('Location: opportunities_list.php?error=' . urlencode('Opportunity not found'));
   exit;
@@ -52,8 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate inputs
     $errors = [];
     
-    if (empty($_POST['company_id'])) {
-      $errors[] = 'Company is required';
+    if (empty($_POST['contact_id'])) {
+      $errors[] = 'Contact is required';
     }
     
     if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
@@ -75,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errors)) {
         // Update opportunity
         $fields = [
-          'company_id' => $_POST['company_id'],
+          'contact_id' => $_POST['contact_id'],
           'value' => $_POST['value'],
           'stage' => $_POST['stage'],
           'probability' => $_POST['probability'],
@@ -86,29 +173,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           header('Location: opportunities_list.php?success=2');
           exit;
         } else {
+          echo '<div style="position:fixed;top:144px;left:0;right:0;z-index:2147483647;background:#fee;color:#900;border-bottom:3px solid #f00;padding:24px 40px;font-size:22px;font-family:monospace;box-shadow:0 4px 16px rgba(0,0,0,0.18);text-align:center;">Failed to update opportunity. Check for output before header() or DB errors.</div>';
+          flush();
           $error = 'Failed to update opportunity.';
         }
     } else {
         $error = implode(', ', $errors);
     }
-}
-?>
 
+  }
+?>
 <style>
-  .page-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 32px;
-    border-radius: 12px;
-    margin-bottom: 24px;
-  }
-  
-  .page-header h1 {
-    margin: 0 0 8px 0;
-    font-size: 32px;
-    font-weight: 700;
-  }
-  
   .page-header p {
     margin: 0;
     opacity: 0.9;
@@ -350,6 +425,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   }
 </style>
+<?php
+?>
 
 <a href="opportunities_list.php" class="back-link">
   ← Back to Opportunities
@@ -368,44 +445,86 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 
 <div class="form-container">
+  <?php
+  require_once 'opportunity_edit_log.php';
+  $editHistory = fetch_opportunity_edits($opportunityId);
+  if (!empty($editHistory)):
+  ?>
+  <div class="card mb-4">
+    <div class="card-header bg-info text-white">Edit History</div>
+    <div class="card-body">
+      <table class="table table-bordered table-sm">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>User</th>
+            <th>Field</th>
+            <th>Old Value</th>
+            <th>New Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($editHistory as $edit): ?>
+          <tr>
+            <td><?= htmlspecialchars($edit['edited_at']) ?></td>
+            <td><?= htmlspecialchars($edit['user_id']) ?></td>
+            <td><?= htmlspecialchars($edit['field']) ?></td>
+            <td><?= htmlspecialchars($edit['old_value']) ?></td>
+            <td><?= htmlspecialchars($edit['new_value']) ?></td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <?php endif; ?>
   <form method="POST" id="opportunityForm">
     <input type="hidden" name="id" value="<?= htmlspecialchars($opportunityId) ?>">
     
     <div class="form-section">
       <div class="form-section-title">
         <span>👤</span>
-        <span>Company Information</span>
+        <span>Contact Information</span>
       </div>
 
       <div class="form-grid">
         <div class="form-group full-width">
           <label for="company_id">Company *</label>
-          <select name="company_id" id="company_id" required>
-            <option value="">Select a company...</option>
-            <?php
-            // Load contacts with company names for dropdown
-            $conn = get_mysql_connection();
-            $result = $conn->query("SELECT id, company, first_name, last_name FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY company, last_name, first_name");
-            if ($result) {
-              while ($row = $result->fetch_assoc()) {
-                $companyLabel = $row['company'];
-                // Optionally append contact name for clarity
-                if (!empty($row['first_name']) || !empty($row['last_name'])) {
-                  $companyLabel .= ' (' . trim($row['first_name'] . ' ' . $row['last_name']) . ')';
-                }
-                $selected = ($row['id'] == $opportunity['company_id']) ? 'selected' : '';
-            ?>
-                <option value="<?= htmlspecialchars($row['id']) ?>" <?= $selected ?>>
-                  <?= htmlspecialchars($companyLabel) ?>
-                </option>
-            <?php
-              }
-              $result->free();
+          <?php
+          // Fetch all companies for dropdown
+          $conn = get_mysql_connection();
+          $companies = [];
+          $result2 = $conn->query("SELECT DISTINCT company FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY company");
+          if ($result2) {
+            while ($row = $result2->fetch_assoc()) {
+              $companies[] = $row['company'];
             }
-            $conn->close();
-            ?>
-          </select>
-          <div class="form-help">Select the company associated with this opportunity</div>
+            $result2->free();
+          }
+          $conn->close();
+          // Get current company for this opportunity
+          $current_company = '';
+          $conn = get_mysql_connection();
+          $stmt = $conn->prepare("SELECT company FROM contacts WHERE contact_id = (SELECT contact_id FROM opportunities WHERE id = ?)");
+          $stmt->bind_param('i', $opportunityId);
+          $stmt->execute();
+          $stmt->bind_result($current_company);
+          $stmt->fetch();
+          $stmt->close();
+          $conn->close();
+          ?>
+          <div style="padding: 14px 16px; border: 2px solid #E5E7EB; border-radius: 8px; background: #F9FAFB; font-size: 15px; margin-bottom: 10px;">
+            <select name="company_id" id="company_id" style="width:100%;padding:8px;">
+              <option value="">-- Select Company --</option>
+              <?php foreach ($companies as $company): ?>
+                <option value="<?= htmlspecialchars($company) ?>" <?= ($current_company === $company) ? 'selected' : '' ?>><?= htmlspecialchars($company) ?></option>
+              <?php endforeach; ?>
+              <?php if (!in_array($current_company, $companies)): ?>
+                <option value="<?= htmlspecialchars($current_company) ?>" selected><?= htmlspecialchars($current_company) ?></option>
+              <?php endif; ?>
+            </select>
+          </div>
+          <div class="form-help">You can update the company for this opportunity.</div>
         </div>
       </div>
     </div>
@@ -426,7 +545,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             placeholder="0.00" 
             step="0.01" 
             min="0"
-            value="<?= htmlspecialchars($opportunity['value']) ?>"
+            value="<?= isset($opportunity['value']) ? htmlspecialchars($opportunity['value']) : '' ?>"
             required
           >
           <div class="form-help">Enter the total value in dollars</div>
@@ -457,11 +576,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <label for="stage">Sales Stage *</label>
           <select name="stage" id="stage" required>
             <option value="">Select stage...</option>
-            <option value="Prospecting" data-probability="10" <?= $opportunity['stage'] === 'Prospecting' ? 'selected' : '' ?>>Prospecting (10% win rate)</option>
-            <option value="Proposal" data-probability="25" <?= $opportunity['stage'] === 'Proposal' ? 'selected' : '' ?>>Proposal (25% win rate)</option>
-            <option value="Negotiation" data-probability="50" <?= $opportunity['stage'] === 'Negotiation' ? 'selected' : '' ?>>Negotiation (50% win rate)</option>
-            <option value="Closed Won" data-probability="100" <?= $opportunity['stage'] === 'Closed Won' ? 'selected' : '' ?>>Closed Won (100%)</option>
-            <option value="Closed Lost" data-probability="0" <?= $opportunity['stage'] === 'Closed Lost' ? 'selected' : '' ?>>Closed Lost (0%)</option>
+            <option value="Prospecting" data-probability="10" <?= isset($opportunity['stage']) && $opportunity['stage'] === 'Prospecting' ? 'selected' : '' ?>>Prospecting (10% win rate)</option>
+            <option value="Proposal" data-probability="25" <?= isset($opportunity['stage']) && $opportunity['stage'] === 'Proposal' ? 'selected' : '' ?>>Proposal (25% win rate)</option>
+            <option value="Negotiation" data-probability="50" <?= isset($opportunity['stage']) && $opportunity['stage'] === 'Negotiation' ? 'selected' : '' ?>>Negotiation (50% win rate)</option>
+            <option value="Closed Won" data-probability="100" <?= isset($opportunity['stage']) && $opportunity['stage'] === 'Closed Won' ? 'selected' : '' ?>>Closed Won (100%)</option>
+            <option value="Closed Lost" data-probability="0" <?= isset($opportunity['stage']) && $opportunity['stage'] === 'Closed Lost' ? 'selected' : '' ?>>Closed Lost (0%)</option>
           </select>
           
           <div class="stage-visual" style="margin-top: 16px;">
@@ -482,10 +601,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               id="probability" 
               min="0" 
               max="100" 
-              value="<?= htmlspecialchars($opportunity['probability']) ?>"
+              value="<?= isset($opportunity['probability']) ? htmlspecialchars($opportunity['probability']) : '0' ?>"
               step="5"
             >
-            <span class="probability-value"><?= htmlspecialchars($opportunity['probability']) ?>%</span>
+            <span class="probability-value">
+              <?= isset($opportunity['probability']) ? htmlspecialchars($opportunity['probability']) : '0' ?>%
+            </span>
           </div>
           <div class="form-help">Estimated likelihood of closing this deal</div>
         </div>
@@ -537,5 +658,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
   });
 </script>
+
 
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

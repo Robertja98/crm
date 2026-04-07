@@ -29,9 +29,7 @@ $companies = fetch_companies_mysql();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   // Validate inputs
   $errors = [];
-  if (empty($_POST['company_id'])) {
-    $errors[] = 'Company is required';
-  }
+  // Contact is now optional; only company is required
   if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
     $errors[] = 'Valid opportunity value is required';
   }
@@ -46,20 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   if (empty($errors)) {
     $conn = get_mysql_connection();
-    $stmt = $conn->prepare("INSERT INTO opportunities (company_id, value, stage, probability, expected_close) VALUES (?, ?, ?, ?, ?)");
+    $contact_id = $_POST['contact_id'] ?? null;
+    $value = number_format((float)$_POST['value'], 2, '.', '');
+    $stage = $_POST['stage'];
+    $probability = (int)$_POST['probability'];
+    $expected_close = $_POST['expected_close'];
+    $stmt = $conn->prepare("INSERT INTO opportunities (contact_id, value, stage, probability, expected_close) VALUES (?, ?, ?, ?, ?)");
     if (!$stmt) {
       $error = 'Failed to prepare statement: ' . $conn->error;
     } else {
-      $company_id = $_POST['company_id'];
-      $value = number_format((float)$_POST['value'], 2, '.', '');
-      $stage = $_POST['stage'];
-      $probability = (int)$_POST['probability'];
-      $expected_close = $_POST['expected_close'];
-      $stmt->bind_param('sdsss', $company_id, $value, $stage, $probability, $expected_close);
+      $stmt->bind_param('sdsss', $contact_id, $value, $stage, $probability, $expected_close);
       if ($stmt->execute()) {
         $stmt->close();
         $conn->close();
-        // Clean output buffer before redirect
         if (ob_get_length()) {
           ob_end_clean();
         }

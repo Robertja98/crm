@@ -9,50 +9,32 @@ $success = false;
 $newCustomer = [];
 
 // Get next customer ID from MySQL
-$conn = get_mysql_connection();
-$result = $conn->query('SELECT MAX(customer_id) AS max_id FROM customers');
+
+
+
+$connId = get_mysql_connection();
+$result = $connId->query('SELECT MAX(customer_id) AS max_id FROM customers');
 $row = $result ? $result->fetch_assoc() : null;
 $lastId = $row && $row['max_id'] ? intval($row['max_id']) : 0;
 $nextId = str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
+if ($result) $result->free();
 
-// Handle POST
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  foreach ($schema as $field) {
-    if ($field === 'customer_id') {
-      $newCustomer[$field] = $nextId;
-    } elseif ($field === 'tank_count') {
-      $val = trim($_POST[$field] ?? '');
-      $newCustomer[$field] = ($val === '' || !is_numeric($val)) ? null : (int)$val;
-    } elseif ($field === 'last_delivery') {
-      $val = trim($_POST[$field] ?? '');
-      // Accept only valid YYYY-MM-DD or set to null
-      if ($val === '' || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $val)) {
-        $newCustomer[$field] = null;
-      } else {
-        $newCustomer[$field] = $val;
-      }
-    } elseif ($field === 'last_modified') {
-      $val = trim($_POST[$field] ?? '');
-      // Accept only valid YYYY-MM-DD HH:MM:SS or set to null
-      if ($val === '' || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $val)) {
-        $newCustomer[$field] = null;
-      } else {
-        $newCustomer[$field] = $val;
-      }
-    } else {
-      $newCustomer[$field] = trim($_POST[$field] ?? '');
-    }
+// Ensure customer_id is unique
+$uniqueId = $nextId;
+while (true) {
+  $checkResult = $connId->query("SELECT customer_id FROM customers WHERE customer_id = '" . $connId->real_escape_string($uniqueId) . "'");
+  if ($checkResult && $checkResult->num_rows > 0) {
+    $uniqueId = str_pad(intval($uniqueId) + 1, 5, '0', STR_PAD_LEFT);
+    $checkResult->free();
+    continue;
   }
-
-  // Validate main fields
-  if ($newCustomer['contact_id'] === '') $errors[] = 'Contact ID is required.';
-  if ($newCustomer['address'] === '') $errors[] = 'Address is required.';
+  if ($checkResult) $checkResult->free();
 
   // Parse line items
   $items = [];
   if (isset($_POST['items']) && is_array($_POST['items'])) {
     foreach ($_POST['items'] as $item) {
-      $clean = ['customer_id' => $nextId];
+      $clean = ['customer_id' => $uniqueId];
       foreach ($itemFields as $f) {
         $clean[$f] = trim($item[$f] ?? '');
       }
@@ -61,51 +43,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   if (empty($errors)) {
-    // Insert customer
-    $fieldsStr = implode(", ", $schema);
-    $placeholders = implode(", ", array_fill(0, count($schema), '?'));
-    // Set types: s for string, i for int, d for double
-    $types = '';
-    foreach ($schema as $field) {
-      if ($field === 'tank_count') {
-        $types .= 'i';
-      } else {
-        $types .= 's';
-      }
-    }
-    $stmt = $conn->prepare("INSERT INTO customers ($fieldsStr) VALUES ($placeholders)");
-    $params = array_values($newCustomer);
-    // Convert nulls for tank_count
-    foreach ($schema as $i => $field) {
-      if ($field === 'tank_count' && $params[$i] === null) {
-        $params[$i] = null;
-      }
-    }
-    $stmt->bind_param($types, ...$params);
-    if (!$stmt->execute()) {
-      $errors[] = 'Failed to add customer: ' . $stmt->error;
+    // Prevent creation if no contact is selected
+    if (empty($_POST['contact_id']) && empty($selectedContactId)) {
+      $errors[] = 'You must select a contact before creating a customer.';
     } else {
-      // Insert items
-      foreach ($items as $item) {
-        $itemFieldsFull = array_merge(['customer_id'], $itemFields);
-        $fieldsStr2 = implode(", ", $itemFieldsFull);
-        $placeholders2 = implode(", ", array_fill(0, count($itemFieldsFull), '?'));
-        $types2 = str_repeat('s', count($itemFieldsFull));
-        $stmt2 = $conn->prepare("INSERT INTO customer_items ($fieldsStr2) VALUES ($placeholders2)");
-        $stmt2->bind_param($types2, ...array_values($item));
-        if (!$stmt2->execute()) {
-          $errors[] = 'Failed to add item: ' . $stmt2->error;
+      // Insert customer
+      $connPost = get_mysql_connection();
+      $newCustomer['customer_id'] = $uniqueId;
+      // Always use the contact_id from POST if provided, else fallback to selectedContactId
+      $newCustomer['contact_id'] = $_POST['contact_id'] ?? $selectedContactId;
+      $fieldsStr = implode(", ", $schema);
+      $placeholders = implode(", ", array_fill(0, count($schema), '?'));
+      // Set types: s for string, i for int, d for double
+      $types = '';
+      $params = [];
+      foreach ($schema as $field) {
+        if ($field === 'tank_count' || $field === 'contact_id') {
+          $types .= 'i';
+          $val = $newCustomer[$field] ?? null;
+          $params[] = ($val === '' || $val === null || !is_numeric($val)) ? null : (int)$val;
+        } else if ($field === 'last_delivery') {
+          $types .= 's';
+          $val = $newCustomer[$field] ?? '';
+          $params[] = (empty($val) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $val)) ? null : $val;
+        } else if ($field === 'last_modified') {
+          $types .= 's';
+          $val = $newCustomer[$field] ?? '';
+          $params[] = (empty($val) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $val)) ? null : $val;
+        } else {
+          $types .= 's';
+          $params[] = $newCustomer[$field] ?? '';
         }
-        $stmt2->close();
       }
-      if (empty($errors)) {
-        $success = true;
+      $stmt = $connPost->prepare("INSERT INTO customers ($fieldsStr) VALUES ($placeholders)");
+      $stmt->bind_param($types, ...$params);
+      if (!$stmt->execute()) {
+        $errors[] = 'Failed to add customer: ' . $stmt->error;
+      } else {
+        foreach ($items as $item) {
+          $itemFieldsFull = array_merge(['customer_id'], $itemFields);
+          $fieldsStr2 = implode(", ", $itemFieldsFull);
+          $placeholders2 = implode(", ", array_fill(0, count($itemFieldsFull), '?'));
+          $types2 = str_repeat('s', count($itemFieldsFull));
+          $stmt2 = $connPost->prepare("INSERT INTO customer_items ($fieldsStr2) VALUES ($placeholders2)");
+          $stmt2->bind_param($types2, ...array_values($item));
+          if (!$stmt2->execute()) {
+            $errors[] = 'Failed to add item: ' . $stmt2->error;
+          }
+          $stmt2->close();
+        }
+        if (empty($errors)) {
+          $success = true;
+        }
       }
+      $stmt->close();
+      $connPost->close();
     }
-    $stmt->close();
   }
+  break;
 }
-$conn->close();
 ?>
 
 <div class="container">
@@ -129,13 +125,43 @@ $conn->close();
       <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
         <div>
           <label><strong>Customer ID:</strong></label><br>
-          <input type="text" value="<?= $nextId ?>" readonly>
+          <input type="text" value="<?= $nextId ?>" readonly disabled>
+          <input type="hidden" name="customer_id" value="<?= $nextId ?>">
+        </div>
+        <div>
+          <label for="contact_id"><strong>Contact:</strong></label><br>
+          <?php
+          $selectedContactId = $_GET['contact_id'] ?? $_POST['contact_id'] ?? '';
+          $connForm3 = get_mysql_connection();
+          $result3 = $connForm3->query("SELECT contact_id, CONCAT(first_name, ' ', last_name) AS label, company, address FROM contacts WHERE contact_id = '" . $connForm3->real_escape_string($selectedContactId) . "'");
+          $row3 = $result3 ? $result3->fetch_assoc() : null;
+          if ($row3) {
+            $label = htmlspecialchars($row3['label']);
+            $company = htmlspecialchars($row3['company']);
+            $address = htmlspecialchars($row3['address']);
+            echo '<input type="hidden" name="contact_id" value="' . htmlspecialchars($selectedContactId) . '">';
+            echo '<input type="text" value="' . $label . '" readonly style="background:#eee;">';
+            echo '<input type="hidden" name="company" value="' . $company . '">';
+            echo '<input type="text" value="' . $company . '" readonly disabled style="background:#eee;margin-top:8px;">';
+            echo '<input type="hidden" name="address" value="' . $address . '">';
+            echo '<input type="text" value="' . $address . '" readonly disabled style="background:#eee;margin-top:8px;">';
+          } else {
+            echo '<span style="color:#c00;">No contact selected. Please start from a contact profile.</span>';
+          }
+          if ($result3) $result3->free();
+          $connForm3->close();
+          ?>
         </div>
         <?php foreach ($schema as $field): ?>
-          <?php if ($field === 'customer_id') continue; ?>
+          <?php if ($field === 'customer_id' || $field === 'contact_id' || $field === 'address') continue; ?>
           <div>
             <label for="<?= $field ?>"><strong><?= ucfirst(str_replace('_', ' ', $field)) ?>:</strong></label><br>
-            <input type="text" name="<?= $field ?>" id="<?= $field ?>" value="<?= htmlspecialchars($_POST[$field] ?? '') ?>">
+            <?php if ($field === 'tank_number'): ?>
+              <input type="number" name="tank_number" id="tank_number" value="<?= htmlspecialchars($_POST['tank_number'] ?? '') ?>" min="0">
+            <?php // Removed tank_size field: not present in DB schema ?>
+            <?php else: ?>
+              <input type="text" name="<?= $field ?>" id="<?= $field ?>" value="<?= htmlspecialchars($_POST[$field] ?? '') ?>">
+            <?php endif; ?>
           </div>
         <?php endforeach; ?>
       </div>
@@ -178,6 +204,40 @@ function addLineItem() {
   row.innerHTML = html;
   container.appendChild(row);
 }
+
+// Persist form values using localStorage
+window.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  if (!form) return;
+  // Restore values
+  Array.from(form.elements).forEach(el => {
+    if (!el.name) return;
+    const val = localStorage.getItem('add_customer_' + el.name);
+    if (val !== null) {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = val === 'true';
+      } else {
+        el.value = val;
+      }
+    }
+  });
+  // Save values on change
+  form.addEventListener('input', function(e) {
+    const el = e.target;
+    if (!el.name) return;
+    if (el.type === 'checkbox' || el.type === 'radio') {
+      localStorage.setItem('add_customer_' + el.name, el.checked);
+    } else {
+      localStorage.setItem('add_customer_' + el.name, el.value);
+    }
+  });
+  // Clear storage on submit
+  form.addEventListener('submit', function() {
+    Array.from(form.elements).forEach(el => {
+      if (el.name) localStorage.removeItem('add_customer_' + el.name);
+    });
+  });
+});
 </script>
 
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

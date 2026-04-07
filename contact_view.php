@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CRM Contact Details: View and edit contact information.">
-  <title>Contact Details</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+
 <?php
 // Security headers
 header('Content-Type: text/html; charset=utf-8');
-header('X-Content-Type-Options: nosniff');
+header('X-Content-Type-Options: nosniff;');
 
 // Page metadata
 $pageTitle = 'Contact Details';
@@ -20,42 +11,89 @@ $pageTitle = 'Contact Details';
 require_once('layout_start.php');
 require_once 'db_mysql.php';
 
-// ...existing code...
-?>
-    if ($result && ($row = mysqli_fetch_assoc($result))) {
-      $contact = $row;
+// Explicitly create the database connection after all includes
+$conn = get_mysql_connection();
+
+// Handle contact update form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
+    $contactId = mysqli_real_escape_string($conn, $_POST['contact_id']);
+    $fields = [
+        'first_name', 'last_name', 'company', 'email', 'phone', 'address',
+        'city', 'province', 'postal_code', 'country', 'notes', 'tags', 'is_customer'
+    ];
+    $updates = [];
+    foreach ($fields as $field) {
+        if (isset($_POST[$field])) {
+            $value = mysqli_real_escape_string($conn, $_POST[$field]);
+            if ($field === 'is_customer') {
+                $value = $_POST[$field] ? '1' : '0';
+            }
+            $updates[] = "`$field` = '" . $value . "'";
+        }
     }
-    if ($result) {
-      mysqli_free_result($result);
+    if (!empty($updates)) {
+        $sql = "UPDATE contacts SET " . implode(", ", $updates) . ", last_modified = NOW() WHERE contact_id = '" . $contactId . "'";
+        $saveSuccess = mysqli_query($conn, $sql);
+    } else {
+        $saveSuccess = false;
     }
-  } else {
-    $saveSuccess = false;
+    // Reload the page to show updated info and avoid resubmission
+    if ($saveSuccess) {
+        header("Location: contact_view.php?id=" . urlencode($contactId) . "&updated=1");
+        exit;
+    }
+}
+
+// Get contactId from GET or POST
+$contactId = $_GET['id'] ?? $_POST['contact_id'] ?? null;
+$contact = null;
+if ($contactId) {
+  $safeContactId = mysqli_real_escape_string($conn, $contactId);
+  $result = mysqli_query($conn, "SELECT * FROM contacts WHERE contact_id = '" . $safeContactId . "'");
+  if ($result && ($row = mysqli_fetch_assoc($result))) {
+    $contact = $row;
   }
+  if ($result) {
+    mysqli_free_result($result);
+  }
+}
+
+// Add Convert to Customer button
+if ($contact && isset($contact['contact_id'])) {
+  echo '<form method="GET" action="add_customer.php" style="margin:20px 0;">';
+  echo '<input type="hidden" name="contact_id" value="' . htmlspecialchars($contact['contact_id']) . '">';
+  echo '<button type="submit" class="btn btn-success">Convert to Customer</button>';
+  echo '</form>';
 }
 
 // Safety: verify contact was loaded
 if (!$contact) {
   // Try to fetch the record even if fields are missing
   $safeContactId = mysqli_real_escape_string($conn, $contactId);
-  $result = mysqli_query($conn, "SELECT * FROM contacts WHERE id = '" . $safeContactId . "'");
+  $result = mysqli_query($conn, "SELECT * FROM contacts WHERE contact_id = '" . $safeContactId . "'");
   if ($result && ($row = mysqli_fetch_assoc($result))) {
     $contact = $row;
-    echo '<div style="background:#fffbe6;border:2px solid #ffc;padding:10px;margin:10px 0;">';
-    echo '<strong>Warning:</strong> This contact record is incomplete. Some fields may be missing or blank.';
-    echo '</div>';
+    ?>
+    <div style="background:#fffbe6;border:2px solid #ffc;padding:10px;margin:10px 0;">
+      <strong>Warning:</strong> This contact record is incomplete. Some fields may be missing or blank.
+    </div>
+    <?php
     mysqli_free_result($result);
   } else {
     // Diagnostic: Show all available contact IDs
-    $result = mysqli_query($conn, "SELECT id, first_name, last_name FROM contacts ORDER BY id LIMIT 20");
-    echo '<div style="background:#fee;border:2px solid #c33;padding:10px;margin:10px 0;">';
-    echo '<strong>Error: Contact not found.</strong><br>';
-    echo 'Available Contact IDs:<br><ul>';
-    while ($row = mysqli_fetch_assoc($result)) {
-      echo '<li>ID: ' . htmlspecialchars($row['id']) . ' - ' . htmlspecialchars($row['first_name']) . ' ' . htmlspecialchars($row['last_name']) . '</li>';
-    }
-    echo '</ul>';
-    echo 'Try <code>contact_view.php?id=&lt;ID&gt;</code> with one of the above.';
-    echo '</div>';
+    $result = mysqli_query($conn, "SELECT contact_id, first_name, last_name FROM contacts ORDER BY contact_id LIMIT 20");
+    ?>
+    <div style="background:#fee;border:2px solid #c33;padding:10px;margin:10px 0;">
+      <strong>Error: Contact not found.</strong><br>
+      Available Contact IDs:<br>
+      <ul>
+      <?php while ($row = mysqli_fetch_assoc($result)): ?>
+        <li>ID: <?= htmlspecialchars($row['contact_id']) ?> - <?= htmlspecialchars($row['first_name']) ?> <?= htmlspecialchars($row['last_name']) ?></li>
+      <?php endwhile; ?>
+      </ul>
+      Try <code>contact_view.php?id=&lt;ID&gt;</code> with one of the above.
+    </div>
+    <?php
     if ($result) {
       mysqli_free_result($result);
     }
@@ -63,8 +101,7 @@ if (!$contact) {
   }
 }
 
-// Load opportunities from PostgreSQL
-
+// Load opportunities for this contact
 $opportunities = [];
 $opportunitySchema = ['id', 'contact_id', 'value', 'stage', 'probability', 'expected_close'];
 $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $opportunitySchema));
@@ -77,6 +114,28 @@ if ($result) {
   mysqli_free_result($result);
 }
 
+// Find orphaned opportunities (missing contact_id, but possibly matching company)
+$orphanedOpportunities = [];
+if (!empty($contact['company'])) {
+  $safeCompany = mysqli_real_escape_string($conn, $contact['company']);
+  $result = mysqli_query($conn, "SELECT * FROM opportunities WHERE (contact_id IS NULL OR contact_id = '') AND company_id = '" . $safeCompany . "'");
+  if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $orphanedOpportunities[] = $row;
+    }
+    mysqli_free_result($result);
+  }
+}
+
+// Handle admin action to link orphaned opportunity
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['link_opportunity_id'], $_POST['contact_id'])) {
+    $oppId = (int)$_POST['link_opportunity_id'];
+    $contactId = (int)$_POST['contact_id'];
+    $sql = "UPDATE opportunities SET contact_id = '" . $contactId . "' WHERE id = '" . $oppId . "'";
+    mysqli_query($conn, $sql);
+    header("Location: contact_view.php?id=" . urlencode($contactId) . "&linked=1");
+    exit;
+}
 
 // NOTE: If a discussion_log entry's contact_id does not exist in the contacts table,
 // those discussions will not appear for any contact. Example missing IDs:
@@ -85,13 +144,24 @@ if ($result) {
 // To display these, add matching contacts or map them to existing contacts.
 // Load discussions from PostgreSQL
 
+// Load discussions for this contact by contact_id or manual_contact_id
 $discussions = [];
 $discussionSchema = require 'discussion_schema.php';
 $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $discussionSchema));
-$result = mysqli_query($conn, "SELECT $fields FROM discussion_log WHERE contact_id = '$safeContactId'");
+$fields = '`id`, ' . $fields . ', `manual_contact_id`'; // Ensure id and manual_contact_id are included
+
+$safeContactId = mysqli_real_escape_string($conn, $contactId);
+$discussionQuery = "SELECT $fields FROM discussion_log WHERE contact_id = '$safeContactId' OR manual_contact_id = '$safeContactId' ORDER BY timestamp DESC";
+$result = mysqli_query($conn, $discussionQuery);
 if ($result) {
+  $seen = [];
   while ($row = mysqli_fetch_assoc($result)) {
-    $discussions[] = $row;
+    // Avoid duplicates if both contact_id and manual_contact_id match
+    $uniqueKey = $row['id'] ?? md5(json_encode($row));
+    if (!isset($seen[$uniqueKey])) {
+      $discussions[] = $row;
+      $seen[$uniqueKey] = true;
+    }
   }
   mysqli_free_result($result);
 }
@@ -123,12 +193,12 @@ function parseTags($tagString) {
 function getContactOpportunities($contact, $opportunities) {
     if (!is_array($opportunities)) return [];
     return array_filter($opportunities, function($opp) use ($contact) {
-      return ($opp['contact_id'] ?? '') === ($contact['id'] ?? '');
+      return ($opp['contact_id'] ?? '') === ($contact['contact_id'] ?? '');
     });
-if (!is_array($contactOpportunities)) $contactOpportunities = [];
 }
 
 // ...existing code...
+
 ?>
 
 <style>
@@ -410,7 +480,7 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
     <div class="accordion-content">
       <div class="accordion-body">
         <form method="post">
-          <input type="hidden" name="id" value="<?= htmlspecialchars($contact['id']) ?>">
+          <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['contact_id']) ?>">
 
           <!-- Quick Status Section -->
           <div class="form-section" style="background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%); border: 1px solid #bfdbfe; padding: 14px; margin-bottom: 16px;">
@@ -606,6 +676,22 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
             </div>
           <?php endif; ?>
         </div>
+
+        <?php if (!empty($orphanedOpportunities)): ?>
+        <div class="section" style="margin-top:30px;">
+          <div class="section-title" style="color:#d32f2f;">Orphaned Opportunities (Admin Only)</div>
+          <p style="font-size:13px;">The following opportunities match this company but are not linked to any contact. You can link them below:</p>
+          <?php foreach ($orphanedOpportunities as $opp): ?>
+            <form method="post" style="margin-bottom:10px;display:inline-block;">
+              <input type="hidden" name="link_opportunity_id" value="<?= htmlspecialchars($opp['id']) ?>">
+              <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['contact_id']) ?>">
+              <span style="font-weight:600;">Opportunity #<?= htmlspecialchars($opp['id']) ?></span> - <?= htmlspecialchars($opp['stage']) ?> ($<?= htmlspecialchars($opp['value']) ?>)
+              <button type="submit" class="btn-primary" style="margin-left:10px;">Link to this Contact</button>
+            </form>
+          <?php endforeach; ?>
+        </div>
+        <?php endif; ?>
+
       </div>
     </div>
   </div>
@@ -625,7 +711,7 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
         <div class="section">
           <div class="section-title">➕ Log Discussion</div>
           <form method="post" action="discussion_logger.php" style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
-            <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['id']) ?>">
+            <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['contact_id']) ?>">
             
             <div class="form-group" style="margin-bottom: 12px;">
               <label>Author</label>
@@ -675,6 +761,9 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
                   </div>
                   <div style="color: #666; font-size: 11px; margin-bottom: 8px;">
                     📅 <?= htmlspecialchars($disc['timestamp'] ?? '—') ?>
+                    <?php if (!empty($disc['manual_contact_id'])): ?>
+                      <span style="margin-left:10px; color:#8B5CF6; font-weight:600; font-size:11px;">🔗 Linked by manual_contact_id: <?= htmlspecialchars($disc['manual_contact_id']) ?></span>
+                    <?php endif; ?>
                   </div>
                   <div style="color: #1a1a1a; font-size: 13px; line-height: 1.5; margin-bottom: 6px;">
                     <?= nl2br(htmlspecialchars($disc['entry_text'] ?? '')) ?>
@@ -760,3 +849,10 @@ if (!is_array($contactOpportunities)) $contactOpportunities = [];
 </body>
 </html>
 <?php include_once('layout_end.php'); ?>
+
+<?php
+// Close the database connection at the very end
+if (isset($conn) && $conn instanceof mysqli) {
+  $conn->close();
+}
+?>

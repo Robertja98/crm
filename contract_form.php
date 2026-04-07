@@ -5,7 +5,73 @@ require_once 'db_mysql.php';
 $pageTitle = 'Add Service Contract';
 $contractSchema = require __DIR__ . '/contract_schema.php';
 
+// --- SEARCH & PAGINATION LOGIC (like contacts_list.php) ---
+define('DEFAULT_CONTRACTS_PER_PAGE', 25);
+define('ALLOWED_PER_PAGE_OPTIONS', [10, 25, 50, 100]);
+$per_page = isset($_GET['per_page']) && in_array((int)$_GET['per_page'], ALLOWED_PER_PAGE_OPTIONS)
+    ? (int)$_GET['per_page']
+    : DEFAULT_CONTRACTS_PER_PAGE;
+$current_page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+$query = strtolower(trim($_GET['query'] ?? ''));
+$field = $_GET['field'] ?? '';
+
+function fetch_contracts_search($schema, $query, $field, $per_page, $current_page) {
+    $conn = get_mysql_connection();
+    $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
+    $where = '';
+    if ($query !== '') {
+        if ($field && in_array($field, $schema)) {
+            $where = " WHERE LOWER(`$field`) LIKE '%" . $conn->real_escape_string($query) . "%'";
+        } else {
+            $searchConditions = [];
+            foreach ($schema as $f) {
+                $searchConditions[] = "LOWER(`$f`) LIKE '%" . $conn->real_escape_string($query) . "%'";
+            }
+            $where = ' WHERE ' . implode(' OR ', $searchConditions);
+        }
+    }
+    $offset = ($current_page - 1) * $per_page;
+    $sql = "SELECT $fields FROM contracts$where LIMIT $per_page OFFSET $offset";
+    $result = $conn->query($sql);
+    $contracts = [];
+    if ($result) {
+        while ($row = $result->fetch_assoc()) {
+            $contracts[] = $row;
+        }
+        $result->free();
+    }
+    // Get total count for pagination
+    $count_sql = "SELECT COUNT(*) as cnt FROM contracts$where";
+    $count_result = $conn->query($count_sql);
+    $total_contracts = 0;
+    if ($count_result) {
+        $row = $count_result->fetch_assoc();
+        $total_contracts = (int)($row['cnt'] ?? 0);
+        $count_result->free();
+    }
+    $conn->close();
+    return [$contracts, $total_contracts];
+}
+
+list($contracts_search, $total_contracts) = fetch_contracts_search($contractSchema, $query, $field, $per_page, $current_page);
+$total_pages = max(1, ceil($total_contracts / $per_page));
+$offset = ($current_page - 1) * $per_page;
+
+// --- END SEARCH & PAGINATION LOGIC ---
+
 function fetch_mysql($table, $schema) {
+        // DEBUG: Directly test if contact_id can be selected from contracts
+        if ($table === 'contracts') {
+            $conn2 = get_mysql_connection();
+            $testResult = $conn2->query('SELECT contact_id FROM contracts LIMIT 1');
+            if ($testResult) {
+                error_log('DEBUG: SELECT contact_id FROM contracts succeeded.');
+                $testResult->free();
+            } else {
+                error_log('DEBUG: SELECT contact_id FROM contracts failed: ' . $conn2->error);
+            }
+            $conn2->close();
+        }
     $conn = get_mysql_connection();
     $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
     $result = $conn->query("SELECT $fields FROM $table");
@@ -21,7 +87,17 @@ function fetch_mysql($table, $schema) {
 }
 
 $contacts = fetch_mysql('contacts', require __DIR__ . '/contact_schema.php');
-$customers = fetch_mysql('customers', require __DIR__ . '/customer_schema.php');
+$conn = get_mysql_connection();
+$sql = "SELECT customers.customer_id, contacts.company, customers.address FROM customers LEFT JOIN contacts ON customers.contact_id = contacts.contact_id";
+$result = $conn->query($sql);
+$customers = [];
+if ($result) {
+    while ($row = $result->fetch_assoc()) {
+        $customers[] = $row;
+    }
+    $result->free();
+}
+$conn->close();
 $equipment = fetch_mysql('equipment', require __DIR__ . '/equipment_schema.php');
 
 // Handle form submission
@@ -53,8 +129,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $fields = [
         'contract_id' => $contractId,
-        'contact_id' => $_POST['contact_id'],
         'customer_id' => (isset($_POST['customer_id']) && is_numeric($_POST['customer_id']) && $_POST['customer_id'] !== '' ? (int)$_POST['customer_id'] : null),
+        'contact_id' => $_POST['contact_id'] ?? null,
         'contract_type' => $_POST['contract_type'],
         'contract_status' => 'Active',
         'equipment_type' => $_POST['equipment_type'],
@@ -281,30 +357,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="form-container">
     <form method="POST" id="contractForm">
-        <!-- Contact & Customer Information -->
+        <!-- Customer & (Optional) Contact Information -->
         <div class="form-section">
-            <div class="form-section-title">👤 Contact & Customer Information</div>
+            <div class="form-section-title">🏢 Customer & (Optional) Contact</div>
             <div class="form-grid">
                 <div class="form-group">
-                    <label for="contact_id">Contact *</label>
-                    <select name="contact_id" id="contact_id" required>
-                        <option value="">Select Contact</option>
-                        <?php foreach ($contacts as $contact): ?>
-                            <option value="<?= htmlspecialchars($contact['id']) ?>">
-                                <?= htmlspecialchars(trim($contact['first_name'] . ' ' . $contact['last_name'])) ?> 
-                                <?php if (!empty($contact['company'])): ?>
-                                    - <?= htmlspecialchars($contact['company']) ?>
+                    <label for="customer_id">Customer *</label>
+                    <select name="customer_id" id="customer_id" required>
+                        <option value="">Select Customer</option>
+                        <?php foreach ($customers as $customer): ?>
+                            <option value="<?= htmlspecialchars($customer['customer_id']) ?>">
+                                <?= htmlspecialchars($customer['company']) ?>
+                                <?php if (!empty($customer['address'])): ?>
+                                    - <?= htmlspecialchars($customer['address']) ?>
                                 <?php endif; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
                 </div>
-                
                 <div class="form-group">
-                    <label for="customer_id">Customer ID (Optional)</label>
-                    <input type="text" name="customer_id" id="customer_id">
-                    <div class="form-help">Leave blank if contact is the customer</div>
+                    <label for="contact_id">Customer Contact *</label>
+                    <select name="contact_id" id="contact_id" required>
+                        <option value="">Select Contact</option>
+                        <!-- Options will be populated by JS -->
+                    </select>
+                    <div class="form-help">Contact must belong to selected customer</div>
                 </div>
+            <script>
+            // --- Customer/Contact Filtering ---
+            const allContacts = <?php echo json_encode($contacts); ?>;
+            const customerSelect = document.getElementById('customer_id');
+            const contactSelect = document.getElementById('contact_id');
+            const customers = <?php echo json_encode($customers); ?>;
+
+            function updateContactOptions() {
+                const customerId = customerSelect.value;
+                while (contactSelect.options.length > 1) contactSelect.remove(1);
+                if (!customerId) return;
+                // Find the selected customer's company name
+                const selectedCustomer = customers.find(c => String(c.customer_id) === String(customerId));
+                const companyName = selectedCustomer ? selectedCustomer.company : '';
+                // Filter contacts by company name
+                const filtered = allContacts.filter(c => c.company === companyName);
+                filtered.forEach(contact => {
+                    const opt = document.createElement('option');
+                    opt.value = contact.contact_id;
+                    let label = (contact.first_name || '') + ' ' + (contact.last_name || '');
+                    if (contact.company) label += ' - ' + contact.company;
+                    opt.textContent = label.trim() || contact.contact_id;
+                    contactSelect.appendChild(opt);
+                });
+            }
+            customerSelect.addEventListener('change', updateContactOptions);
+            // On page load, if a customer is preselected, populate contacts
+            if (customerSelect.value) updateContactOptions();
+            </script>
             </div>
         </div>
         
@@ -490,9 +597,55 @@ function calculateDates() {
     document.getElementById('renewal_date_display').textContent = renewalDateStr;
 }
 
+// Persist contract form values using localStorage
+window.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  if (!form) return;
+  // Restore values
+  Array.from(form.elements).forEach(el => {
+    if (!el.name) return;
+    const val = localStorage.getItem('contract_form_' + el.name);
+    if (val !== null) {
+      if (el.type === 'checkbox' || el.type === 'radio') {
+        el.checked = val === 'true';
+      } else {
+        el.value = val;
+      }
+    }
+  });
+  // Save values on change
+  form.addEventListener('input', function(e) {
+    const el = e.target;
+    if (!el.name) return;
+    if (el.type === 'checkbox' || el.type === 'radio') {
+      localStorage.setItem('contract_form_' + el.name, el.checked);
+    } else {
+      localStorage.setItem('contract_form_' + el.name, el.value);
+    }
+  });
+  // Clear storage on submit
+  form.addEventListener('submit', function() {
+    Array.from(form.elements).forEach(el => {
+      if (el.name) localStorage.removeItem('contract_form_' + el.name);
+    });
+  });
+});
+
 // Set default start date to today
 document.getElementById('start_date').valueAsDate = new Date();
 calculateDates();
 </script>
 
-<?php include_once(__DIR__ . '/layout_end.php'); ?>
+<?php
+// Wrap content in container to ensure layout/navbar always renders
+if (!isset($contentContainerStarted)) {
+    echo '<div class="content-container">';
+    $contentContainerStarted = true;
+}
+// ...existing code...
+// At the very end, before layout_end.php:
+if (isset($contentContainerStarted)) {
+    echo '</div>';
+}
+include_once(__DIR__ . '/layout_end.php');
+?>

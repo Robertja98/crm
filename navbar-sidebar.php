@@ -45,6 +45,12 @@ $initials = strtoupper(substr($user_name, 0, 2));
             <span>Dashboard</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="discussion.php" class="nav-link <?= $currentPage === 'discussion.php' ? 'active' : '' ?>">
+            <span class="nav-icon">💬</span>
+            <span>Discussion Log</span>
+          </a>
+        </li>
       </ul>
     </div>
     

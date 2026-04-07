@@ -4,10 +4,6 @@
  * Prevents Cross-Site Request Forgery attacks
  */
 
-// Ensure session is started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
 
 /**
  * Initialize CSRF token in session
@@ -15,15 +11,6 @@ if (session_status() === PHP_SESSION_NONE) {
 function initializeCSRFToken() {
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-        echo "<div style='background:#ffc;border:1px solid #c90;padding:8px;margin-bottom:8px;'>";
-        echo "<strong>DEBUG:</strong> initializeCSRFToken called. Token generated: " . htmlspecialchars($_SESSION['csrf_token']) . "<br>";
-        echo "Session ID: " . session_id() . "<br>";
-        echo "</div>";
-    } else {
-        echo "<div style='background:#ffc;border:1px solid #c90;padding:8px;margin-bottom:8px;'>";
-        echo "<strong>DEBUG:</strong> initializeCSRFToken called. Token already set: " . htmlspecialchars($_SESSION['csrf_token']) . "<br>";
-        echo "Session ID: " . session_id() . "<br>";
-        echo "</div>";
     }
     return $_SESSION['csrf_token'];
 }

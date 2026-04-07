@@ -1,9 +1,5 @@
 <?php
 // Force correct session name before any output
-if (session_status() === PHP_SESSION_NONE) {
-    session_name('CRM_SESSION');
-    session_start();
-}
 require_once __DIR__ . '/csrf_helper.php';
 initializeCSRFToken();
 // Debug output for session and CSRF
@@ -64,7 +60,10 @@ $currentPage = basename($_SERVER['SCRIPT_NAME']);
   <title><?= htmlspecialchars($pageTitle) ?></title>
 </head>
 <body>
-<?php include_once 'navbar-sidebar.php'; ?>
+<?php
+// Always include navbar-sidebar
+include_once 'navbar-sidebar.php';
+?>
 
 <?php
 // Display error messages if present

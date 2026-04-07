@@ -1,7 +1,7 @@
 <?php
 return [
   'id',
-  'company_id',
+  'contact_id',
   'value',
   'stage',
   'probability',

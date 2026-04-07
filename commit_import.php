@@ -1,134 +1,69 @@
 <?php
-
-session_start();
-require_once 'csv_handler.php';
-require_once 'error_handler.php';
-require_once 'contact_validator.php';
+if (session_status() === PHP_SESSION_NONE) {
+    session_name('CRM_SESSION');
+    session_start();
+}
+// Debug output for session and cookies
+if (!headers_sent()) {
+    echo '<div style="background:#ffe; color:#333; padding:8px; margin-bottom:8px; font-size:12px;">';
+    echo '<strong>SESSION DEBUG:</strong><br>$_SESSION: <pre>' . htmlspecialchars(print_r($_SESSION, true)) . '</pre>';
+    echo '$_COOKIE: <pre>' . htmlspecialchars(print_r($_COOKIE, true)) . '</pre>';
+    echo '</div>';
+}
+require_once 'db_mysql.php'; // Assumes you have a db connection helper
 require_once 'csrf_helper.php';
 
-$schema = require __DIR__ . '/contact_schema.php';
-$targetFile = 'contacts.csv';
-
 // CSRF token verification
-// Debug output for CSRF troubleshooting
-echo "<div style='background:#fee;border:1px solid #c00;padding:8px;margin-bottom:8px;'>";
-echo "<strong>DEBUG:</strong> Received CSRF token: " . htmlspecialchars($_POST['csrf_token'] ?? '(none)') . "<br>";
-echo "Session CSRF token: " . htmlspecialchars($_SESSION['csrf_token'] ?? '(none)') . "<br>";
-echo "Session ID: " . session_id() . "<br>";
-echo "</div>";
-
 if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
-    showError('CSRF Error', 'CSRF token validation failed. Import cancelled.');
-    logError('CSRF token validation failed during import', ['ip' => $_SERVER['REMOTE_ADDR']]);
-    exit;
+    die('CSRF token validation failed. Import cancelled.');
 }
 
-// Validate session data
-$contacts = $_SESSION['import_preview'] ?? [];
-
-if (!is_array($contacts) || empty($contacts)) {
-    echo "<div class='container'>";
-    showError('Import Error', 'No import data received or session expired. <a href=\"import_contacts.php\">Try again</a>');
-    logWarning('Import failed: no data in session', ['ip' => $_SERVER['REMOTE_ADDR']]);
-    echo "</div>";
-    exit;
+if (!isset($_SESSION['import_preview']) || !is_array($_SESSION['import_preview'])) {
+    die('No import data found.');
 }
 
-echo "<div class='container'>";
-echo "<h2>Commit Import</h2>";
+$rows = $_SESSION['import_preview'];
+$conn = get_mysql_connection();
+$success = 0;
+$fail = 0;
+$errors = [];
 
-// Re-validate each contact before import (safety check)
-$validContacts = [];
-$importErrors = [];
-
-foreach ($contacts as $index => $contact) {
-    $contact_errors = validateContact($contact);
-    if (empty($contact_errors)) {
-        $validContacts[] = $contact;
-    } else {
-        $importErrors[$index] = $contact_errors;
-    }
+// Detect if this is a discussion log import (by checking for 'company' and 'entry_text' or 'discussion_text')
+$is_discussion = false;
+if (!empty($rows) && (isset($rows[0]['company']) && (isset($rows[0]['entry_text']) || isset($rows[0]['discussion_text'])))) {
+    $is_discussion = true;
 }
 
-if (!empty($importErrors)) {
-    showError('Import Error', 'Some contacts failed final validation. Import aborted.');
-    echo "<ul>";
-    foreach ($importErrors as $idx => $errors) {
-        echo "<li>Contact " . ($idx + 1) . ": " . implode(", ", $errors) . "</li>";
-    }
-        echo "</ul>";
-    logError('Import failed during validation', ['count' => count($importErrors), 'total' => count($contacts)]);
-    echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
-    echo "</div>";
-    exit;
-}
+if ($is_discussion) {
+    foreach ($rows as $row) {
+        $contact_id = null; // Leave blank as per user request
+        $author = $row['author'] ?? '';
+        $timestamp = $row['timestamp'] ?? date('Y-m-d H:i:s');
+        $entry_text = $row['discussion_text'] ?? $row['entry_text'] ?? '';
+        $linked_opportunity_id = $row['linked_opportunity_id'] ?? null;
+        $visibility = $row['visibility'] ?? 'private';
+        $company = $row['company'] ?? '';
 
-// Final check: Re-validate schema alignment
-if (!empty($validContacts)) {
-    $schema_valid = true;
-    foreach ($validContacts as $contact) {
-        foreach ($schema as $col) {
-            if (!array_key_exists($col, $contact)) {
-                $schema_valid = false;
-                break;
-            }
+        $stmt = $conn->prepare("INSERT INTO discussion_log (contact_id, author, timestamp, entry_text, linked_opportunity_id, visibility, company) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param('sssssss', $contact_id, $author, $timestamp, $entry_text, $linked_opportunity_id, $visibility, $company);
+        if ($stmt->execute()) {
+            $success++;
+        } else {
+            $fail++;
+            $errors[] = $conn->error;
         }
-        if (!$schema_valid) break;
+        $stmt->close();
     }
-    
-    if (!$schema_valid) {
-        showError('Contact schema mismatch. Import aborted.');
-        logError('Schema validation failed during import', ['schemas' => json_encode($schema)]);
-        echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
-        echo "</div>";
-        exit;
-    }
-}
-
-// Create backup before import
-if (file_exists($targetFile) && function_exists('createBackup')) {
-    $backup_result = createBackup($targetFile);
-    if (!$backup_result) {
-        showError('Failed to create backup. Import cancelled for safety.');
-        logError('Backup creation failed during import', ['file' => $targetFile]);
-        echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
-        echo "</div>";
-        exit;
-    }
-}
-
-// Attempt to write/append contacts
-try {
-    $success = writeCSV($targetFile, $validContacts, $schema);
-    
-    if ($success) {
-        showSuccess('Import complete. ' . count($validContacts) . ' contacts added successfully.');
-        logInfo('Import successful', ['count' => count($validContacts), 'user_id' => $_SESSION['user_id'] ?? 'unknown']);
-        
-        // ✅ AUDIT: Log bulk import
-        auditImport(count($validContacts), 'success');
-        
-        echo "<p><a href='contacts_list.php' class='btn'>← Back to Contacts</a></p>";
-        unset($_SESSION['import_preview']);
+    $conn->close();
+    unset($_SESSION['import_preview']);
+    if ($fail === 0) {
+        echo '<div style="color:green;">Successfully imported ' . $success . ' discussion log entries.</div>';
     } else {
-        showError('Failed to write contacts to file. Import may have failed.');
-        logError('Write operation failed during import', ['file' => $targetFile, 'count' => count($validContacts)]);
-        
-        // ✅ AUDIT: Log failed import
-        auditImport(count($validContacts), 'failed', 'Write operation failed');
-        
-        echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
+        echo '<div style="color:red;">Imported ' . $success . ' entries, failed ' . $fail . '. Errors: ' . implode('<br>', $errors) . '</div>';
     }
-} catch (Exception $e) {
-    showError('Unexpected error during import: ' . htmlspecialchars($e->getMessage()));
-    logError('Exception during import', ['error' => $e->getMessage(), 'code' => $e->getCode()]);
-    
-    // ✅ AUDIT: Log failed import with exception
-    auditImport(count($validContacts), 'failed', $e->getMessage());
-    
-    echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
+    echo '<a href="import_contacts.php">Back to Import</a>';
+    exit;
 }
+    echo "<p><a href='import_contacts.php'>← Back to Import</a></p>";
 
-echo "</div>";
-?>
-
+    echo "</div>";

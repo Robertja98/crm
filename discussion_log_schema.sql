@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `discussion_log` (
   `entry_text` TEXT NOT NULL,
   `linked_opportunity_id` VARCHAR(64),
   `visibility` VARCHAR(32) DEFAULT 'private',
+  `company` VARCHAR(255),
   INDEX (`contact_id`),
   INDEX (`linked_opportunity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

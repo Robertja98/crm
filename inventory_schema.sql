@@ -15,7 +15,7 @@ CREATE TABLE inventory (
     cost_price DECIMAL(12,2),
     margin DECIMAL(5,2),
     selling_price DECIMAL(12,2),
-    currency VARCHAR(8),
+    currency VARCHAR(8),ye
     quantity_in_stock INT,
     reorder_level INT,
     reorder_quantity INT,

@@ -18,9 +18,13 @@ function get_mysql_connection() {
         $user = $db['user'];
         $password = $db['password'];
     }
-    $conn = new mysqli($host, $user, $password, $dbname);
+    $conn = new mysqli($host, $user, $password);
     if ($conn->connect_error) {
         die('Error: Could not connect to MySQL database. ' . $conn->connect_error);
+    }
+    // Explicitly select the database
+    if (!$conn->select_db($dbname)) {
+        die('Error: Could not select database ' . $dbname . '. ' . $conn->error);
     }
     return $conn;
 }

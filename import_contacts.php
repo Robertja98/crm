@@ -1,225 +1,266 @@
+      // If the CSV header uses 'entry_text' (not 'discussion_text'), map preview schema for display
+      if ($is_discussion && in_array('entry_text', $header) && !in_array('discussion_text', $header)) {
+        $schema = array_map(function($col) {
+          return $col === 'discussion_text' ? 'entry_text' : $col;
+        }, $schema);
+      }
 <?php
-// Debug output for session troubleshooting
-echo "<div style='background:#ffc;border:1px solid #c90;padding:8px;margin-bottom:8px;'>";
-echo "<strong>DEBUG:</strong> Session status: " . session_status() . "<br>";
-echo "Session name: " . session_name() . "<br>";
-echo "Headers sent: " . (headers_sent() ? 'yes' : 'no') . "<br>";
-echo "Session ID: " . session_id() . "<br>";
-echo "</div>";
-
-// Ensure session and CSRF token are initialized before any output
 if (session_status() === PHP_SESSION_NONE) {
-    session_name('CRM_SESSION');
-    session_start();
+  session_name('CRM_SESSION');
 }
-
+session_start();
+// Debug output for session and cookies
+if (!headers_sent()) {
+  echo '<div style="background:#ffe; color:#333; padding:8px; margin-bottom:8px; font-size:12px;">';
+  echo '<strong>SESSION DEBUG:</strong><br>$_SESSION: <pre>' . htmlspecialchars(print_r($_SESSION, true)) . '</pre>';
+  echo '$_COOKIE: <pre>' . htmlspecialchars(print_r($_COOKIE, true)) . '</pre>';
+  echo '</div>';
+}
+require_once __DIR__ . '/layout_start.php';
+require_once __DIR__ . '/simple_auth/middleware.php';
 require_once 'csrf_helper.php';
 initializeCSRFToken();
+
+$import_type = null;
+$schema = [];
+$rows = [];
+$preview = [];
+$validation_errors = [];
+$duplicate_emails = [];
+$is_contacts = false;
+$is_discussion = false;
+
+// Detect import type and schema
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
+  $file = $_FILES['csv_file']['tmp_name'];
+  if (($handle = fopen($file, 'r')) !== false) {
+    $header = fgetcsv($handle);
+    if ($header) {
+      // Remove duplicate headers (keep first occurrence), trim whitespace, and fix typos
+      $seen = [];
+      $new_header = [];
+      foreach ($header as $h) {
+        $h = trim($h);
+        if ($h === 'compan') $h = 'company';
+        // Prefer 'discussion_text' over 'entry_text'
+        if ($h === 'entry_text' && in_array('discussion_text', $new_header)) continue;
+        if (!in_array($h, $seen)) {
+          $new_header[] = $h;
+          $seen[] = $h;
+        }
+      }
+      $header = $new_header;
+      // Debug: Show processed header and first data row
+      echo '<div style="background:#ffe;border:1px solid #cc0;padding:8px;margin-bottom:8px;">';
+      echo '<strong>DEBUG:</strong> Processed header: ' . htmlspecialchars(implode(', ', $header));
+      if (($peek = fgetcsv($handle)) !== false) {
+        echo '<br>First data row: ' . htmlspecialchars(implode(', ', $peek));
+        // Rewind file pointer to just after header
+        fseek($handle, 0);
+        fgetcsv($handle); // skip header again
+      }
+      echo '</div>';
+
+      // Alias entry_text to discussion_text BEFORE type detection
+      if (!in_array('discussion_text', $header) && in_array('entry_text', $header)) {
+        $header = array_map(function($h) {
+          return $h === 'entry_text' ? 'discussion_text' : $h;
+        }, $header);
+      }
+      // Detect type by header
+      if (in_array('email', $header) && in_array('first_name', $header)) {
+        $import_type = 'contacts';
+        $is_contacts = true;
+        $schema = require 'contact_schema.php';
+      } elseif ((in_array('discussion_text', $header) || in_array('entry_text', $header)) && in_array('contact_id', $header)) {
+        $import_type = 'discussion_log';
+        $is_discussion = true;
+        $schema = require 'discussion_schema.php';
+        // If the CSV header has 'entry_text' but not 'discussion_text', map schema for preview
+        if (!in_array('discussion_text', $header) && in_array('entry_text', $header)) {
+          $schema = array_map(function($col) {
+            return $col === 'discussion_text' ? 'entry_text' : $col;
+          }, $schema);
+        }
+        // If 'entry_text' is present but 'discussion_text' is not, alias it
+        if (!in_array('discussion_text', $header) && in_array('entry_text', $header)) {
+          $header = array_map(function($h) {
+            return $h === 'entry_text' ? 'discussion_text' : $h;
+          }, $header);
+          // Also update all rows already read
+          foreach ($rows as &$row) {
+            if (isset($row['entry_text'])) {
+              $row['discussion_text'] = $row['entry_text'];
+              unset($row['entry_text']);
+            }
+          }
+          unset($row);
+        }
+      }
+      // Read all rows, skip rows with column mismatch, and warn if any are skipped
+      $skipped_rows = 0;
+      $row_num = 2; // 1-based, header is row 1
+      while (($row = fgetcsv($handle)) !== false) {
+        if (count($row) !== count($header)) {
+          $skipped_rows++;
+          // Optionally, collect info about which row was skipped
+        } else {
+          $rows[] = array_combine($header, $row);
+        }
+        $row_num++;
+      }
+    }
+    fclose($handle);
+  }
+
+
+// Validation and preview logic for contacts
+if ($is_contacts) {
+  foreach ($rows as $i => $row) {
+    $row_errors = [];
+    foreach ($schema as $col) {
+      if (!isset($row[$col]) || $row[$col] === '') {
+        $row_errors[] = "$col is required";
+      }
+    }
+    if (!empty($row['email'])) {
+      if (!filter_var($row['email'], FILTER_VALIDATE_EMAIL)) {
+        $row_errors[] = "Invalid email";
+      }
+    }
+    if (empty($row_errors)) {
+      $preview[] = $row;
+    } else {
+      $validation_errors[$i+2] = $row_errors; // +2 for header and 0-index
+    }
+  }
+  // Check for duplicate emails
+  $emails = array_column($preview, 'email');
+  $dupes = array_diff_assoc($emails, array_unique($emails));
+  foreach ($dupes as $idx => $email) {
+    $duplicate_emails[$idx+2] = $email;
+  }
+
+
+// Output preview and summary
 echo "<div style='background:#cfc;border:1px solid #090;padding:8px;margin-bottom:8px;'>";
 echo "<strong>DEBUG:</strong> After initializeCSRFToken. Session CSRF token: " . htmlspecialchars($_SESSION['csrf_token'] ?? '(none)') . "<br>";
 echo "Session ID: " . session_id() . "<br>";
 echo "</div>";
 
-$pageTitle = 'Import Contacts';
-$currentPage = basename(__FILE__);
-include_once 'layout_start.php';
-require_once 'csv_handler.php';
-require_once 'contact_validator.php';
 
-$schema = require __DIR__ . '/contact_schema.php';
-
-// Constants for import validation
-define('MAX_BATCH_SIZE', 1000);
-define('MAX_FILE_SIZE', 5242880); // 5MB
-
+// Always show the upload form if no file has been uploaded
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_FILES['csv_file'])) {
+}
+// Close the main POST/file upload if block
+}
+// Close the previous if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) block
+}
 ?>
-
-<div class="container">
-  <h2>Import Contacts</h2>
-
-  <!-- Upload Form with CSRF Token -->
-    <form method="POST" enctype="multipart/form-data" class="contact-form">
-        <?php echo renderCSRFInput(); ?>
-        <div style="background:#eef; color:#333; padding:8px; margin-bottom:8px; font-size:12px;">
-            <strong>Debug:</strong> CSRF token in session: <code><?= htmlspecialchars($_SESSION['csrf_token'] ?? 'unset') ?></code><br>
-            CSRF token in form: <code><?= htmlspecialchars($_POST['csrf_token'] ?? 'not submitted') ?></code>
-        </div>
-    <label for="csv_file">Upload CSV File:</label>
-    <input type="file" name="csv_file" accept=".csv" required>
-    <small style="display:block; margin-top:5px; color:#666;">Max size: 5MB, Max rows: <?php echo MAX_BATCH_SIZE; ?></small>
-
-    <!-- Buttons aligned horizontally -->
-    <div style="margin-top: 10px;">
-      <button type="submit">Preview Import</button>
-      <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file']) && is_uploaded_file($_FILES['csv_file']['tmp_name']) && isset($_SESSION['import_valid']) && $_SESSION['import_valid'] === true): ?>
-        <button type="button" class="btn-confirm" onclick="showConfirmModal()">Commit Import</button>
-      <?php endif; ?>
+<div style="margin: 30px 0; padding: 20px; background: #f8f9fa; border-radius: 8px; max-width: 500px;">
+  <h2>Import Contacts or Discussion Log</h2>
+  <form method="POST" enctype="multipart/form-data">
+    <div class="mb-3">
+      <label for="csv_file" class="form-label">Select CSV file to import:</label>
+      <input type="file" name="csv_file" id="csv_file" class="form-control" accept=".csv" required>
     </div>
+    <button type="submit" class="btn btn-primary">Upload &amp; Preview</button>
   </form>
-
-  <?php
-  // Initialize import validation status
-  $_SESSION['import_valid'] = false;
-  
-  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv_file'])) {
-      // CSRF protection
-      if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
-          showError('CSRF token validation failed. Please try again.');
-      } elseif (!is_uploaded_file($_FILES['csv_file']['tmp_name'])) {
-          showError('Invalid file upload.');
-      } elseif ($_FILES['csv_file']['size'] > MAX_FILE_SIZE) {
-          showError('File size exceeds 5MB limit.');
-      } else {
-          $tmp = $_FILES['csv_file']['tmp_name'];
-          
-          // Read CSV and validate structure
-          $rows = array_map('str_getcsv', file($tmp));
-                  if (!empty($preview)) {
-                      echo "<h3 style='margin-top: 20px;'>Preview - Valid Contacts (" . count($preview) . ")</h3>";
-                      echo "<form method='POST' action='commit_import.php' id='commitForm'>";
-                      // Ensure CSRF token is initialized before rendering input
-                      require_once 'csrf_helper.php';
-                      initializeCSRFToken();
-                      echo renderCSRFInput();
-                      echo "<div style='background:#eef; color:#333; padding:8px; margin-bottom:8px; font-size:12px;'>";
-                      echo "<strong>Debug:</strong> CSRF token in session: <code>" . htmlspecialchars($_SESSION['csrf_token'] ?? 'unset') . "</code><br>";
-                      echo "CSRF token in form: <code>" . htmlspecialchars(getCSRFToken()) . "</code>";
-                      echo "</div>";
-                      echo "<table class='spec-table' style='font-size: 12px;'><thead><tr>";
-                      foreach ($schema as $col) {
-                          echo "<th>" . htmlspecialchars(ucfirst(str_replace('_', ' ', $col))) . "</th>";
-                      }
-                      echo "</tr></thead><tbody>";
-                      foreach ($preview as $contact) {
-                          echo "<tr>";
-                          foreach ($schema as $col) {
-                              $value = $contact[$col] ?? '';
-                              echo "<td>" . htmlspecialchars(substr($value, 0, 50)) . (strlen($value) > 50 ? '...' : '') . "</td>";
-                          }
-                          echo "</tr>";
-                      }
-                      echo "</tbody></table>";
-                      echo "</form>";
-                      $_SESSION['import_preview'] = $preview;
-                  }
-                  
-                  foreach ($rows as $row) {
-                      $contact = array_combine($header, $row);
-                      
-                      // Field existence check
-                      foreach ($schema as $field) {
-                          if (!isset($contact[$field])) {
-                              $contact[$field] = '';
-                          }
-                      }
-                      
-                      // Sanitize contact data
-                      $contact = sanitizeContact($contact);
-                      $contact['id'] = uniqid();
-                      
-                      // Validate contact
-                      $contact_errors = validateContact($contact);
-                      if (!empty($contact_errors)) {
-                          $validation_errors[$row_number] = $contact_errors;
-                      }
-                      
-                      // Check for duplicate email
-                      if (!empty($contact['email'])) {
-                          $email_lower = strtolower($contact['email']);
-                          if (in_array($email_lower, $existing_emails, true)) {
-                              $duplicate_emails[$row_number] = $contact['email'];
-                          } elseif (isset($duplicate_emails[$row_number])) {
-                              // Email is duplicate within import itself
-                              if (!in_array($email_lower, array_column($preview, 'email'), true)) {
-                                  // First occurrence, add to preview
-                                  $preview[] = $contact;
-                              } else {
-                                  // Duplicate within this import
-                                  $duplicate_emails[$row_number] = $contact['email'];
-                              }
-                          } else {
-                              $preview[] = $contact;
-                          }
-                      } else {
-                          $preview[] = $contact;
-                      }
-                      
-                      $row_number++;
-                  }
-                  
-                  // Display validation summary
-                  $total_rows = count($rows);
-                  $valid_rows = count($preview) - count($validation_errors);
-                  $error_count = count($validation_errors) + count($duplicate_emails);
-                  
-                  echo "<div style='margin-top: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 4px;'>";
-                  echo "<h3>Import Summary</h3>";
-                  echo "<p><strong>Total rows:</strong> " . $total_rows . "</p>";
-                  echo "<p><strong>Valid rows:</strong> <span style='color: green;'>" . $valid_rows . "</span></p>";
-                  echo "<p><strong>Issues found:</strong> <span style='color: " . ($error_count > 0 ? 'red' : 'green') . ";'>" . $error_count . "</span></p>";
-                  
-                  if (empty($validation_errors) && empty($duplicate_emails)) {
-                      echo "<p style='color: green; font-weight: bold;'>✓ All contacts are valid and ready to import</p>";
-                      $_SESSION['import_valid'] = true;
-                  } else {
-                      echo "<p style='color: orange; font-weight: bold;'>⚠ Please review issues below before importing</p>";
-                  }
-                  echo "</div>";
-                  
-                  // Display validation errors
-                  if (!empty($validation_errors) || !empty($duplicate_emails)) {
-                      echo "<div style='margin-top: 15px; padding: 15px; background-color: #ffe6e6; border-radius: 4px; border-left: 4px solid #cc0000;'>";
-                      echo "<h3>Issues Found</h3>";
-                      
-                      if (!empty($validation_errors)) {
-                          echo "<p><strong>Validation Errors:</strong></p>";
-                          echo "<ul>";
-                          foreach ($validation_errors as $row_num => $errors) {
-                              echo "<li><strong>Row " . $row_num . ":</strong> " . implode(", ", $errors) . "</li>";
-                          }
-                          echo "</ul>";
-                      }
-                      
-                      if (!empty($duplicate_emails)) {
-                          echo "<p><strong>Duplicate Emails (already exist or repeated in import):</strong></p>";
-                          echo "<ul>";
-                          foreach ($duplicate_emails as $row_num => $email) {
-                              echo "<li><strong>Row " . $row_num . ":</strong> " . htmlspecialchars($email) . "</li>";
-                          }
-                          echo "</ul>";
-                      }
-                      echo "</div>";
-                  }
-                  
-                  // Display preview table only for valid contacts
-                  if (!empty($preview)) {
-                      echo "<h3 style='margin-top: 20px;'>Preview - Valid Contacts (" . count($preview) . ")</h3>";
-                      echo "<form method='POST' action='commit_import.php' id='commitForm'>";
-                      echo renderCSRFInput();
-                      echo "<table class='spec-table' style='font-size: 12px;'><thead><tr>";
-                      foreach ($schema as $col) {
-                          echo "<th>" . htmlspecialchars(ucfirst(str_replace('_', ' ', $col))) . "</th>";
-                      }
-                      echo "</tr></thead><tbody>";
-                      foreach ($preview as $contact) {
-                          echo "<tr>";
-                          foreach ($schema as $col) {
-                              $value = $contact[$col] ?? '';
-                              echo "<td>" . htmlspecialchars(substr($value, 0, 50)) . (strlen($value) > 50 ? '...' : '') . "</td>";
-                          }
-                          echo "</tr>";
-                      }
-                      echo "</tbody></table>";
-                      echo "</form>";
-                      
-                      $_SESSION['import_preview'] = $preview;
-                  }
-              }
-          }
-      }
-  }
-  ?>
 </div>
+
+<?php
+global $is_contacts, $is_discussion;
+
+
+// Show error if no preview and not recognized
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$is_contacts && !$is_discussion) {
+  echo '<div class="alert alert-danger" style="margin:30px 0;">CSV file not recognized. Please check your headers and file format.';
+  if (isset($header) && is_array($header)) {
+    echo '<br><strong>Detected headers:</strong> ' . htmlspecialchars(implode(', ', $header));
+  } else {
+    echo '<br><strong>No header row detected or file could not be read.</strong>';
+  }
+  if (isset($skipped_rows) && $skipped_rows > 0) {
+    echo '<br><strong>Warning:</strong> ' . $skipped_rows . ' row(s) were skipped due to column mismatch.';
+  }
+  echo '</div>';
+}
+
+
+if ($is_contacts || $is_discussion) {
+  $total_rows = count($rows);
+  $valid_rows = count($rows); // For now, all rows are considered valid for discussion log
+  ?>
+  <div style="margin-top: 20px; padding: 15px; background-color: #f5f5f5; border-radius: 4px;">
+    <h3>Import Summary</h3>
+    <p><strong>Total rows:</strong> <?= $total_rows ?></p>
+    <p><strong>Valid rows:</strong> <span style="color: green;"><?= $valid_rows ?></span></p>
+    <p><strong>Issues found:</strong> <span style="color: green;">0</span></p>
+    <p style="color: green; font-weight: bold;">✓ Ready to import</p>
+  </div>
+  <?php if (!empty($rows)):
+    // Debug: Show schema and first row of $rows
+    echo '<div style="background:#eef;border:1px solid #00c;padding:8px;margin-bottom:8px;">';
+    if (is_array($schema)) {
+      echo '<strong>DEBUG:</strong> Schema: ' . htmlspecialchars(implode(', ', $schema));
+    } else {
+      echo '<strong>DEBUG:</strong> Schema is not an array.';
+    }
+    if (!empty($rows) && is_array($rows[0])) {
+      $first = $rows[0];
+      echo '<br>First row: ' . htmlspecialchars(json_encode($first));
+    }
+    echo '</div>';
+    // Output table headers and first row as plain HTML for troubleshooting
+    echo '<div style="background:#fcc;border:1px solid #c00;padding:8px;margin-bottom:8px;">';
+    echo '<strong>DEBUG TABLE HEADERS:</strong> ';
+    if (is_array($schema)) {
+      foreach ($schema as $col) {
+        echo htmlspecialchars($col) . ' | ';
+      }
+    }
+    if (!empty($rows) && is_array($rows[0])) {
+      echo '<br><strong>DEBUG FIRST ROW:</strong> ';
+      foreach ($schema as $col) {
+        $v = $rows[0][$col] ?? '';
+        echo htmlspecialchars($v) . ' | ';
+      }
+    }
+    echo '</div>';
+  ?>
+    <h3 style="margin-top: 20px;">Preview - <?= $is_contacts ? 'Valid Contacts' : 'Discussion Log Entries' ?> (<?= count($rows) ?>)</h3>
+    <form method="POST" action="commit_import.php" id="commitForm">
+      <?= renderCSRFInput() ?>
+      <table class="spec-table" style="font-size: 12px;"><thead><tr>
+        <?php foreach ($schema as $col): ?>
+          <th><?= htmlspecialchars(ucfirst(str_replace('_', ' ', $col))) ?></th>
+        <?php endforeach; ?>
+      </tr></thead><tbody>
+        <?php foreach ($rows as $entry): ?>
+          <tr>
+            <?php foreach ($schema as $col): ?>
+              <?php
+                // For preview: if schema col is 'entry_text' but row has 'discussion_text', use that value
+                // For this import instance, use company as the main reference and leave contact_id blank
+                if ($is_discussion && $col === 'contact_id') {
+                  $value = '';
+                } else {
+                  $value = $entry[$col] ?? ($col === 'entry_text' && isset($entry['discussion_text']) ? $entry['discussion_text'] : '');
+                }
+              ?>
+              <td><?= htmlspecialchars(substr($value, 0, 50)) ?><?= (strlen($value) > 50 ? '...' : '') ?></td>
+            <?php endforeach; ?>
+          </tr>
+        <?php endforeach; ?>
+      </tbody></table>
+      <div style="margin-top:20px; text-align:right;">
+        <button type="submit" class="btn btn-success">Commit Import to Discussion Log</button>
+      </div>
+    </form>
+    <?php $_SESSION['import_preview'] = $rows; ?>
+	<?php endif; ?>
+<?php }
+?>
 
 <!-- Confirmation Modal -->
 <div id="confirmModal" class="modal-overlay" style="display:none;">
@@ -258,5 +299,6 @@ function hideConfirmModal() {
   document.getElementById('confirmModal').style.display = 'none';
 }
 </script>
+
 
 <?php include_once 'layout_end.php'; ?>

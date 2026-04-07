@@ -1,34 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="CRM Contacts List: Search, filter, and manage contacts.">
-  <title>Contacts List</title>
-  <link rel="stylesheet" href="styles.css">
-  <style>
-    /* Add responsive and accessibility styles here or keep existing */
-    ...existing code...
-  </style>
-</head>
-<body>
-<header>
-  <!-- Navigation can be included here if layout_start.php provides it -->
-</header>
-<main>
 <?php
 require_once __DIR__ . '/simple_auth/middleware.php';
+// Session initialization is now handled by Auth via middleware.php
+require_once __DIR__ . '/layout_start.php';
+require_once __DIR__ . '/sanitize_helper.php';
+require_once __DIR__ . '/csrf_helper.php';
 define('DEFAULT_CONTACTS_PER_PAGE', 25); // Default number of contacts per page
 define('ALLOWED_PER_PAGE_OPTIONS', [10, 25, 50, 100]);
 $currentPage = basename(__FILE__);
 require_once 'db_mysql.php';
 $schema = require __DIR__ . '/contact_schema.php';
-// ...existing code...
-?>
 
-// Fallback if displayFields is empty
-if (empty($displayFields)) {
-  $displayFields = ['first_name', 'last_name', 'company', 'email'];
+// Always initialize these variables before any use
+$total_contacts = 0;
+$offset = 0;
+$per_page = DEFAULT_CONTACTS_PER_PAGE;
+$total_pages = 1;
+$displayFields = ['contact_id', 'first_name', 'last_name', 'company', 'email'];
+
+$displayFieldsFromGet = isset($_GET['display']) && is_array($_GET['display']) ? $_GET['display'] : (isset($_GET['display']) ? [$_GET['display']] : null);
+if (isset($_POST['display']) && is_array($_POST['display'])) {
+  $displayFields = $_POST['display'];
+  $_SESSION['displayFields'] = $displayFields;
+} elseif ($displayFieldsFromGet) {
+  $displayFields = $displayFieldsFromGet;
+  $_SESSION['displayFields'] = $displayFields;
+} elseif (isset($_SESSION['displayFields']) && is_array($_SESSION['displayFields'])) {
+  $displayFields = $_SESSION['displayFields'];
+}
+// If POST or session provides displayFields, override default
+$displayFieldsFromGet = isset($_GET['display']) && is_array($_GET['display']) ? $_GET['display'] : (isset($_GET['display']) ? [$_GET['display']] : null);
+if (isset($_POST['display']) && is_array($_POST['display'])) {
+  $displayFields = $_POST['display'];
+  $_SESSION['displayFields'] = $displayFields;
+} elseif ($displayFieldsFromGet) {
+  $displayFields = $displayFieldsFromGet;
+  $_SESSION['displayFields'] = $displayFields;
+} elseif (isset($_SESSION['displayFields']) && is_array($_SESSION['displayFields'])) {
+  $displayFields = $_SESSION['displayFields'];
 }
 
 // ✅ PAGINATION: Get current page and per-page setting
@@ -40,7 +48,6 @@ $current_page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
 // Handle query and sort
 $query = strtolower(trim($_GET['query'] ?? ''));
-$field = $_GET['field'] ?? '';
 $sortFields = explode(',', $_GET['sort'] ?? '');
 $sortDirection = $_GET['direction'] ?? 'asc';
 $activeSort = array_flip($sortFields);
@@ -69,7 +76,34 @@ function fetch_contacts_mysql($schema) {
   $current_page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
   $offset = ($current_page - 1) * $per_page;
   $limit = $per_page;
-  $sql = "SELECT $fields FROM contacts$orderBy LIMIT $limit OFFSET $offset";
+
+  // Search logic
+  $query = strtolower(trim($_GET['query'] ?? ''));
+  $field = $_GET['field'] ?? '';
+  $where = '';
+  if ($query !== '') {
+    $words = preg_split('/\s+/', $query);
+    if ($field && in_array($field, $schema)) {
+      // Search in specific field, all words must match
+      $searchConditions = [];
+      foreach ($words as $word) {
+        $searchConditions[] = "LOWER(`$field`) LIKE '%" . $conn->real_escape_string($word) . "%'";
+      }
+      $where = ' WHERE ' . implode(' AND ', $searchConditions);
+    } else {
+      // Search across all fields, all words must match somewhere
+      $wordConds = [];
+      foreach ($words as $word) {
+        $fieldConds = [];
+        foreach ($schema as $f) {
+          $fieldConds[] = "LOWER(`$f`) LIKE '%" . $conn->real_escape_string($word) . "%'";
+        }
+        $wordConds[] = '(' . implode(' OR ', $fieldConds) . ')';
+      }
+      $where = ' WHERE ' . implode(' AND ', $wordConds);
+    }
+  }
+  $sql = "SELECT $fields FROM contacts$where$orderBy LIMIT $limit OFFSET $offset";
   global $debugMode;
   global $debugOutput;
   if ($debugMode) {
@@ -112,28 +146,6 @@ foreach ($contacts as $c) {
     }
 }
 
-// Apply filter - search across multiple fields
-if ($query !== '') {
-    if ($field && in_array($field, $schema)) {
-      // Search in specific field if specified
-      $contacts = array_filter($contacts, function($c) use ($field, $query) {
-        $fieldValue = strtolower($c[$field] ?? '');
-        return strpos($fieldValue, $query) !== false;
-      });
-    } else {
-      // Search across all fields
-      $contacts = array_filter($contacts, function($c) use ($schema, $query) {
-        foreach ($schema as $field) {
-          $fieldValue = strtolower($c[$field] ?? '');
-          if (strpos($fieldValue, $query) !== false) {
-            return true;
-          }
-        }
-        return false;
-      });
-    }
-}
-
 // Pagination calculations
 $total_contacts = 0;
 $conn = get_mysql_connection();
@@ -171,12 +183,11 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
 }
 
 ?>
-// ...existing code...
 
 <div class="container-fluid px-0">
   <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3 bg-white rounded shadow-sm p-3">
     <div class="d-flex flex-column">
-      <h1 class="h2 mb-1">👥 All Contacts</h1>
+
       <span class="text-muted mb-0" style="font-size:16px;">Total: <strong><?= $total_contacts ?></strong></span>
     </div>
     <div class="d-flex flex-wrap gap-2 align-items-center">
@@ -194,19 +205,7 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
 
   <div class="d-flex flex-wrap align-items-center mb-3 gap-2 bg-light rounded p-3 border">
     <form method="GET" action="contacts_list.php" class="d-flex flex-wrap gap-2 align-items-center mb-0">
-      <input type="text" name="query" class="form-control" placeholder="Search contacts..." value="<?= htmlspecialchars($_GET['query'] ?? '') ?>" style="min-width:220px;">
-      <select name="field" class="form-select" style="min-width:140px;">
-        <option value="">All Fields</option>
-        <?php foreach ($schema as $f): ?>
-          <option value="<?= htmlspecialchars($f) ?>" <?= ($field ?? '') === $f ? 'selected' : '' ?>>
-            <?= ucfirst(str_replace('_', ' ', $f)) ?>
-          </option>
-        <?php endforeach; ?>
-      </select>
-      <button type="submit" class="btn btn-primary"><i class="bi bi-search"></i> Search</button>
-      <?php if (!empty($_GET['query'])): ?>
-        <a href="contacts_list.php" class="btn btn-outline-secondary">✕ Clear</a>
-      <?php endif; ?>
+      <input type="text" name="query" class="form-control" placeholder="Search" value="<?= htmlspecialchars($_GET['query'] ?? '') ?>" style="min-width:220px;">
     </form>
     <span class="ms-3 text-muted" style="font-size:15px;">Showing <strong><?= $offset + 1 ?></strong>–<strong><?= min($offset + $per_page, $total_contacts) ?></strong> of <strong><?= $total_contacts ?></strong> contacts</span>
     <?php if ($total_pages > 1): ?>
@@ -227,7 +226,9 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
               echo '<li class="page-item disabled"><span class="page-link">&hellip;</span></li>';
             }
             echo '<li class="page-item' . ($p == $current_page ? ' active' : '') . '">';
-            echo '<a class="page-link" href="?page=' . $p . '&query=' . urlencode($_GET['query'] ?? '') . '&field=' . urlencode($field) . '&sort=' . urlencode($_GET['sort'] ?? '') . '&direction=' . $sortDirection . '&per_page=' . $per_page . '">' . $p . '</a>';
+            echo '<a class="page-link" href="?page=' . $p . '&query=' . urlencode($_GET['query'] ?? '') . '&field=' . urlencode($field) . '&sort=' . urlencode($_GET['sort'] ?? '') . '&direction=' . $sortDirection . '&per_page=' . $per_page;
+            foreach ($displayFields as $df) { echo '&display[]=' . urlencode($df); }
+            echo '">' . $p . '</a>';
             echo '</li>';
             $last = $p;
           }
@@ -239,13 +240,18 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
 </div>
 
 <?php if (!empty($fieldSaveError)): ?>
-  <div class="alert alert-error"><?= e($fieldSaveError) ?></div>
+  <div class="alert alert-error" style="margin-top:70px;z-index:1050;position:relative;"> <?= e($fieldSaveError) ?> </div>
 <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply'])): ?>
-  <div class="alert alert-success">Column visibility updated.</div>
+  <div class="alert alert-success" style="margin-top:70px;z-index:1050;position:relative;">Column visibility updated.</div>
 <?php endif; ?>
 
 <!-- Field Visibility Panel -->
-<div id="fieldPanel" class="card shadow-sm mb-4" style="display:none; max-width: 600px;">
+<?php
+$openFieldPanel = !empty($fieldSaveError) ||
+  ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['apply'])) ||
+  (isset($_GET['openPanel']) && $_GET['openPanel'] == '1');
+?>
+<div id="fieldPanel" class="card shadow-sm mb-4" style="display:<?= $openFieldPanel ? 'block' : 'none' ?>; max-width: 600px;">
   <form method="POST" class="p-3">
     <input type="hidden" name="apply" value="1">
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -266,7 +272,7 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
     </div>
     <div class="d-flex gap-2 justify-content-end">
       <button type="submit" class="btn btn-primary">Apply Changes</button>
-      <button type="button" class="btn btn-outline-secondary js-toggle-panel" data-target="fieldPanel">Cancel</button>
+      <button type="button" class="btn btn-outline-secondary js-toggle-panel" data-target="fieldPanel" onclick="window.location.href='contacts_list.php?openPanel=1'">Cancel</button>
     </div>
   </form>
 </div>
@@ -281,7 +287,12 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
             <th style="min-width:120px;">Actions</th>
             <?php foreach ($displayFields as $f): ?>
               <th>
-                <a href="?query=<?= urlencode($_GET['query'] ?? '') ?>&field=<?= urlencode($field) ?>&sort=<?= e($f) ?>&direction=<?= (in_array($f, $sortFields) && $sortDirection === 'asc') ? 'desc' : 'asc' ?>&per_page=<?= $per_page ?>" class="text-decoration-none text-dark">
+                <?php
+                  // Build the sort link with all displayFields as display[] params
+                  $sortUrl = '?query=' . urlencode($_GET['query'] ?? '') . '&field=' . urlencode($field) . '&sort=' . e($f) . '&direction=' . ((in_array($f, $sortFields) && $sortDirection === 'asc') ? 'desc' : 'asc') . '&per_page=' . $per_page;
+                  foreach ($displayFields as $df) { $sortUrl .= '&display[]=' . urlencode($df); }
+                ?>
+                <a href="<?= $sortUrl ?>" class="text-decoration-none text-dark">
                   <?= ucfirst(str_replace('_', ' ', $f)) ?>
                   <?php if (isset($activeSort[$f])): ?>
                     <i class="bi bi-caret-<?= $sortDirection === 'desc' ? 'down' : 'up' ?>-fill ms-1"></i>
@@ -313,20 +324,52 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
           <?php else: ?>
             <?php foreach ($page_contacts as $contact): ?>
               <?php
-                $id = isset($contact['id']) ? $contact['id'] : '';
+                $id = isset($contact['contact_id']) ? $contact['contact_id'] : '';
                 $email = $contact['email'] ?? '';
                 $isDuplicate = !empty($email) && $emailCount[strtolower(trim($email))] > 1;
               ?>
-              <tr class="contact-row" data-contact-id="<?= escapeAttr($id) ?>">
+                <tr class="contact-row" data-contact-id="<?= escapeAttr($id) ?>">
                 <td>
                   <div class="btn-group" role="group">
                     <a href="contact_view.php?id=<?= escapeAttr($id) ?>" class="btn btn-sm btn-outline-primary" title="View contact"><i class="bi bi-person-lines-fill"></i></a>
                     <a href="contact_view.php?id=<?= escapeAttr($id) ?>#edit" class="btn btn-sm btn-outline-secondary" title="Edit contact"><i class="bi bi-pencil"></i></a>
                     <form method="POST" action="delete_contact.php" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this contact?');">
                       <?php renderCSRFInput(); ?>
-                      <input type="hidden" name="id" value="<?= escapeAttr($id) ?>">
+                      <input type="hidden" name="contact_id" value="<?= escapeAttr($id) ?>">
                       <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete contact"><i class="bi bi-trash"></i></button>
                     </form>
+                    <?php if (!empty($contact['company'])): ?>
+                      <a href="contact_form.php?company=<?= urlencode($contact['company']) ?>" class="btn btn-sm btn-outline-success ms-1" title="Add another contact for this company">
+                        <i class="bi bi-person-plus"></i>
+                      </a>
+                      <?php
+                        // Check if customer already exists for this company
+                        $conn = get_mysql_connection();
+                        $companyName = $contact['company'];
+                        $stmt = $conn->prepare("SELECT customer_id FROM customers LEFT JOIN contacts ON customers.contact_id = contacts.contact_id WHERE contacts.company = ?");
+                        $stmt->bind_param('s', $companyName);
+                        $stmt->execute();
+                        $stmt->bind_result($customerId);
+                        $hasCustomer = $stmt->fetch();
+                        $stmt->close();
+                        $conn->close();
+                        if (!$hasCustomer):
+                      ?>
+                        <form method="POST" action="add_customer.php" class="d-inline ms-1" onsubmit="return confirm('Convert this company to a customer?');">
+                          <?php renderCSRFInput(); ?>
+                          <input type="hidden" name="company" value="<?= escapeAttr($contact['company']) ?>">
+                          <input type="hidden" name="contact_id" value="<?= escapeAttr($contact['contact_id']) ?>">
+                          <input type="hidden" name="address" value="<?= escapeAttr($contact['address']) ?>">
+                          <button type="submit" class="btn btn-sm btn-outline-warning" title="Convert company to customer">
+                            <i class="bi bi-building"></i> Convert to Customer
+                          </button>
+                        </form>
+                      <?php else: ?>
+                        <a href="update_address.php?customer_id=<?= urlencode($customerId) ?>" class="btn btn-sm btn-outline-info ms-1" title="Update company address">
+                          <i class="bi bi-geo-alt"></i> Update Address
+                        </a>
+                      <?php endif; ?>
+                    <?php endif; ?>
                   </div>
                 </td>
                 <?php foreach ($displayFields as $f): ?>
@@ -988,4 +1031,13 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
 <!-- Footer can be included here if layout_end.php provides it -->
 </main>
 </body>
+<script src="js/modern-ui.js"></script>
+<?php if ($openFieldPanel): ?>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var panel = document.getElementById('fieldPanel');
+    if (panel) panel.style.display = 'block';
+  });
+</script>
+<?php endif; ?>
 </html>

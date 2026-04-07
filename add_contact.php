@@ -86,7 +86,7 @@ if (!empty($errors)) {
 
 try {
     $conn = get_mysql_connection();
-    $fields = array_intersect(array_keys($newContact), array_diff($schema, ['id']));
+    $fields = array_intersect(array_keys($newContact), array_diff($schema, ['id', 'contact_id']));
     $placeholders = implode(',', array_fill(0, count($fields), '?'));
     $columns = implode(',', array_map(function($f) { return "`$f`"; }, $fields));
     $stmt = $conn->prepare("INSERT INTO contacts ($columns) VALUES ($placeholders)");

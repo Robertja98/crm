@@ -6,9 +6,43 @@ require_once 'db_mysql.php';
 $discussionSchema = require __DIR__ . '/discussion_schema.php';
 $customerSchema = require __DIR__ . '/customer_schema.php';
 
+
 $csvFile = __DIR__ . '/discussion_log.csv';
 if (!file_exists($csvFile)) {
     die('discussion_log.csv not found');
+}
+
+// Preview mode: show mapping and table before import
+if (!isset($_POST['confirm_import'])) {
+    echo "<h2>Discussion Log Import Preview</h2>";
+    echo "<p><strong>Target Table:</strong> <code>discussion_log</code></p>";
+    echo "<p>The following columns will be imported:</p>";
+    echo "<ul>";
+    foreach ($discussionSchema as $col) {
+        echo "<li><code>$col</code></li>";
+    }
+    echo "</ul>";
+    // Show a preview of the first 5 rows
+    $handle = fopen($csvFile, 'r');
+    $header = fgetcsv($handle);
+    echo "<table border='1' cellpadding='4' style='border-collapse:collapse;'><tr>";
+    foreach ($header as $col) {
+        echo "<th>" . htmlspecialchars($col) . "</th>";
+    }
+    echo "</tr>";
+    $rowCount = 0;
+    while (($row = fgetcsv($handle)) !== false && $rowCount < 5) {
+        echo "<tr>";
+        foreach ($row as $cell) {
+            echo "<td>" . htmlspecialchars($cell) . "</td>";
+        }
+        echo "</tr>";
+        $rowCount++;
+    }
+    fclose($handle);
+    echo "</table>";
+    echo '<form method="POST"><input type="hidden" name="confirm_import" value="1"><button type="submit">Confirm Import</button></form>';
+    exit;
 }
 
 $conn = get_mysql_connection();

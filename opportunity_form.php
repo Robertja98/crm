@@ -3,13 +3,13 @@ require_once 'db_mysql.php';
 require_once 'sanitize_helper.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
 
-// Load unique company names from contacts for dropdown
+// Load contacts for dropdown (company + contact_id)
 $conn = get_mysql_connection();
-$companies = [];
-$result = $conn->query("SELECT DISTINCT company FROM contacts WHERE company IS NOT NULL AND company != '' ORDER BY company");
+$contacts = [];
+$result = $conn->query("SELECT contact_id, CONCAT(first_name, ' ', last_name, ' - ', company) AS label FROM contacts ORDER BY company, first_name");
 if ($result) {
   while ($row = $result->fetch_assoc()) {
-    $companies[] = $row['company'];
+    $contacts[] = $row;
   }
   $result->free();
 }
@@ -23,6 +23,7 @@ $totalValue = 0;
 <?php $currentPage = basename(__FILE__); ?>
 
 <div class="container">
+  <!-- Search bar removed as requested -->
   <h2>Add New Opportunity</h2>
 
   <?php if (!empty($_GET['status']) && $_GET['status'] === 'success'): ?>
@@ -38,16 +39,18 @@ $totalValue = 0;
       <div class="form-group">
         <label for="<?= $field ?>"><?= ucwords(str_replace('_', ' ', $field)) ?>:</label>
 
-        <?php if ($field === 'company_id'): ?>
-          <select name="company_id" id="company_id" class="form-control" required>
-            <option value="">Select Company</option>
-            <?php foreach ($companies as $company): ?>
-              <option value="<?= htmlspecialchars($company) ?>">
-                <?= htmlspecialchars($company) ?>
+        <?php if ($field === 'contact_id'): ?>
+          <div class="mb-2">
+            <input type="text" id="contact-search" class="form-control" placeholder="Search contact/company..." style="min-width:220px;">
+          </div>
+          <select name="contact_id" id="contact-select" class="form-control" required>
+            <option value="">Select contact...</option>
+            <?php foreach ($contacts as $contact): ?>
+              <option value="<?= htmlspecialchars($contact['contact_id']) ?>">
+                <?= htmlspecialchars($contact['label']) ?>
               </option>
             <?php endforeach; ?>
           </select>
-
         <?php elseif ($field === 'stage'): ?>
           <select name="stage" id="stage" class="form-control" required>
             <option value="">Select Stage</option>
@@ -70,6 +73,24 @@ $totalValue = 0;
       </div>
     <?php endforeach; ?>
 
+    <button type="submit" class="btn-primary">Save Opportunity</button>
+  </form>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('contact-search');
+  const contactSelect = document.getElementById('contact-select');
+  if (searchInput && contactSelect) {
+    searchInput.addEventListener('input', function() {
+      const filter = searchInput.value.toLowerCase();
+      for (let i = 0; i < contactSelect.options.length; i++) {
+        const option = contactSelect.options[i];
+        option.style.display = option.text.toLowerCase().includes(filter) ? '' : 'none';
+      }
+    });
+  }
+});
+</script>
     <button type="submit" class="btn-primary">Save Opportunity</button>
   </form>
 </div>

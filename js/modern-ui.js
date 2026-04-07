@@ -4,6 +4,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Force open fieldPanel if openPanel=1 is in the URL
+  if (window.location.search.includes('openPanel=1')) {
+    var panel = document.getElementById('fieldPanel');
+    if (panel) panel.style.display = 'block';
+  }
   const sidebar = document.getElementById('sidebar');
   const mainContent = document.getElementById('mainContent');
   const menuToggle = document.getElementById('menuToggle');
@@ -162,76 +167,78 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Debounced search
   searchInput.addEventListener('input', function(e) {
-    clearTimeout(searchTimeout);
-    const query = e.target.value.trim();
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    const debugClicks = new URLSearchParams(window.location.search).get('debugClick') === '1';
+    const panelToggles = document.querySelectorAll('.js-toggle-panel');
+    const queryInput = document.getElementById('query');
     
-    if (query.length < 2) {
-      hideSearchResults();
-      return;
-    }
-    
-    searchTimeout = setTimeout(() => {
-      performSearch(query);
-    }, 300); // Wait 300ms after user stops typing
-  });
-  
-  // Keyboard shortcuts for search
-  document.addEventListener('keydown', function(e) {
-    // Ctrl/Cmd + K or / to focus search
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-      e.preventDefault();
-      searchInput.focus();
-      searchInput.select();
-    }
-    
-    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
-      e.preventDefault();
-      searchInput.focus();
-    }
-  });
-  
-  // Click outside to close search results
-  document.addEventListener('click', function(e) {
-    if (!e.target.closest('.search-bar')) {
-      hideSearchResults();
-    }
-  });
-});
-*/
 
-/*
-async function performSearch(query) {
-  // Check cache first
-  if (searchCache[query]) {
-    displaySearchResults(searchCache[query]);
-    return;
-  }
-  
-  try {
-    // Show loading state
-    showSearchLoading();
-    
-    // Fetch search results from server
-    const response = await fetch(`search.php?q=${encodeURIComponent(query)}`);
-    const results = await response.json();
-    
-    // Cache results
-    searchCache[query] = results;
-    
-    // Display results
-    displaySearchResults(results);
-    
-  } catch (error) {
-    console.error('Search error:', error);
-    showSearchError();
-  }
-}
+    // Sidebar logic only if sidebar exists
+    if (sidebar && mainContent && sidebarOverlay) {
+      // Toggle sidebar on mobile
+      if (menuToggle) {
+        menuToggle.addEventListener('click', function() {
+          sidebar.classList.toggle('open');
+          sidebarOverlay.classList.toggle('active');
+          // Update aria attributes for accessibility
+          const isOpen = sidebar.classList.contains('open');
+          sidebar.setAttribute('aria-hidden', !isOpen);
+          menuToggle.setAttribute('aria-expanded', isOpen);
+        });
+      }
 
-function displaySearchResults(results) {
-  let resultsHTML = '<div class="search-results">';
-  
-  if (results.length === 0) {
-    resultsHTML += '<div class="search-empty">No results found</div>';
+      // Close sidebar when clicking overlay
+      sidebarOverlay.addEventListener('click', function() {
+        sidebar.classList.remove('open');
+        sidebarOverlay.classList.remove('active');
+      });
+
+      // Collapse sidebar on desktop (optional)
+      const collapseSidebarBtn = document.getElementById('collapseSidebar');
+      if (collapseSidebarBtn) {
+        collapseSidebarBtn.addEventListener('click', function() {
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('expanded');
+          // Save preference
+          const isCollapsed = sidebar.classList.contains('collapsed');
+          localStorage.setItem('sidebarCollapsed', isCollapsed);
+        });
+      }
+
+      // Restore sidebar state from localStorage
+      const savedState = localStorage.getItem('sidebarCollapsed');
+      if (savedState === 'true') {
+        sidebar.classList.add('collapsed');
+        mainContent.classList.add('expanded');
+      }
+
+      // Close mobile sidebar when clicking a link
+      const navLinks = sidebar.querySelectorAll('.nav-link');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+          }
+        });
+      });
+
+      // Handle window resize
+      let resizeTimeout;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          // Close mobile sidebar if window is resized to desktop
+          if (window.innerWidth > 768) {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('active');
+          }
+        }, 250);
+      });
+    }
   } else {
     // Group by type
     const grouped = {};

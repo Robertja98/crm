@@ -7,7 +7,6 @@ require_once __DIR__ . '/sanitize_helper.php';
 
 // Ensure session started for error logging
 if (session_status() === PHP_SESSION_NONE) {
-    session_start();
 }
 
 define('ERROR_LOG_DIR', __DIR__ . '/logs');

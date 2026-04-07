@@ -1,6 +1,6 @@
 <?php
 return [
-        'id',
+        'contact_id',
         'first_name',
         'last_name',
         'company',
@@ -12,10 +12,11 @@ return [
         'postal_code',
         'country',
         'notes',
+        'linkedin',
         'created_at',
         'last_modified',
         'is_customer',
-        'tank_number',
+        'delivery_date',
         'delivery_date',
         'tags'
 ];

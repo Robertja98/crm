@@ -51,7 +51,7 @@ try {
                     'type' => 'Contacts',
                     'title' => $name ?: 'Unnamed Contact',
                     'subtitle' => ($contact['company'] ?? '') . ' • ' . ($contact['email'] ?? ''),
-                    'url' => 'contact_view.php?id=' . urlencode($contact['id'] ?? '')
+                    'url' => 'contact_view.php?id=' . urlencode($contact['contact_id'] ?? $contact['id'] ?? '')
                 ];
             }
         }

@@ -26,10 +26,15 @@
 <header>
   <!-- Navigation can be included here if layout_start.php provides it -->
 </header>
-<main>
 <?php
+require_once __DIR__ . '/layout_start.php';
+require_once __DIR__ . '/sanitize_helper.php';
+require_once __DIR__ . '/csrf_helper.php';
 $schema = require __DIR__ . '/contact_schema.php';
+// Pre-fill company if provided in URL
+$prefill_company = isset($_GET['company']) ? trim($_GET['company']) : '';
 ?>
+<main>
 <section class="page-header">
   <h1>Add New Contact</h1>
   <div class="page-actions">
@@ -48,12 +53,20 @@ $schema = require __DIR__ . '/contact_schema.php';
       <?php renderCSRFInput(); ?>
       <div class="form-grid">
         <?php foreach ($schema as $field): ?>
-          <?php if ($field === 'id') continue; ?>
+          <?php if ($field === 'contact_id') continue; ?>
           <div class="form-group">
             <label for="<?= e($field) ?>"><?= e(ucwords(str_replace('_', ' ', $field))) ?>:</label>
-            <input type="<?= $field === 'email' ? 'email' : ($field === 'phone' ? 'tel' : 'text') ?>"
-                   name="<?= e($field) ?>" id="<?= e($field) ?>" class="form-control"
-                   <?= $field === 'company' ? 'required' : '' ?> aria-required="true">
+            <?php if ($field === 'linkedin'): ?>
+              <input type="url" name="linkedin" id="linkedin" class="form-control" placeholder="LinkedIn profile URL">
+            <?php elseif ($field === 'notes'): ?>
+              <textarea name="notes" id="notes" class="form-control" placeholder="Notes"></textarea>
+            <?php elseif ($field === 'company'): ?>
+              <input type="text" name="company" id="company" class="form-control" required aria-required="true" value="<?= htmlspecialchars($prefill_company) ?>">
+            <?php else: ?>
+              <input type="<?= $field === 'email' ? 'email' : ($field === 'phone' ? 'tel' : 'text') ?>"
+                     name="<?= e($field) ?>" id="<?= e($field) ?>" class="form-control"
+                     <?= $field === 'company' ? 'required' : '' ?> aria-required="true">
+            <?php endif; ?>
           </div>
         <?php endforeach; ?>
       </div>

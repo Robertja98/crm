@@ -1,852 +1,855 @@
-id,first_name,last_name,company,email,phone,address,city,province,postal_code,country,notes,created_at,last_modified,is_customer,tank_number,delivery_date,tags
-68db56a0a1681,Wayne,Arsenault,"AIRBORN FLEXIBLE CIR",arsenaultw@airbornflex.com,"(416) 752-2224",,"East York",ON,"L3R 4C1d",,,,,,,,
-68db56a0a168a,,,"LEYSONS PRODUCTS",,"905) 648-7832",,Ancaster,,"M9W 4Y1",,,,,,,,
-68db56a0a168e,,,"Activation Labratories",ancaster@actlabs.com,"905) 648-9611",,Ancaster,,"M9L 2X6",,,,,,,,
-68db56a0a1692,,,"ACTIVATION LABORATOR",,,,Ancaster,,"M3J 2K8",,,,,,,,
-68db56a0a1695,,,"ACTIVATION LABORATOR",,,,,,"M1N 1V4",,,,,,,,
-68db56a0a1698,,,"JANA LABORATORIES",,"905 726 8550",,Aurora,ON,"L7A 1A7",,,,,,,,
-68db56a0a169a,,,"O I CANADA",,"905) 457-2423",,Brampton,,,,,,,,,,
-68db56a0a169e,Hamid,Moazami,"A Berger Precision Limited",,"905 840 4207",,Brampton,ON,"l7A 1A7",,,,,,,,
-68db56a0a16a0,,,"NEWTRON GROUP",,"(905) 458-1400",,Brampton,,"L9G 4V5",,,,,,,,
-68db56a0a16a3,,,"GRAFF DIAMOND PRODUC",juan@graffdiamond.com,"1 800-465-9021",,Brampton,,,,,,,,,,
-68db56a0a16a9,Richardo,,"Asahi Refining",,"(905) 453-6120",,Brampton,,"L4W 2S6",,,,,,,,
-68db56a0a16af,Joe,,"INOX INDUSTRIES",joe@inoxindustries.com,"(905) 799-9996",,Brampton,,"M1R 3C3",,,,,,,,
-68db56a0a16b2,Woods,,"CHROMOFLO TECHNOLOGI",,"(905) 451-3810",,Brampton,,"L5T 1H5",,,,,,,,
-68db56a0a16b5,Vince,Pietrantonio,"Embassy Ingredients",,"905) 789-3200",,Brampton,,"L5T 1Z7",,,,,,,,
-68db56a0a16b7,,,"CHROMAFLOW TECHNOLOG",,"(905) 451-3810",,Brampton,,,,,,,,,,
-68db56a0a16bb,,,"Newtron Group 1192901 ONTARIO LTD",,905.458.1400,,Brampton,,"L6T 3Y3",,,,,,,,
-68db56a0a16bd,Bob,,"Syncoat Chemcials Ltd",,"(905) 270-2391",,Brantford,ON,"L5N 6B9",,,,,,,,
-68db56a0a16c0,Tammy,,"HAWCO PRODUCTS LTD",tammy@hawcoproducts.com,"(519) 759-2443",,Brantford,,"N3T 5M1",,,,,,,,
-68db56a0a16c3,"Ext 209",,"JOHNSEN ULTRAVAC",,,,Burlington,ON,"L7M 1A8",,,,,,,,
-68db56a0a16c6,Enzo,,"Canada Brick",,"(905) 633-7384",,Burlington,,"M1V 4A9",,,,,,,,
-68db56a0a16c9,Diane,Iles,"ASK COSMETICS INC",,"(905) 634-2454",,Burlington,,"N5A 6T3",,,,,,,,
-68db56a0a16cc,,,"OC TANNER MFG LTD",service@octanner.com,"905 632 7255",,Burlington,,"L5E 1E4",,,,,,,,
-68db56a0a16cf,,,"CAPO INDUSTRIES LTD",purchasing@capoindustries.com,"905 332 6626",,Burlington,,"L7L 5R6",,,,,,,,
-68db56a0a16d2,,,Rampf,,"905) 331-8042",,Burlington,,"L7L 6A6",,,,,,,,
-68db56a0a16d4,Janet,Augland,"ATOTECH CANADA LTD",,"(905) 332-0111",,Burlington,,"L7L 5R6",,,,,,,,
-68db56a0a16db,,,"WILLARD MFG INC",,"905) 633-6905",,Brampton,,"L6T 5G5",,,,,,,,
-68db56a0a16de,Ohmar,Chijaini,"ARZON LTD",ochijani@arzonlimited.com,"905) 332-5600",,Burlington,,"L7L 7P3",,,,,,,,
-68db56a0a16e0,,,"CANADA MALTING CO LT",,,,Calgary,,,,,,,,,,
-68db56a0a16e3,Bryan,,"Cambridge Customer Chrome",ccc@cambridgecustomchrome.com,"226 988 3449",,Cambridge,,"N3C 3W2",,,,,,,,
-68db56a0a16e6,Robert,Krebsz,"INDUSTRIAL PROCESSIN",rkrebsz@industrialprocessing.ca,"(519) 621-2571",,Cambridge,,"N1R 7Z1",,,,,,,,
-68db56a0a16e9,,,"INDUSTRIAL PROCESSIN",,"(519) 621-2571",,Cambridge,,"N1R 7Z1",,,,,,,,
-68db56a0a16ec,,,"Innovative Steam Technologies",,"(519) 740-0036",,Cambridge,,"N1R 7P4",,,,,,,,
-68db56a0a16ef,,,"Honeywell Aerospace",,15196222300,,Cambridge,,"N1R 7H6",,,,,,,,
-68db56a0a16f2,,,"CANADIAN GEN TOWERS",,"(519) 623-1630",,Cambridge,,"N1R 5T6",,,,,,,,
-68db56a0a16f5,,,"DAVID W WILSON MFG L",,,,Cathcart,,,,,,,,,,
-68db56a0a16f7,,,"LAKE SUPERIOR POWER",,"(905) 984-8383",,Catherines,,,,,,,,,,
-68db56a0a16fb,,,"AB SCIEX LP",,,,,,,,,,,,,,
-68db56a0a16fe,,,"MAGNA EXTERIORS AND",,"(905) 669-2888",,Concord,,"L4K 4J5",,,,,,,,
-68db56a0a1703,,,"CO EX TEC",,"(905) 738-8710",,Concord,,"L4K 2X3",,,,,,,,
-68db56a0a1706,,,"DCL INTERNATIONAL",,"905 660 6450",,Concord,,"L4K 4T5",,,,,,,,
-68db56a0a1709,,,"K-G PACKAGING INC",,v,,Concord,,"L4K 1Y8",,,,,,,,
-68db56a0a170c,,,"ALLBRAND ELECTRONICS",,"905 479 4141",,Concord,,"L4K 2Y7",,,,,,,,
-68db56a0a170f,Mark,Henry,"The Plating House",,"(416) 661-3964","C1-116 Viceroy Rd",Concord,ON,"L4K 2L8",,,,,,,,
-68db56a0a1714,,,"MULTIMATIC MANUFACTU",,"(905) 879-0200",,Concord,,"L4K 4V6",,,,,,,,
-68db56a0a1717,Johnathan,Lake,"ANTON MANUFACTURING",,"905 879 0500",,Concord,,"L4K 2N2",,,,,,,,
-68db56a0a171a,"Corey ",Multin,"TRACKLESS VEHICLES L",,"(519) 688-0370",,Courtland,,,,,,,,,,
-68db56a0a171d,Myles,Melcher,"CARMEUSE LIME",myles.melchers@carmuse.com,"1 866-780-0974",,Dundas,,"L9H 5E2",,,,,,,,
-68db56a0a1720,,,"Schaeffler Canada",,"(905) 829-2750",,"E Unit 101",,"Rd E Unit 101,",,,,,,,,
-68db56a0a1723,,,"AIRBORN FLEXIBLE CIR",,"(416) 752-2224",,"East York",,"M4B 1Y9",,,,,,,,
-68db56a0a1726,,,"AIRBORN FLEXIBLE CIR",,,,"East York",,"M4B 1Y9",,,,,,,,
-68db56a0a172b,,,"Sulco Chemcials Ltd",,"(519) 669-5166",,Elmira,,"N3B 2Z5",,,,,,,,
-68db56a0a172e,,,"CSA INTERNATIONAL",,"(416) 747-4000",,Etobicoke,,"M9W 1R3",,,,,,,,
-68db56a0a1731,,,"National Silicates Ltd",,"(416) 255-7771",,Etobicoke,,"M8Z 5C7",,,,,,,,
-68db56a0a1734,,,"Kinectrics Inc",,"416) 207-6000",,Etobicoke,,"M8Z 5G5",,,,,,,,
-68db56a0a1737,,,"MMG CANADA LTD TT EL",melissa.marques@mmgca.com,"(416) 251-2831",,Etobicoke,,"M8Z 5J4",,,,,,,,
-68db56a0a173a,Roger,Dolicker,"Acadian Platers Company",,"(416) 743-7130",,Etobicoke,,"M9W 1R8",,,,,,,,
-68db56a0a173d,,,Ultraform,,"(416) 749-9323",,Etobicoke,,"M9V 3Y8",,,,yes,,,,
-68db56a0a1740,Chris,Goodwin,"Nanowave Inc",cgoodwin@nanowavetech.com,"416 252 5602",,Etobicoke,,"M8W 4W3",,,,,,,,
-68db56a0a1742,,,"ESSILOR CANADA",,"416) 252-5458",,Etobicoke,,"M8Z 1K2",,,,,,,,
-68db56a0a1746,,,"ESSILOR CANADA",,"(416) 252-5458",,Etobicoke,,"M8Z 1K2",,,,,,,,
-68db56a0a1748,,,"BASF CANADA",,,,,,,,,,,,,,
-68db56a0a174b,,,"Continuous Colour Coat Ltd",,"416 743 7980",,Rexdale,ON,"M9W 4Y1",,,,,,,,
-68db56a0a174e,Dave,Damen,"STAINLESS PIPING SYS",,"(416) 679-2937",,Etobicoke,,"M9W 6N4",,,,,,,,
-68db56a0a1751,,,"KIK CORP",,"(416) 740-7400",,Etobicoke,,"M9W 1G1",,,,,,,,
-68db56a0a1754,,,"CALEDON LABORATORY C",,"(905) 877-0101",,Georgetown,,"L7G 4R9",,,,,,,,
-68db56a0a1757,,,"COMMUNICATIONS & POW",,"(905) 877-0161",,Georgetown,,"L7G 2J4",,,,,,,,
-68db56a0a175a,,,"INTEL VAC",,"1 800-959-5517",,Georgetown,,"L7G 4X6",,,,,,,,
-68db56a0a175c,,,"HPG INC",,,,Georgetown,,"L7G 0C6",,,,,,,,
-68db56a0a175f,,,"SIFTO CANADA INC",,,,Goderich,,"N7A 2L9",,,,,,,,
-68db56a0a1762,,,"SEMEX - GUELPH LABOR",,"(519) 821-5060",,Guelph,,,,,,,,,,
-68db56a0a1765,,,"CANADIAN SOLAR MANUF",,,,,,,,,,,,,,
-68db56a0a1768,,,"NESTLE WATERS CANADA",,"(519) 763-9462",,Guelph,,,,,,,,,,
-68db56a0a176b,,,"GUELPH UTILITY POLE",,"(519) 822-3901",,Guelph,,,,,,,,,,
-68db56a0a176e,,,"MOLD MASTERS LTD",,"(905) 877-0185",,"Halton Hills",,,,,,,,,,
-68db56a0a1771,,,"DALPRO TECHNOLOGIES",,,,,,,,,,,,,,
-68db56a0a1773,,,"A RAYMOND TINNERMAN",,,,,,,,,,,,,,
-68db56a0a1776,,,"HAMILTON PAPER BOX C",,"(905) 548-0999",,Hamilton,,,,,,,,,,
-68db56a0a1779,,,"PIONEER BALLOON CANA",,,,,,,,,,,,,,
-68db56a0a177c,,,"CFF SPECIALTY",,"905) 549-2603",,Hamilton,,,,,,,,,,
-68db56a0a177f,,,"A RAYMOND TINNERMAN",,,,,,,,,,,,,,
-68db56a0a1782,,,"A RAYMOND TINNERMAN",,"(905) 549-4661",,Hamilton,,,,,,,,,,
-68db56a0a1785,,,"SAF T CAB",,,,"Huron Park",,,,,,,,,,
-68db56a0a1787,,,"TETRA CHEM INDUSTRIE",,"(519) 485-4370",,Ingersoll,,,,,,,,,,
-68db56a0a178a,,,"SKYWORKS SOLUTIONS I",,,,Kanata,,,,,,,,,,
-68db56a0a178e,,,"SAVARIN SPRINGS INC",,,,Kitchener,,,,,,,,,,
-68db56a0a1791,,,"SCI LAB MATERIAL TES",,"519) 895-0500",,Kitchener,,,,,,,,,,
-68db56a0a1794,,,"KUNTZ ELECTROPLATING",,"(519) 893-7680",,Kitchener,,,,,,,,,,
-68db56a0a1797,,,"ULTRATEC SPECIAL EFF",,"519) 659-7972",,London,,,,,,,,,,
-68db56a0a179b,,,"SCANDIA METAL FINISH",,"(519) 451-4365",,London,,,,,,,,,,
-68db56a0a179e,,,"ZUCORA INC",,"1 800-388-2640",,London,,,,,,,,,,
-68db56a0a17a1,,,"STRATHCRAFT TROPHIES",,"1 877-661-1103",,London,,,,,,,,,,
-68db56a0a17a4,,,"TROJAN TECHNOLOGIES",,,,,,,,,,,,,,
-68db56a0a17a7,,,"CREATION TECHNOLOGIE",,905.754.0055,,Markham,,,,,,,,,,
-68db56a0a17aa,,,"DATA CIRCUITS",,"(905) 477-4400",,Markham,,"L3R 2Z3",,,,,,,,
-68db56a0a17ac,,,"UMICORE PRECIOUS MET",,"(905) 475-9566",,Markham,,"L3R 1B7",,,,,,,,
-68db56a0a17af,,,"DATA CIRCUITS",,"905) 477-4400",,Markham,,"L3R 2Z3",,,,,,,,
-68db56a0a17b3,,,STENTECH,,"905) 472-7773",,Markham,,"L6E 1A4",,,,,,,,
-68db56a0a17b5,,,"SIBER CIRCUITS INC",,"905) 470-0515",,Markham,,"L3R 5J6",,,,,,,,
-68db56a0a17b8,,,"PANCAP INC",,,,,On,"L3R 6E9",,,,,,,,
-68db56a0a17bb,,,"ESTEE LAUDER",,,,,,,,,,,,,,
-68db56a0a17be,,,"SILLIKER LABORATORIE",,"905) 479-5255",,Markham,,"L3R 5V5",,,,,,,,
-68db56a0a17c0,,,ARAMARK,,"(905) 472-8065",,Markham,,"L3S 3L5",,,,,,,,
-68db56a0a17c3,,,"RAYTHEON ELCAN OPTIC",,"(705) 526-5401",,Midland,,,,,,,,,,
-68db56a0a17c6,,,"RECOCHEM INC",,"(905) 878-5544",,Milton,,,,,,,,,,
-68db56a0a17c9,,,"KARMAX HEAVY STAMPIN",,"905) 878-5571",,Milton,,,,,,,,,,
-68db56a0a17cc,Darshan,,"BRYCE INDUSTRIES INC",,"(905) 678-1548",,Mississauga,,"L5S 1B1",,,,,,,,
-68db56a0a17cf,,,"CAMBRIDGE MATERIAL T",,,,,,,,,,,,,,
-68db56a0a17d2,,,"EXOVA CANADA INC",,"(905) 822-4111",,Mississauga,,"L5K 1B3",,,,,,,,
-68db56a0a17d5,,,"MERSEN CANADA TORONT",,"(416) 252-9371",,Mississauga,,"L5T 1Z1",,,,,,,,
-68db56a0a17d8,,,"HOPE AERO PROPELLER",,,,Mississauga,,"L4T 3T1",,,,,,,,
-68db56a0a17db,,,"PVD ADVANCED TECHNOL",,"(905) 564-1859",,Mississauga,,"L5T 1L9",,,,,,,,
-68db56a0a17de,,,"GENTEK BUILDING PROD",,"(416) 745-6133",,Mississauga,,"L5T 1Z4",,,,,,,,
-68db56a0a17e1,,,"AXIOMATIC TECHNOLOGI",,"(905) 602-9270",,Mississauga,,"L4Z 1Z8",,,,,,,,
-68db56a0a17e4,,,"COVALON TECHNOLOGIES",,"(905) 568-8400",,Mississauga,,"L4W 5S7",,,,,,,,
-68db56a0a17e7,,,"ROTOMETRICS CANADA I",,"905) 858-3800",,Mississauga,,"L5N 6P9",,,,,,,,
-68db56a0a17ea,,,"ROLLSTAR METAL FORMI",,,,Mississauga,,"L4V 1L1",,,,,,,,
-68db56a0a17ec,,,"MGA RESEARCH CORPORA",,"905) 670-3330",,Mississauga,,"L4W 4T2",,,,,,,,
-68db56a0a17ef,,,"XEROX RESEARCH CENTR",,"(905) 823-7091",,Mississauga,,"L5K 2L1",,,,,,,,
-68db56a0a17f2,,,"DAHL BROTHERS LTD",,"905) 822-2330",,Mississauga,,"L5J 2M4",,,,,,,,
-68db56a0a17f5,,,"HENKEL CANADA CORPRO",,,,Mississauga,,"L5N 6C3",,,,,,,,
-68db56a0a17f8,,,"PEARLON PRODUCTS LTD",,,,,,,,,,,,,,
-68db56a0a17fb,,,"PRATT & WHITNEY",,"905) 564-7500",,Mississauga,,"L5T 1J3",,,,,,,,
-68db56a0a17fe,Michael,V,"BASIC PACKAGING IND",michaelv@basicpackaging.com,"905) 890-0922",,Mississauga,,"L4Z 1P1",,,,,,,,
-68db56a0a1802,,,"TRILLIUM MEDITEC INC",,"416) 840-3428",,Mississauga,,"L4V 1T4",,,,,,,,
-68db56a0a1805,Michael,Cheek,"ALPHACHEM LTD",mrcheek@alphachem.ca,"(905) 821-2995",,Mississauga,,"L5N 5Z6",,,,,,,,
-68db56a0a1808,,,"ARMSTRONG MFG INC",,"(905) 566-1395",,Mississauga,,"L4Y 1Y7",,,,,,,,
-68db56a0a180a,,,"NATIONAL BAIT CO",,,,,,,,,,,,,,
-68db56a0a180e,,,QSDM,,,,,,,,,,,,,,
-68db56a0a1811,,,"DANTE GROUP",,"905) 678-9916",,Mississauga,,"L5S 1N6",,,,,,,,
-68db56a0a1813,,,"PROTEC FINISHERS",,"(905) 564-5338",,Mississauga,,"L5T 1C4",,,,,,,,
-68db56a0a1816,,,"BURCKHARDT COMPRESSI",,"844 307 0222",,Mississauga,ON,"L4W 4M2",,,,,,,,
-68db56a0a1819,,,"HYDROGENICS CORP",,"905) 361-3660",,Mississauga,,"L5T 2N6",,,,,,,,
-68db56a0a181b,,,INFASCO,,"(905) 677-8920",,Mississauga,,"L4V 1P8",,,,,,,,
-68db56a0a181e,,,LABSTAT,,,,N,,,,,,,,,,
-68db56a0a1821,,,"MARITIME HOUSE METAL",,"'+1 (613) 354 3808",,Napanee,,,,,,,,,,
-68db56a0a1824,,,"SAF DRIVES INC",,"(519) 662-6489",,"New Hamburg",,,,,,,,,,
-68db56a0a1827,,,"CLOSURES TECHNICAL C",,"(905) 898-2665",,Newmarket,,"L3Y 4X7",,,,,,,,
-68db56a0a182a,,,"SAINT GOBAIN CERAMIC",,,,,,,,,,,,,,
-68db56a0a182d,,,"CYTEC CANADA INC",,"(905) 356-9000",,"Niagara Falls",,,,,,,,,,
-68db56a0a1830,,,"ISOMERS LABORATORIES",,"(416) 787-2465",,"North York",,"M6B 1W3",,,,,,,,
-68db56a0a1833,,,"SECURITY MIRROR IND",,"416) 244-3393",,"North York",,"M6M 2P5",,,,,,,,
-68db56a0a1835,,,"DE HAVILLAND INC",,,,"North York",,"M3K 1Y5",,,,,,,,
-68db56a0a1838,,,"TORONTO RESEARCH CHE",,,,,,,,,,,,,,
-68db56a0a183c,,,"FOUR STAR PLATING",,"416) 745-1742",,"North York",,"M9L 1X5",,,,,,,,
-68db56a0a183e,,,"ABC GROUP TECH CENTR",,,,,,,,,,,,,,
-68db56a0a1841,,,"SOUTHERN GRAPHICS",,"(416) 512-6692",,"North York",,"M2N 6S6",,,,,,,,
-68db56a0a1844,,,"SANOFI PASTEUR LTD",,"416) 667-2700",,"North York",,"M2R 3T4",,,,,,,,
-68db56a0a1847,Mohamed,Sadeghian,"CDN CUSTOM PACKAGING",msadeghian@cdncustompackaging.com,,,"North York",ON,"M3J 3J9",,,,,,,,
-68db56a0a184a,,,"THOMSON RESEARCH",,"416) 955-1881",,"North York",,"M3C 1Y9",,,,,,,,
-68db56a0a184c,,,"DANA CANADA CORP",,"905) 849-1200",,Oakville,,"L6K 3E4",,,,,,,,
-68db56a0a184f,,,"DANA CANADA CORP",,"905) 849-1200",,Oakville,,"L6K 3E4",,,,,,,,
-68db56a0a1853,,,"VIROX TECHNOLOGIES I",,"(905) 813-0110",,Oakville,,"L6H 6R1",,,,,,,,
-68db56a0a1855,,,MANCOR,,"905) 844-0581",,Oakville,,"L6J 7X6",,,,,,,,
-68db56a0a1858,,,"ALLCOLOUR PAINT LTD",,"(905) 827-4173",,Oakville,,"L6L 2X5",,,,,,,,
-68db56a0a185b,,,"ATOTECH CANADA LTD",,"1 905 332 0111",,Ontario,,"L7L 5R6",,,,,,,,
-68db56a0a185e,,,"EXOVA CANADA INC",,15195509021,,Mississauga,,,,,,,,,,
-68db56a0a1861,,,"GAMMA CLEAN",,"(905) 576-4450",,Oshawa,,"L1J 8M8",,,,,,,,
-68db56a0a1865,,,"TECHFORM PRODUCTS LT",,"(705) 549-7406",,Penetanguishene,,,,,,,,,,
-68db56a0a1868,,,"REENA ENTERPRISES LT",,,,Scarborough,,"M1X 1E7",,,,,,,,
-68db56a0a186b,Andrew,Douglas,"CAMECO FUEL MFG INC",,"905 885 1129",,"Port Hope",,,,,,,,,,
-68db56a0a186f,,,"NOVX SYSTEMS INC",,"(905) 474-5051",,"Richmond Hill",,"L4B 4N1",,,,,,,,
-68db56a0a1876,,,"SILCHEM INC",,"905) 709-5867",,"Richmond Hill",,"L4B 1H7",,,,,,,,
-68db56a0a187b,,,"ARTAFLEX INC",,"(905) 470-0109",,"Richmond Hill",,"L4B 1B4",,,,,,,,
-68db56a0a1881,,,POLYBRITE,,,,"Richmond Hill",,"L4C 1A8",,,,,,,,
-68db56a0a1886,Ramana,Wignarajah,"WGI MFG INC",Ramana.Wignarajah@ia.ca,"416) 412-2970","3 Pullman Crt",Scarborough,,"M1X 1E4",,,,,,,,
-68db56a0a1889,,,"AQUABOND INC",,"(416) 754-7211","440 Passmore Ave",Scarborough,ON,"M1V 5J8",,,,,,,,
-68db56a0a188c,,,"UNDERWRITERS LABORAT",,,,Scarborough,,"M1R 5P8",,,,,,,,
-68db56a0a188f,,,"PFC CIRCUITS",,"416 750 8433","11 Canadian Road",Scarborough,ON,"M1R 5G1",,,,,,,,
-68db56a0a1892,,,"ACT COSMETICS CANADA",,"(416) 285-6228","1-11 Canadian Road",Scarborough,ON,"M1R 5G1",,,,,,,,
-68db56a0a1895,,,"QUALITY PLATING LTD",,,,,,,,,,,,,,
-68db56a0a189c,,,"SAE POWER",,"416) 298-0560","1810 Birchmount Road",Scarborough,ON,"M1P 2H7",,,,,,,,
-68db56a0a189f,,,"HEROUX DEVTEK",,,,Scarborough,,"M1P 2E3",,,,,,,,
-68db56a0a18a2,,,"THE SOLAR GROUP INC",admin@solarwindowcleaning.com,,,,,,,,,,,,,
-68db56a0a18a5,,,"ELIZABETH GRANT",,"1 877-751-1999","381 Kennedy Rd",Scarborough,ON,"M1K 2A1",,,,,,,,
-68db56a0a18a9,,,"BESTWIND INDUSTRIES",,"(416) 289-3993","705 Progress Ave",Scarborough,ON,"M1H 2X1",,,,,,,,
-68db56a0a18ac,,,CHEMTURA,,"(416) 284-1662","10 Chemical Crt",Scarborough,ON,"M1E 3X7",,,,,,,,
-68db56a0a18b2,,,"AMPHENOL CANADA CORP",,"(416) 291-4401","5950 14h Ave",Markham,ON,"L3S 4M4",,,,,,,,
-68db56a0a18b5,,,"TTM Technologies",,"(416) 208-2100","8150 Sheppard Ave E",Scarborough,ON,"M1B 5K2",,,,,,,,
-68db56a0a18bb,,,"PURDUE PHARMA",,"'+1 800-387-5349",,Pickering,,"L1W 3W8",,,,,,,,
-68db56a0a18be,,,"Safran Landing Systems",,"905) 683-3100",,Ajax,,"L1S 2G8",,,,,,,,
-68db56a0a18c1,,,"AEROSPACE METAL FINI",,"905) 939-8830",,Schomberg,,"L0G 1T0",,,,,,,,
-68db56a0a18c4,,,"DYNAMIC AND PROTO CI",,"(905) 643-9900",,"Stoney Creek",,,,,,,,,,
-68db56a0a18c7,,,"Stratford Agri Analysis Inc",,"(519) 273-4411","1131 Erie Street",Stratford,ON,"N5A 6S4",,,,,,,,
-68db56a0a18ca,,,"CLEMMER TECHOLOGIES",,,,,,,,,,,,,,
-68db56a0a18ce,,,"INTERNATIONAL GRAPHI",,"1 800-565-5345","505 Douro St",Stratford,ON,"N5A 3S9",,,,,,,,
-68db56a0a18d1,,,"EASTERN POWER LTD",,"416) 234-1301","2275 Lake Shore Blvd W",Toronto,ON,"M3V 3Y3",,,,,,,,
-68db56a0a18d4,,,"BABCOCK & WILCOX",,"1 855-696-9588","75 Savage Dr",Cambridge,ON,"N1T 1S5",,,,,,,,
-68db56a0a18d7,,,"LEASIDE CURLING CLUB",,"(647) 748-2875",,Toronto,,"M4G 1X6",,,,,,,,
-68db56a0a18db,,,"MONDELEZ CANADA INC",,"(647) 243-5400","5 Bermondsey Road",Toronto,ON,"M6J 3L9",,,,,,,,
-68db56a0a18de,,,"HOUSE OF HORVATH INC",,,,Toronto,,"M6J 2Z2",,,,,,,,
-68db56a0a18e1,,,"COMMERCIAL ALCOHOLS",,"(416) 304-1700","1400-20 Toronto St",Toronto,ON,"M5C 2B8",,,,,,,,
-68db56a0a18e4,,,"CANADA COLOUR & CHEM",,"(416) 443-5500","175 Bloor St E",Toronto,ON,"M4W 3R8",,,,,,,,
-68db56a0a18e6,,,"BRENNTAG CANADA INC",,"(416) 259-8231","133 The West Mall",Etobicoke,ON,"M9C 1C2",,,,,,,,
-68db56a0a18e9,,,"MORGAN SOLAR INC",,"(416) 203-1655","100 Symes Road",Toronto,ON,"M6N 0A8",,,,,,,,
-68db56a0a18ec,,,"RELECTRONICS SERVICE",,519-884-8665,"785 Bridge Street W",Waterloo,ON,"N2V 2K1",,,,,,,,
-68db56a0a18ef,,,"BEN MACHINE PRODUCTS",,"(905) 856-7707","1-8065 Huntington Road",Woodbridge,ON,"L4H 3T9",,,,,,,,
-68db56a0a18f1,,,"FISCHER CANADA",,"519) 746-0088","190 Frobisher Dr",Waterloo,ON,"N2V 2A2",,,,,,,,
-68db56a0a18fa,,,"WESTEX COATINGS",,"519) 884-2260","639 Colby Dr",Waterloo,ON,"N2V 1B4",,,,,,,,
-68db56a0a1900,,,ACCU-AUTOMATION,,"(519) 725-9090","141 Dearborn Pl",Waterloo,ON,"N2J 4N5",,,,,,,,
-68db56a0a1907,,,"VALLEY BLADES LTD",,"(519) 885-5500","425 Phillip St",Waterloo,ON,"N2L 3X2",,,,,,,,
-68db56a0a190f,,,"HAUSER INDUSTRIES IN",,"1 800-268-7328","330 Weber St N",Waterloo,ON,"N2J 3H6",,,,,,,,
-68db56a0a1917,Rochan,,"CROVEN CRYSTALS",,"905) 668-3324","500 Beech St",Whitby,ON,"L1N 7T8",,,,,,,,
-68db56a0a191b,,,"ACTIVE BURGESS MOULD",,"519) 737-1341",,Windsor,,,,,,,,,,
-68db56a0a191e,,,"WESCAST CASTING WING",,"(519) 357-3450",,Wingham,,,,,,,,,,
-68db56a0a1924,,,"P3T LAB",,"905) 851-9237",,Woodbridge,,"L4L 2A4",,,,,,,,
-68db56a0a192d,,,"AD FIRE SYSTEMS",,"(905) 660-4077",,Woodbridge,,"L4L 5Y3",,,,,,,,
-68db56a0a1933,,,RAYTHEON,,"905) 265-1723",,Woodbridge,,"L4L 8V1",,,,,,,,
-68db56a0a1936,Rosen,,"SPUTTEK INC",info@sputtek.com,"(416) 213-9833","110 Sharer Rd",Woodbridge,ON,"L4L 8P4",,,,,,,,
-68db56a0a1939,,,"FIRESTONE TEXTILES",,"(519) 537-6231",,Woodstock,,,,,,,,yes,,
-68db56a0a1940,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1943,,,"TRANSCANADA ENERGY L",,,,,,,,,,,,,,
-68db56a0a1946,,,"NATIONAL RESEARCH CO",,,,,,,,,,,,,,
-68db56a0a1949,,,"LONDON HEALTH SCIENC",,,,,,,,,,,,,,
-68db56a0a194d,,,"SULCO CHEMICALS LTD",,,,,,,,,,,,,,
-68db56a0a1950,,,"APOTEX PHARMACHEM IN",,,,,,,,,,,,,,
-68db56a0a1952,,,"HOME HARDWARE STORES",,,,,,,,,,,,,,
-68db56a0a1955,,,"APOTEX INC",,,,,,,,,,,,,,
-68db56a0a1958,,,"PATHEON INC WHITBY O",,,,,,,,,,,,,,
-68db56a0a195b,,,"HONDA CANADA",,,,,,,,,,,,,,
-68db56a0a195e,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1961,,,"BELVEDERE INTL 26741",,,,,,,,,,,,,,
-68db56a0a1964,,,"ELCAN OPTICAL TECH R",,,,,,,,,,,,,,
-68db56a0a1967,,,"CML HEALTHCARE INC",,,,,,,,,,,,,,
-68db56a0a196a,,,"NIAGARA HEALTH SYSTE",,,,,,,,,,,,,,
-68db56a0a196d,,,"TARO PHARMACEUTICALS",,,,,,,,,,,,,,
-68db56a0a1970,,,"LAKERIDGE HEALTH OSH",,,,,,,,,,,,,,
-68db56a0a1973,,,"CDN CUSTOM PACKAGING",,,,,,,,,,,,,,
-68db56a0a1976,,,"MILTON HOSP",,,,,,,,,,,,,,
-68db56a0a1979,Daniel,Vanderstern,"Toronto Zoo",purchasing@torontozoo.ca,"416 392 5916","2000 Meadowvale Road",Scarborough,ON,"M1B 5K7",,,,,,,,
-68db56a0a197c,,,"TORONTO GEN HOSP",,,,,,,,,,,,,,
-68db56a0a197f,,,"BIO AGRI MIX LP",,,,,,,,,,,,,,
-68db56a0a1982,,,"NIAGARA HEALTH SYSTE",,,,,,,,,,,,,,
-68db56a0a1985,,,"GENERAL MOTORS COMPA",,,,,,,,,,,,,,
-68db56a0a1988,,,"WELLSPRING PHARMACEU",,,,,,,,,,,,,,
-68db56a0a198b,,,EPM,,,,,,,,,,,,,,
-68db56a0a198e,,,"APOTEX PHARMACHEM IN",,,,,,,,,,,,,,
-68db56a0a1991,,,"BIO CLEAN SERVICES I",,,,,,,,,,,,,,
-68db56a0a1994,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1997,,,"THE WILLIAM OSLER HE",,,,,,,,,,,,,,
-68db56a0a199a,,,"ROYAL VICTORIA HOSP",,,,,,,,,,,,,,
-68db56a0a199c,,,"PURDUE PHARMA",,,,,,,,,,,,,,
-68db56a0a199f,,,"SPRAY PAK INDUSTRIES",,,,,,,,,,,,,,
-68db56a0a19a2,,,"TORONTO GEN HOSP",,,,,,,,,,,,,,
-68db56a0a19a5,,,"PATHEON INC",,,,,,,,,,,,,,
-68db56a0a19a8,,,"SGS CANADA INC",,,,,,,,,,,,,,
-68db56a0a19ab,,,PATHEON,,,,,,,,,,,,,,
-68db56a0a19ae,,,"MARKHAM STOUFFVILLE",,,,,,,,,,,,,,
-68db56a0a19b1,,,"GEORGETOWN HOSP CAMP",,,,,,,,,,,,,,
-68db56a0a19b4,,,"GO TRANSIT",,,,,,,,,,,,,,
-68db56a0a19b7,,,"ATLANTIC POWER - NIP",,,,,,,,,,,,,,
-68db56a0a19ba,,,"COMPOUND METAL COATI",,,,,,,,,,,,,,
-68db56a0a19bd,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a19c0,,,"PATHEON WHITBY INC",,,,,,,,,,,,,,
-68db56a0a19c3,,,"CITY OF TORONTO",,,,,,,,,,,,,,
-68db56a0a19c5,,,"PILLAR5 PHARMA INC",,,,,,,,,,,,,,
-68db56a0a19c8,,,"APOTEX INC",,,,,,,,,,,,,,
-68db56a0a19cb,,,"PANCAP INC",,,,,,,,,,,,,,
-68db56a0a19ce,,,PATHEON,,,,,,,,,,,,,,
-68db56a0a19d1,,,"HYDRO ONE NETWORKS",,,,,,,,,,,,,,
-68db56a0a19d4,,,"HYDRO ONE NETWORKS",,,,,,,,,,,,,,
-68db56a0a19d7,,,"REMBRANDT CHARMS",,,,,,,,,,,,,,
-68db56a0a19da,,,"COOPER STANDARD AUTO",,,,,,,,,,,,,,
-68db56a0a19dd,,,"APOTEX PHARMACHEM IN",,,,,,,,,,,,,,
-68db56a0a19e0,,,"HAMILTON CIVIC HOSP",,,,,,,,,,,,,,
-68db56a0a19e3,,,"COLMAR CORP",,,,,,,,,,,,,,
-68db56a0a19e5,,,"TARO PHARMACEUTICALS",,,,,,,,,,,,,,
-68db56a0a19e8,,,"SAINT JOSEPHS HOSP",,,,,,,,,,,,,,
-68db56a0a19eb,,,"HYDRO ONE NETWORKS",,,,,,,,,,,,,,
-68db56a0a19ee,,,"UNIVERSITY OF WATERL",,,,,,,,,,,,,,
-68db56a0a19f1,,,"CARILLION ELLISDON S",,,,,,,,,,,,,,
-68db56a0a19f4,,,"FORD WINDSOR ENGINE",,,,,,,,,,,,,,
-68db56a0a19f7,,,"SUNNYBROOK HEALTH SC",,,,,,,,,,,,,,
-68db56a0a19f9,,,"EAST WINDSOR COGENER",,,,,,,,,,,,,,
-68db56a0a19fc,,,"VALE CANADA LIMITED",,,,,,,,,,,,,,
-68db56a0a19ff,,,"PARMALAT CANADA INC",,,,,,,,,,,,,,
-68db56a0a1a02,,,"MRHH MACKENZIE RICHM",,,,,,,,,,,,,,
-68db56a0a1a05,,,"MULTI CHAIR",,,,,,,,,,,,,,
-68db56a0a1a08,,,"BABCOCK & WILCOX",,,,,,,,,,,,,,
-68db56a0a1a0b,,,"CHALMERS REGIONAL HO",,,,,,,,,,,,,,
-68db56a0a1a0e,,,"CHARLSTON INTERNATIO",,,,,,,,,,,,,,
-68db56a0a1a11,,,"ACUREN GROUP INC",,19058390015,,,,,,,,,,,,
-68db56a0a1a14,,,"UNIVERSITY OF WATERL",,,,,,,,,,,,,,
-68db56a0a1a17,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1a1a,,,"BABCOCK & WILCOX",,,,,,,,,,,,,,
-68db56a0a1a1f,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1a22,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1a25,,,"PIONEER HI BRED",,,,,,,,,,,,,,
-68db56a0a1a28,,,"L 3 COMMUNICATIONS C",,,,,,,,,,,,,,
-68db56a0a1a2b,,,"APOTEX INC",,,,,,,,,,,,,,
-68db56a0a1a2e,,,"APOTEX INC",,,,,,,,,,,,,,
-68db56a0a1a31,,,"PATHEON WHITBY INC",,,,,,,,,,,,,,
-68db56a0a1a34,,,PATHEON,,,,,,,,,,,,,,
-68db56a0a1a37,,,APOTEX,,,,,,,,,,,,,,
-68db56a0a1a3a,,,"UNIVERSITY OF WATERL",,,,,,,,,,,,,,
-68db56a0a1a3d,,,"PATHEON YM",,,,,,,,,,,,,,
-68db56a0a1a40,,,"CINRAM LTD",,,,,,,,,,,,,,
-68db56a0a1a42,,,"LHSC UNIVERSITY",,,,,,,,,,,,,,
-68db56a0a1a45,,,"COMMUNICATIONS AND P",,,,,,,,,,,,,,
-68db56a0a1a48,,,"US STEEL CANADA",,,,,,,,,,,,,,
-68db56a0a1a4b,,,"ST JOSEPH HAMILTON",,,,,,,,,,,,,,
-68db56a0a1a4e,,,"HOLLYS ANODIZING SER",,,,,,,,,,,,,,
-68db56a0a1a51,,,"ARCELORMITTAL DOFASC",,,,,,,,,,,,,,
-68db56a0a1a55,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1a57,,,"MEDICAL LAB OF WINDS",,,,,,,,,,,,,,
-68db56a0a1a5a,,,"MULTI CHAIR",,,,,,,,,,,,,,
-68db56a0a1a5d,,,"DOMINION DIAMOND MAR",,,,,,,,,,,,,,
-68db56a0a1a60,,,"DIKSON SERVICE CANAD",,,,,,,,,,,,,,
-68db56a0a1a63,,,"BABCOCK & WILCOX LTD",,,,,,,,,,,,,,
-68db56a0a1a66,,,"SYNFINE RESEARCH LTD",,,,,,,,,,,,,,
-68db56a0a1a69,,,"HOUSE OF HORVATH CIG",,,,,,,,,,,,,,
-68db56a0a1a6b,,,"HYDRO ONE NETWORKS",,,,,,,,,,,,,,
-68db56a0a1a6f,,,"HYDRO ONE NETWORKS",,,,,,,,,,,,,,
-68db56a0a1a72,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1a74,,,"MAC ESTEE LAUDER THE",,,,,,,,,,,,,,
-68db56a0a1a78,,,"JIMS POLISHING & BUF",,,,,,,,,,,,,,
-68db56a0a1a7a,,,"BASF COATINGS & INKS",,,,,,,,,,,,,,
-68db56a0a1a7d,,,"PRINCESS MARGARET HO",,,,,,,,,,yes,,,,
-68db56a0a1a80,,,"MAPLE LEAF CONSUMER",,,,,,,,,,,,,,
-68db56a0a1a83,,,"ST JOSEPHS HEALTH CA",,,,,,,,,,,,,,
-68db56a0a1a86,,,"CORA WEGMAN INTL INC",,,,,,,,,,,,,,
-68db56a0a1a8a,,,"PATHEON WHITBY INC",,,,,,,,,,,,,,
-68db56a0a1a8c,,,"THUNDER BAY REGIONAL",,,,,,,,,,,,,,
-68db56a0a1a90,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1a92,,,"TEKPRO GLOBAL",,,,,,,,,,,,,,
-68db56a0a1a95,,,"WILFRED LAURIER UNIV",,,,,,,,,,,,,,
-68db56a0a1a98,,,"COCA COLA",,,,,,,,,,,,,,
-68db56a0a1a9b,,,"CAMBRIDGE MEMORIAL H",,,,,,,,,,,,,,
-68db56a0a1a9e,,,"AIR BORN FLEXIBLE CI",,,,,,,,,,,,,,
-68db56a0a1aa1,,,"Mars Canada",,,"661 University",,,,,,,yes,,,,
-68db56a0a1aa4,,,"ACTIVATION LABORATOR",,,,,,,,,,,,,,
-68db56a0a1aa7,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1aaa,,,"HONDA OF CANADA MFG",,,,,,,,,,,,,,
-68db56a0a1aad,,,"AGRICULTURE AGRI FOO",,,,,,,,,,,,,,
-68db56a0a1aaf,,,"MARS CANADA INC",,,,,,,,,,,,,,
-68db56a0a1ab2,,,"PIONEER HI BRED PROD",,,,,,,,,,,,,,
-68db56a0a1ab5,,,"ROYAL BUILDING PRODU",,,,,,,,,,,,,,
-68db56a0a1ab8,,,"RELECTRONICS SERVICE",,,,,,,,,,,,,,
-68db56a0a1abb,,,"CMI COD",,,,,,,,,,,,,,
-68db56a0a1abe,,,"HJ HEINZ CO OF CANAD",,,,,,,,,,,,,,
-68db56a0a1ac1,,,"LAKERIDGE HEALTH COR",,,,,,,,,,,,,,
-68db56a0a1ac4,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1ac7,,,"UNILEVER CANADA INC",,,,,,,,,,,,,,
-68db56a0a1ac9,,,"FOUR COUNTIES HEALTH",,,,,,,,,,,,,,
-68db56a0a1acc,,,"MT SINAI HOSP",,,,,,,,,,,,,,
-68db56a0a1acf,,,"COMMERCIAL ALCOHOL S",,,,,,,,,,,,,,
-68db56a0a1ad2,,,"UNIVERSITY OF TORONT",,,,,,,,,,,,,,
-68db56a0a1ad5,,,"US STEEL CANADA",,,,,,,,,,,,,,
-68db56a0a1ad8,,,"AIR CANADA CENTRE",,,,,,,,,,,,,,
-68db56a0a1adb,,,"FAST TRACK MAINTENAN",,"(519) 570-0012",,,,,,,,,,,,
-68db56a0a1add,,,"KOREX CANADA LD",,"(416) 231-7800",,,,,,,,,,,,
-68db56a0a1ae0,,,"ONTARIO DIE CO LTD",,"'+1 519-745-1002",,,,,,,,,,,,
-68db56a0a1ae3,,,"BIO BASIC CANADA INC",,,,,,,,,,,,,,
-68db56a0a1ae6,,,"BRITANNIA SILVERSMIT",,,,,,,,,,,,,,
-68db56a0a1ae9,,,"MERIDIAN LIGHTWEIGHT",,,,,,,,,,,,,,
-68db56a0a1aec,,,INTELLIPHARMACEUTICS,,,,,,,,,,,,,,
-68db56a0a1aef,,,HONEYWELL,,,,,,,,,,,,,,
-68db56a0a1af2,,,"ANTEX DESIGN",,,,,,,,,,,,,,
-68db56a0a1af5,,,"MOLD MASTERS LTD",,,,,,,,,,,,,,
-68db56a0a1af7,,,"HANSON BRICK LTD",,,,,,,,,,,,,,
-68db56a0a1afa,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1afd,,,"THE EMERSON GROUP IN",,,,,,,,,,,,,,
-68db56a0a1b00,,,"SOUTHLAKE REGIONAL H",,,,,,,,,,,,,,
-68db56a0a1b03,,,"ORILLIA SOLDIER MEMO",,,,,,,,,,,,,,
-68db56a0a1b06,,,"TEMPO AEROSPACE INC",,,,,,,,,,,,,,
-68db56a0a1b08,,,"GEORGETOWN & DISTRIC",,,,,,,,,,,,,,
-68db56a0a1b0b,,,"THUNDER BAY REGIONAL",,,,,,,,,,,,,,
-68db56a0a1b0e,,,"UNIVERSITY OF WINDSO",,,,,,,,,,,,,,
-68db56a0a1b11,,,"NOVA CENTURY SCIENTI",,,,,,,,,,,,,,
-68db56a0a1b14,,,"ST JOSEPHS HEALTH CE",,,,,,,,,,,,,,
-68db56a0a1b17,,,"SELECTONE PAINTS",,,,,,,,,,,,,,
-68db56a0a1b1a,,,"UNIVERSITY OF WATERL",,,,,,,,,,,,,,
-68db56a0a1b1d,Robbie,,"MAPLE LEAF FOODS INC",,,"7474 McLean Road",Aberfoyle,ON,,,,,,,,,
-68db56a0a1b20,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1b23,,,"ENNIS PAINT CANADA U",,,,,,,,,,,,,,
-68db56a0a1b26,,,"CAMBRIDGE MATERIALS",,,,,,,,,,,,,,
-68db56a0a1b29,,,"LABSTAT INTERNATIONA",,,,,,,,,,,,,,
-68db56a0a1b2c,,,"CSA INTERNATIONAL",,,,,,,,,,,,,,
-68db56a0a1b2e,,,"TRISTAR COATINGS",,,,,,,,,,,,,,
-68db56a0a1b32,,,"UNIVERSITY OF WATERL",,,,,,,,,,,,,,
-68db56a0a1b35,,,"ORANGEVILLE CURLING",,,,,,,,,,,,,,
-68db56a0a1b38,,,"PIRAMAL HEALTHCARE C",,,,,,,,,,,,,,
-68db56a0a1b3a,,,"ST JOSEPHS HAMILTON",,,,,,,,,,,,,,
-68db56a0a1b3d,,,"VIROX TECHNOLOGIES I",,,,,,,,,,,,,,
-68db56a0a1b40,,,"CHANDCO MANUFACTURIN",,,,,,,,,,,,,,
-68db56a0a1b43,,,"SCARBOROUGH HOSPITAL",,,,,,,,,,,,,,
-68db56a0a1b46,,,"MAGELLAN AEROSPACE K",,,,,,,,,,,,,,
-68db56a0a1b49,,,"UNIVAR CANADA LTD",,,,,,,,,,,,,,
-68db56a0a1b4c,,,"METRO ONTARIO INC",,,,,,,,,,,,,,
-68db56a0a1b4f,,,"AQUARIAN CHEMICALS I",,,,,,,,,,,,,,
-68db56a0a1b52,,,"WESCAST INDUSTRIES",,,,,,,,,,,,,,
-68db56a0a1b55,,,"KOCH HEAT TRANSFER C",,,,,,,,,,,,,,
-68db56a0a1b57,,,"NIAGARA HEALTH SYSTE",,,,,,,,,,,,,,
-68db56a0a1b5a,,,"SPECTRONIC PLATING C",,,,,,,,,,,,,,
-68db56a0a1b5d,,,HONEYWELL,,,,,,,,,,,,,,
-68db56a0a1b60,,,TECHNIC,,,,,,,,,,,,,,
-68db56a0a1b63,,,"TRIBOCHEM INC",,,,,,,,,,,,,,
-68db56a0a1b66,,,"SCI LAB MATIERALS TE",,,,,,,,,,,,,,
-68db56a0a1b69,,,"KINCARDINE CURLING C",,,,,,,,,,,,,,
-68db56a0a1b6c,,,"METRICAN MFG CO INC",,,,,,,,,,,,,,
-68db56a0a1b6f,,,"SANOFI PASTEUR LTD",,,,,,,,,,,,,,
-68db56a0a1b72,,,"EMBASSY FLAVOURS",,,,,,,,,,,,,,
-68db56a0a1b75,,,"LIFEQUEST CENTRE FOR",,,,,,,,,,,,,,
-68db56a0a1b78,,,"SGS LAKEFIELD RESEAR",,,,,,,,,,,,,,
-68db56a0a1b7a,,,"ACTIVATION LABORATOR",,,,,,,,,,,,,,
-68db56a0a1b7d,,,"ACCUREX HEALTH CARE",,,,,,,,,,,,,,
-68db56a0a1b80,,,"QUADRAD MFG",,,,,,,,,,,,,,
-68db56a0a1b83,,,"VALLEY REGIONAL HOSP",,,,,,,,,,,,,,
-68db56a0a1b86,,,"COATINGS 85",,,,,,,,,,,,,,
-68db56a0a1b89,,,"TORONTO GENERAL HOSP",,,,,,,,,,,,,,
-68db56a0a1b8c,,,"ABS GLOBAL CANADA IN",,,,,,,,,,,,,,
-68db56a0a1b8f,,,"SUNCOR ENERGY INC",,,,,,,,,,,,,,
-68db56a0a1b92,,,"CATARAQUI GULF & COU",,,,,,,,,,,,,,
-68db56a0a1b95,,,"HIGHBURY CANCO CORP",,,,,,,,,,,,,,
-68db56a0a1b97,,,"PARMALAT CANADA RESE",,,,,,,,,,,,,,
-68db56a0a1b9b,,,"HEROUX DEUTEK",,,,,,,,,,,,,,
-68db56a0a1b9d,,,"EXOVA CANADA INC",,,,,,,,,,,,,,
-68db56a0a1ba0,,,"ADM AGRI",,,,,,,,,,,,,,
-68db56a0a1ba3,,,"NALCO CANADA CO",,,,,,,,,,,,,,
-68db56a0a1ba6,,,"BELCO OPTICAL",,,,,,,,,,,,,,
-68db56a0a1ba9,,,"ALEXANDRA HOSP",,,,,,,,,,,,,,
-68db56a0a1bac,,,"PULSE SCIENTIFIC INC",,,,,,,,,,,,,,
-68db56a0a1baf,,,"BFC TECHNOLOGIES INC",,,,,,,,,,,,,,
-68db56a0a1bb2,,,"SCI LAB MATERIALS TE",,,,,,,,,,,,,,
-68db56a0a1bb5,,,"DR JEAN PAUL DAVIS D",,,,,,,,,,,,,,
-68db56a0a1bb8,,,"SOUTHWEST UNITED CAN",,,,,,,,,,,,,,
-68db56a0a1bbb,,,"STRATHROY MIDDLESEX",,,,,,,,,,,,,,
-68db56a0a1bbe,,,"COCO PAVING INC",,,,,,,,,,,,,,
-68db56a0a1bc1,,,"REDEEMER COLLEGE",,,,,,,,,,,,,,
-68db56a0a1bc4,,,"AMPHENOL CANADA",,,,,,,,,,,,,,
-68db56a0a1bc7,,,"GLENLEVEN MOTORS",,,,,,,,,,,,,,
-68db56a0a1bca,,,"ARCELORMITTAL DOFASC",,,,,,,,,,,,,,
-68db56a0a1bcd,,,"XAGENIC CANADA INC",,,,,,,,,,,,,,
-68db56a0a1bcf,,,"VALE CANADA LIMITED",,,,,,,,,,,,,,
-68db56a0a1bd2,,,"GREY BRUCE REGIONAL",,,,,,,,,,,,,,
-68db56a0a1bd5,,,"BLUEWATER CURLING CL",,,,,,,,,,,,,,
-68db56a0a1bd8,,,"ADM AGRI",,,,,,,,,,,,,,
-68db56a0a1bdb,,,"PROLLENIUM MEDICAL T",,,,,,,,,,,,,,
-68db56a0a1bde,,,"METRO TOR LIBRARY BO",,,,,,,,,,,,,,
-68db56a0a1be1,,,"PAVACO PRODUCTS INC",,,,,,,,,,,,,,
-68db56a0a1be4,,,"BASF CANADA COCO",,,,,,,,,,,,,,
-68db56a0a1be6,,,"UNIVERSITY OF WATERL",,,,,,,,,,,,,,
-68db56a0a1be9,,,"DAVICENNA NC",,,,,,,,,,,,,,
-68db56a0a1bed,,,"SCHOTT GEMTRON CANAD",,,,,,,,,,,,,,
-68db56a0a1bef,,,"SCARBOROUGH HOSPITAL",,,,,,,,,,,,,,
-68db56a0a1bf2,,,"UNIVERSITY HOSP",,,,,,,,,,,,,,
-68db56a0a1bf5,,,"ANDRE LABORATORY INC",,,,,,,,,,,,,,
-68db56a0a1bf8,,,"VOGUE OPTICAL",,,,,,,,,,,,,,
-68db56a0a1bfa,,,"MILTON PHOTOGRAPHIC",,,,,,,,,,,,,,
-68db56a0a1bfe,,,"STEELCRAFT INC - QCI",,,,,,,,,,,,,,
-68db56a0a1c01,,,"SOUTH WEST HEALTH",,,,,,,,,,,,,,
-68db56a0a1c04,,,"WILFRID LAURIER UNIV",,,,,,,,,,,,,,
-68db56a0a1c07,,,"KITCHENER WATERLOO C",,,,,,,,,,,,,,
-68db56a0a1c0a,,,TECHNIC,,,,,,,,,,,,,,
-68db56a0a1c0d,,,"SGS CANADA INC",,,,,,,,,,,,,,
-68db56a0a1c10,,,"PATHEON INC",,,,,,,,,,,,,,
-68db56a0a1c13,,,"WATERLOO COLLEGIATE",,,,,,,,,,,,,,
-68db56a0a1c16,,,"WATERLOO COLLEGIATE",,,,,,,,,,,,,,
-68db56a0a1c19,,,"WATERLOO COLLEGIATE",,,,,,,,,,,,,,
-68db56a0a1c1c,,,"WATERLOO OXFORD SECO",,,,,,,,,,,,,,
-68db56a0a1c1e,,,"MGA RESEARCH CORPORA",,,,,,,,,,,,,,
-68db56a0a1c21,,,"UNIVERSITY OF WESTER",,,,,,,,,,,,,,
-68db56a0a1c24,,,"KENSINGTON EYE INSTI",,,,,,,,,,,,,,
-68db56a0a1c26,,,"METRO TORONTO PUBLIC",,,,,,,,,,,,,,
-68db56a0a1c29,,,"REIDELL CHEMICALS LT",,,,,,,,,,,,,,
-68db56a0a1c2c,,,"KLEAR VIEW WINDOW CL",,,,,,,,,,,,,,
-68db56a0a1c2f,,,"VIP HOME & YARD",,,,,,,,,,,,,,
-68db56a0a1c32,,,"MOLD MASTERS LTD",,,,,,,,,,,,,,
-68db56a0a1c34,,,"CITI IND CHEMICAL",,,,,,,,,,,,,,
-68db56a0a1c37,,,"OTTAWA HEART INSTITU",,,,,,,,,,,,,,
-68db56a0a1c3a,,,"ATI TECHNOLOGIES ULC",,,,,,,,,,,,,,
-68db56a0a1c3d,,,"LONDON HEALTH SCIENC",,,,,,,,,,,,,,
-68db56a0a1c40,,,"MARA TECHNOLOGIES IN",,,,,,,,,,,,,,
-68db56a0a1c43,,,"BRANTFORD GEN HOSP",,,,,,,,,,,,,,
-68db56a0a1c46,,,"GEORGETOWN PHOTGRAPH",,,,,,,,,,,,,,
-68db56a0a1c48,,,"SCHAEFFLER CANADA IN",,,,,,,,,,,,,,
-68db56a0a1c4b,,,"BLUFFERS PARK YACHT",,,,,,,,,,,,,,
-68db56a0a1c4e,,,"UNIVERSITY OF TORONT",,,,,,,,,,,,,,
-68db56a0a1c51,,,"GALT COLLEGIATE",,,,,,,,,,,,,,
-68db56a0a1c53,,,"SUPERFINISH CO LTD",,,,,,,,,,,,,,
-68db56a0a1c56,Ilya,,"Prism Powder Coating",,"905 660 5361","321 Edgeley Boulevard",Vaughan,ON,"L4K 3Y2",,,,,,,,
-68db56a0a1c59,,,"SOUTH BRUCE GREY HEA",,,,,,,,,,,,,,
-68db56a0a1c5c,,,"HAMILTON GEN HOSP",,,,,,,,,,,,,,
-68db56a0a1c5f,,,"UNIVERSITY OF TORONT",,,,,,,,,,,,,,
-68db56a0a1c61,,,"FOREST HEIGHTS CI",,,,,,,,,,,,,,
-68db56a0a1c64,,,"APOTEX INC",,,,,,,,,,,,,,
-68db56a0a1c67,,,"CLOVERDALE PAINT INC",,,,,,,,,,,,,,
-68db56a0a1c6a,,,"SERIF COATINGS & CHE",,,,,,,,,,,,,,
-68db56a0a1c6d,,,"THUNDER BAY REGIONAL",,,,,,,,,,,,,,
-68db56a0a1c6f,,,"BASF CANADA",,,,,,,,,,,,,,
-68db56a0a1c72,,,"LIFELABS LP",,,,,,,,,,,,,,
-68db56a0a1c75,,,"NESTLE CANADA INC",,,,,,,,,,,,,,
-68db56a0a1c78,,,"MOLD MASTERS LTD",,,,,,,,,,,,,,
-68db56a0a1c7a,,,"INTERNATIONAL CUSTOM",,,,,,,,,,,,,,
-68db56a0a1c7d,,,"ACTIVE METAL FINISHI",,,,,,,,,,,,,,
-68db56a0a1c80,,,PLASTICO,,,,,,,,,,,,,,
-68db56a0a1c83,,,"PAPIERS DE PUBLICATI",,,,,,,,,,,,,,
-68db56a0a1c85,,,"ESSILOR INC",,,,,,,,,,,,,,
-68db56a0a1c88,,,"LALLEMAND SOLUTIONS",,,,,,,,,,,,,,
-68db56a0a1c8b,,,"PURIBEC INC",,,,,,,,,,,,,,
-68db56a0a1c8e,,,"ANCO CHEMICAL PARTNE",,,,,,,,,,,,,,
-68db56a0a1c91,,,"CIRCUITS ASTRO INC",,,,,,,,,,,,,,
-68db56a0a1c94,,,"NUMED INC",,,,,,,,,,,,,,
-68db56a0a1c98,,,"CHUM HOTEL DIEU DE M",,,,,,,,,,,,,,
-68db56a0a1c9b,,,"FPINNOVATIONS PAPRIC",,,,,,,,,,,,,,
-68db56a0a1c9e,,,"QUEEN ELIZABETH HOSP",,,,,,,,,,,,,,
-68db56a0a1ca1,,,"KLOCKNER PENTAPLAST",,,,,,,,,,,,,,
-68db56a0a1ca4,,,"HAGEN INDUSTRIES LTD",,,,,,,,,,,,,,
-68db56a0a1ca7,,,PHARMASCIENCE,,,,,,,,,,,,,,
-68db56a0a1ca9,,,"VERNICO PRODUITS INC",,,,,,,,,,,,,,
-68db56a0a1cac,,,"PRO OPTIC CANADA INC",,,,,,,,,,,,,,
-68db56a0a1caf,,,"ULTRAPERF TECHNOLOGI",,,,,,,,,,,,,,
-68db56a0a1cb2,,,"VOGUE OPTICAL",,,,,,,,,,,,,,
-68db56a0a1cb5,,,"SOUVENIRS AVANTI",,,,,,,,,,,,,,
-68db56a0a1cb7,,,"SEKISUI DIAGNOSTICS",,,,,,,,,,,,,,
-68db56a0a1cbb,,,"SIGNATURE AEROSPACE",,,,,,,,,,,,,,
-68db56a0a1cbe,,,"DBM REFLEX ENTREPRIS",,,,,,,,,,,,,,
-68db56a0a1cc0,,,"CANADA COLOUR AND CH",,,,,,,,,,,,,,
-68db56a0a1cc3,,,"LABORATORIES DERMO C",,,,,,,,,,,,,,
-68db56a0a1cc7,,,"ABRASIVE TECHNOLOGY",,,,,,,,,,,,,,
-68db56a0a1cca,,,"EGS EUROCAM",,,,,,,,,,,,,,
-68db56a0a1ccd,,,"ANALOGIC CANADA CORP",,,,,,,,,,,,,,
-68db56a0a1cd0,,,"CANADA LAFARGE",,,,,,,,,,,,,,
-68db56a0a1cd3,,,"BIONICHE LIFE SCIENC",,,,,,,,,,,,,,
-68db56a0a1cd6,,,"ELECTRO LOH PLATING",,,,,,,,,,,,,,
-68db56a0a1cd8,,,"IMPORT FAB",,,,,,,,,,,,,,
-68db56a0a1cdb,,,"BIO VECTRA INC",,,,,,,,,,,,,,
-68db56a0a1cde,,,"BOMBARDIER AEROSPACE",,,,,,,,,,,,,,
-68db56a0a1ce0,,,"ANCO CHEMICALS",,,,,,,,,,,,,,
-68db56a0a1ce3,,,"DIAMOND PRODUCTIONS",,,,,,,,,,,,,,
-68db56a0a1ce6,,,"DBM REFLEX ENTREPRIS",,,,,,,,,,,,,,
-68db56a0a1ce9,,,"MOORE CANADA",,,,,,,,,,,,,,
-68db56a0a1cec,,,"OTTAWA HOSP GROUP",,,,,,,,,,,,,,
-68db56a0a1cee,,,"HOPITAL JEAN TALON L",,,,,,,,,,,,,,
-68db56a0a1cf1,,,"TECHNO SPEC USINE B",,,,,,,,,,,,,,
-68db56a0a1cf4,,,CHUS,,,,,,,,,,,,,,
-68db56a0a1cf7,,,"INTERSAC INC",,,,,,,,,,,,,,
-68db56a0a1cfa,,,"HORIZON HEALTH NETWO",,,,,,,,,,,,,,
-68db56a0a1cfd,,,"LES INDUSTRIES POWER",,,,,,,,,,,,,,
-68db56a0a1d00,,,"PYROGENESIS CANADA I",,,,,,,,,,,,,,
-68db56a0a1d02,,,"ANDREW PELLER LTD",,,,,,,,,,,,,,
-68db56a0a1d05,,,"E Z EM CANADA INC",,,,,,,,,,,,,,
-68db56a0a1d08,,,"LES INSECTICIDES PUR",,,,,,,,,,,,,,
-68db56a0a1d0b,,,"ST JEAN PHOTOCHEMICA",,,,,,,,,,,,,,
-68db56a0a1d0d,,,"AEROSPACE WELDING",,,,,,,,,,,,,,
-68db56a0a1d10,,,"CSSS DE SAINT JEROME",,,,,,,,,,,,,,
-68db56a0a1d13,,,"RECYCLAGE ECOSOLUTIO",,,,,,,,,,,,,,
-68db56a0a1d16,,,"CSSS DARGENTEUIL",,,,,,,,,,,,,,
-68db56a0a1d19,,,"MISTRAS OPTIMUS INC",,,,,,,,,,,,,,
-68db56a0a1d1c,,,"KEANS PUMP SHOP",,,,,,,,,,,,,,
-68db56a0a1d1f,,,"SILLIKER CANADA COMP",,,,,,,,,,,,,,
-68db56a0a1d24,,,"FORMICA CANADA INC",,,,,,,,,,,,,,
-68db56a0a1d27,,,"SHIELDCOR LABS INC",,,,,,,,,,,,,,
-68db56a0a1d2a,,,"COLLEGE EDOUARD MONT",,,,,,,,,,,,,,
-68db56a0a1d2d,,,"GAMMA DYNACARE MEDIC",,,,,,,,,,,,,,
-68db56a0a1d30,,,"MR ROLLER INC",,,,,,,,,,,,,,
-68db56a0a1d33,,,SANDOZ,,,,,,,,,,,,,,
-68db56a0a1d36,,,"LABORATOIRE MIRO",,,,,,,,,,,,,,
-68db56a0a1d39,,,"SIGNATURE AEROSPACE",,,,,,,,,,,,,,
-68db56a0a1d3b,,,"ADVANCED POWDERS & C",,,,,,,,,,,,,,
-68db56a0a1d3f,,,"ANODISATION VERDUN I",,,,,,,,,,,,,,
-68db56a0a1d41,,,"COLAROME INC",,,,,,,,,,,,,,
-68db56a0a1d44,,,"LERNAPHARM LORIS INC",,,,,,,,,,,,,,
-68db56a0a1d47,,,"CSSS PIERRE DE SAURE",,,,,,,,,,,,,,
-68db56a0a1d4a,,,"AEROSPACE WELDING IN",,,,,,,,,,,,,,
-68db56a0a1d4d,,,"SHRINERS HOSP",,,,,,,,,,,,,,
-68db56a0a1d50,,,"OTTAWA HOSPITAL",,,,,,,,,,,,,,
-68db56a0a1d53,,,"SHARELLI INC",,,,,,,,,,,,,,
-68db56a0a1d56,,,"PRO STAR CANADA",,,,,,,,,,,,,,
-68db56a0a1d59,,,"CENTRE DE COLONOSCOP",,,,,,,,,,,,,,
-68db56a0a1d5c,,,"VALLEY REGIONAL HOSP",,,,,,,,,,,,,,
-68db56a0a1d5f,,,"GROUPE MARCELLE INC",,,,,,,,,,,,,,
-68db56a0a1d62,,,"WESTERN HEALTH CARE",,,,,,,,,,,,,,
-68db56a0a1d65,,,"TELESTA THEREAPEUTIC",,,,,,,,,,,,,,
-68db56a0a1d68,,,"VELAN INC",,,,,,,,,,,,,,
-68db56a0a1d6a,,,"OTTAWA HOSPITAL",,,,,,,,,,,,,,
-68db56a0a1d6d,,,"COLLEGE BOIS DE BOUL",,,,,,,,,,,,,,
-68db56a0a1d70,,,"ST LAMBERT CURLING C",,,,,,,,,,,,,,
-68db56a0a1d73,,,"JONES LANG LASALLE",,,,,,,,,,,,,,
-68db56a0a1d76,,,"DBM REFLEX ENTERPRIS",,,,,,,,,,,,,,
-68db56a0a1d78,,,"LABOVAL INC",,,,,,,,,,,,,,
-68db56a0a1d7b,,,"MP REPRODUCTIONS",,,,,,,,,,,,,,
-68db56a0a1d7e,,,"MCGILL UNIVERSITY",,,,,,,,,,,,,,
-68db56a0a1d81,,,"ESSILOR CANADA LTD",,,,,,,,,,,,,,
-68db56a0a1d84,,,"QUADRA CHEMICALS",,,,,,,,,,,,,,
-68db56a0a1d86,,,"ALBERTA POWER 2000 L",,,,,,,,,,,,,,
-68db56a0a1d89,,,"CAPITAL POWER CORPOR",,,,,,,,,,,,,,
-68db56a0a1d8c,,,"NALCO CANADA CO",,,,,,,,,,,,,,
-68db56a0a1d8f,,,"ATCO POWER CANADA LT",,,,,,,,,,,,,,
-68db56a0a1d92,,,"BRENNTAG CANADA",,,,,,,,,,,,,,
-68db56a0a1d94,,,"UNIVERSITY OF ALBERT",,,,,,,,,,,,,,
-68db56a0a1d97,,,AGRIUM,,,,,,,,,,,,,,
-68db56a0a1d9a,,,"GILEAD ALBERTA ULC",,,,,,,,,,,,,,
-68db56a0a1d9d,,,"GILEAD ALBERTA ULC",,,,,,,,,,,,,,
-68db56a0a1da0,,,"ALBERTA INNOVATES TE",,,,,,,,,,,,,,
-68db56a0a1da3,,,"STURGEON COMMUNITY H",,,,,,,,,,,,,,
-68db56a0a1da6,,,"WESTERN HARDCHROME P",,,,,,,,,,,,,,
-68db56a0a1da9,,,"MISERICORDIA COMMUNI",,,,,,,,,,,,,,
-68db56a0a1dab,,,"DACRO INDUSTRIES INC",,,,,,,,,,,,,,
-68db56a0a1dae,,,"WESTLOCK CURLING CLU",,,,,,,,,,,,,,
-68db56a0a1db1,,,"CITY OF EDMONTON",,,,,,,,,,,,,,
-68db56a0a1db3,,,"PETRUS RESOURCES LTD",,,,,,,,,,,,,,
-68db56a0a1db6,,,"BENTALL KENNEDY (CAN",,,,,,,,,,,,,,
-68db56a0a1db9,,,"PEACE ANALYTICAL LAB",,,,,,,,,,,,,,
-68db56a0a1dbc,,,"EXOVA CANADA INC",,,,,,,,,,,,,,
-68db56a0a1dbf,,,"DAVID B CLIMENHAGA",,,,,,,,,,,,,,
-68db56a0a1dc1,,,"LOGICAN TECHNOLOGIES",,,,,,,,,,,,,,
-68db56a0a1dc4,,,"MDS AERO TEST CORP",,,,,,,,,,,,,,
-68db56a0a1dc7,,,"CARO ANALYTICAL SERV",,,,,,,,,,,,,,
-68db56a0a1dc9,,,"AIR LIQUIDE CANADA I",,,,,,,,,,,,,,
-68db56a0a1dcc,,,"GIMBEL EYE CENTER ED",,,,,,,,,,,,,,
-68db56a0a1dcf,,,"MORINVILLE CURLING S",,,,,,,,,,,,,,
-68db56a0a1dd2,,,"CLYDE CURLING CLUB",,,,,,,,,,,,,,
-68db56a0a1dd4,,,"FORT SMITH CURLING C",,,,,,,,,,,,,,
-68db56a0a1dd7,,,"CITY OF EDMONTON ENG",,,,,,,,,,,,,,
-68db56a0a1dda,,,"CANADIAN SALT CO LTD",,,,,,,,,,,,,,
-68db56a0a1ddd,,,"TRANE NORTHWEST",,,,,,,,,,,,,,
-68db56a0a1ddf,,,"ROYAL ALBERTA MUSEUM",,,,,,,,,,,,,,
-68db56a0a1de2,,,"GILEAD ALBERTA ULC",,,,,,,,,,,,,,
-68db56a0a1de5,,,"ENMAX SHEPARD SERVIC",,,,,,,,,,,,,,
-68db56a0a1de8,,,"CROSSFIELD ENERGY CE",,,,,,,,,,,,,,
-68db56a0a1deb,,,"EVRAZ INC NA",,,,,,,,,,,,,,
-68db56a0a1ded,,,"OLDS HOSP AND CARE C",,,,,,,,,,,,,,
-68db56a0a1df0,,,"GIMBEL EYE CENTRE",,,,,,,,,,,,,,
-68db56a0a1df3,,,"CALGARY LAB SERVICES",,,,,,,,,,,,,,
-68db56a0a1df6,,,"EXOVA CANADA INC",,,,,,,,,,,,,,
-68db56a0a1df8,,,"MDS AERO TEST CORP",,,,,,,,,,,,,,
-68db56a0a1dfb,,,"CALGARY LAB SERVICES",,,,,,,,,,,,,,
-68db56a0a1dfe,,,"UNIVERSITY OF CALGAR",,,,,,,,,,,,,,
-68db56a0a1e01,,,"ENMAX CROSSFIELD ENE",,,,,,,,,,,,,,
-68db56a0a1e04,,,"DALYNN BIOLOGICALS I",,,,,,,,,,,,,,
-68db56a0a1e06,,,"MAXXAM ANALYTICS",,,,,,,,,,,,,,
-68db56a0a1e09,,,"CROSSFIELD CURLING C",,,,,,,,,,,,,,
-68db56a0a1e0c,,,"PPG CANADA INC",,,,,,,,,,,,,,
-68db56a0a1e0f,,,"CALGARY LAB SERVICES",,,,,,,,,,,,,,
-68db56a0a1e12,,,"ACADIA RECREATION CE",,,,,,,,,,,,,,
-68db56a0a1e14,,,"IRRICANA CURLING CLU",,,,,,,,,,,,,,
-68db56a0a1e17,,,"EVRAZ INC NA",,,,,,,,,,,,,,
-68db56a0a1e1a,,,"MEADOW LAKE MECHANIC",,,,,,,,,,,,,,
-68db56a0a1e1d,,,"ENGINEERED POWER",,,,,,,,,,,,,,
-68db56a0a1e1f,,,"CFR CHEMICALS INC",,,,,,,,,,,,,,
-68db56a0a1e22,,,"BRENNTAG CANADA",,,,,,,,,,,,,,
-68db56a0a1e25,,,"FIELD AVIATION COMPA",,,,,,,,,,,,,,
-68db56a0a1e28,,,"LETHBRIDGE CURLING C",,,,,,,,,,,,,,
-68db56a0a1e2b,,,"WESTMAN REGIONAL LAB",,,,,,,,,,,,,,
-68db56a0a1e2d,,,"CORE LABORATORIES",,,,,,,,,,,,,,
-68db56a0a1e30,,,"EARTH RENEW STRATHMO",,,,,,,,,,,,,,
-68db56a0a1e33,,,"PIC CANADA LTD",,,,,,,,,,,,,,
-68db56a0a1e36,,,"AGAT LAB WATER LAB",,,,,,,,,,,,,,
-68db56a0a1e39,,,"CANADA MALTING LTD",,,,,,,,,,,,,,
-68db56a0a1e3b,,,"INDUS CURLING CLUB",,,,,,,,,,,,,,
-68db56a0a1e3e,,,"THREE HILLS CURLING",,,,,,,,,,,,,,
-68db56a0a1e41,,,"BIO CHEM CONSULTING",,,,,,,,,,,,,,
-68db56a0a1e44,,,"MEDICINE HAT COLLEGE",,,,,,,,,,,,,,
-68db56a0a1e47,,,"VERSA POWER SYSTEM L",,,,,,,,,,,,,,
-68db56a0a1e49,,,"CANADIAN BLOOD SERVI",,,,,,,,,,,,,,
-68db56a0a1e4c,,,"INTERNATIONAL LABORA",,,,,,,,,,,,,,
-68db56a0a1e4f,,,"CORE LABORATORIES",,,,,,,,,,,,,,
-68db56a0a1e52,,,"ALS LABORATORY GROUP",,,,,,,,,,,,,,
-68db56a0a1e55,,,"BANFF MINERAL SPRING",,,,,,,,,,,,,,
-68db56a0a1e58,,,"EVRAZ INC NA",,,,,,,,,,,,,,
-68db56a0a1e5a,,,"CAMERON CANADA CORP",,,,,,,,,,,,,,
-68db56a0a1e5d,,,"STRATHMORE CURLING C",,,,,,,,,,,,,,
-68db56a0a1e60,,,"AGAT LABORATORIES CO",,,,,,,,,,,,,,
-68db56a0a1e63,,,"MEDICINE HAT COLLEGE",,,,,,,,,,,,,,
-68db56a0a1e66,,,"SPRINGBANK PARK CURL",,,,,,,,,,,,,,
-68db56a0a1e68,,,"DIDSBURY CURLING CLU",,,,,,,,,,,,,,
-68db56a0a1e6b,,,"CARBON CURLING CLUB",,,,,,,,,,,,,,
-68db56a0a1e6e,,,"FIELD AVIATION CO",,,,,,,,,,,,,,
-68db56a0a1e71,,,"DELIA CURLING CLUB",,,,,,,,,,,,,,
-68db56a0a1e74,,,"INEOS CANADA PARTNER",,,,,,,,,,,,,,
-68db56a0a1e77,,,"HYDROQUAL LABORATORI",,,,,,,,,,,,,,
-68db56a0a1e79,,,"CHESTERMERE REGIONAL",,,,,,,,,,,,,,
-68db56a0a1e7c,,,"HYPERION RESEARCH",,,,,,,,,,,,,,
-68db56a0a1e7f,,,"MEDICAL EXAMINER",,,,,,,,,,,,,,
-68db56a0a1e82,,,"MAXXAM ANALYTICS ALB",,,,,,,,,,,,,,
-68db56a0a1e85,,,"BROOKS HEALTH CENTRE",,,,,,,,,,,,,,
-68db56a0a1e87,,,SP3,,,,,,,,,,,,,,
-68db56a0a1e8a,,,"CORE LABORATORIES CA",,,,,,,,,,,,,,
-68db56a0a1e8d,,,"ROCKY MOUNTAIN ANALY",,,,,,,,,,,,,,
-68db56a0a1e90,,,"MPB TECHNOLOGIES INC",,,,,,,,,,,,,,
-68db56a0a1e93,,,"MAXXAM ANALYTICS",,,,,,,,,,,,,,
-68db56a0a1e95,,,"WAVELINK ANTENNA SYS",,,,,,,,,,,,,,
-68db56a0a1e98,,,"GOLDRAY INDUSTRIES",,,,,,,,,,,,,,
-68db56a0a1e9b,,,"ALBERTA BASE ANODIZI",,,,,,,,,,,,,,
-68db56a0a1e9e,,,"C & M ENGINEERING LT",,,,,,,,,,,,,,
-68db56a0a1ea1,,,"UNIVAR CANADA LTD",,,,,,,,,,,,,,
-68db56a0a1ea3,,,"ALBERTA PROCESSING C",,,,,,,,,,,,,,
-68db56a0a1ea6,,,"NOVA RESEARCH & TECH",,,,,,,,,,,,,,
-68db56a0a1ea9,,,"CORE LABORATORIES",,,,,,,,,,,,,,
-68db56a0a1eac,,,"YORKTON REGIONAL HOS",,,,,,,,,,,,,,
-68db56a0a1eaf,,,"METAL TECH LTD",,,,,,,,,,,,,,
-68db56a0a1eb1,,,"CANADIAN PRAIRIES AN",,,,,,,,,,,,,,
-68db56a0a1eb4,,,"CANADA MALTING LTD",,,,,,,,,,,,,,
-68db56a0a1eb7,,,"TOM BAKER CANCER CEN",,,,,,,,,,,,,,
-68db56a0a1eba,,,"NOVA CHEMICALS TECH",,,,,,,,,,,,,,
-68db56a0a1ebd,,,"EVRAZ INC NA",,,,,,,,,,,,,,
-68db56a0a1ebf,,,"MEDICINE HAT HOSPITA",,,,,,,,,,,,,,
-68db56a0a1ec2,,,"ACCURATE STAMP & SEA",,,,,,,,,,,,,,
-68db56a0a1ec5,,,"MEDICINE HAT REGIONA",,,,,,,,,,,,,,
-68db56a0a1ec8,,,"VULCAN GEN HOSP",,,,,,,,,,,,,,
-68db56a0a1eca,,,"ALBERTA COLLEGE OF A",,,,,,,,,,,,,,
-68db56a0a1ecd,,,"HIGH RIVER GENERAL H",,,,,,,,,,,,,,
-68db56a0a1ed0,,,"TAYLOR TOOLWORKS LTD",,,,,,,,,,,,,,
-68db56a0a1ed3,,,"COCHRANE CURLING CLU",,,,,,,,,,,,,,
-68db56a0a1ed5,,,"CROSSFIELD ENERGY CE",,,,,,,,,,,,,,
-68db56a0a1ed8,,,"NATURAL FACTORS",,,,,,,,,,,,,,
-68db56a0a1edb,,,"AVCORP INDUSTRIES IN",,,,,,,,,,,,,,
-68db56a0a1ede,,,"EXOVA CANADA INC",,,,,,,,,,,,,,
-68db56a0a1ee0,,,"VIKING AIR LTD",,,,,,,,,,,,,,
-68db56a0a1ee3,,,"CANFOR PULP LP",,,,,,,,,,,,,,
-68db56a0a1ee6,,,"NEOVA TECHNOLOGIES I",,,,,,,,,,,,,,
-68db56a0a1ee9,,,"DORIGO SYSTEMS LTD",,,,,,,,,,,,,,
-68db56a0a1eec,,,"POLYBOTTLE GROUP LIM",,,,,,,,,,,,,,
-68db56a0a1eee,,,"DORIGO SYSTEMS",,,,,,,,,,,,,,
-68db56a0a1ef1,,,"THOMPSON FOUNDRY",,,,,,,,,,,,,,
-68db56a0a1ef4,,,"BRENNTAG CANADA INC",,,,,,,,,,,,,,
-68db56a0a1ef7,,,"ACME ANALYTICAL LABO",,,,,,,,,,,,,,
-68db56a0a1efa,,,"EXOVA CANADA INC",,,,,,,,,,,,,,
-68db56a0a1efc,,,"CHILDRENS & WOMENS H",,,,,,,,,,,,,,
-68db56a0a1eff,,,"LOCKERROOMNET MARKET",,,,,,,,,,,,,,
-68db56a0a1f02,,,"STEMCELL TECHNOLOGIE",,,,,,,,,,,,,,
-68db56a0a1f05,,,"CANADIAN FOOD INSPEC",,,,,,,,,,,,,,
-68db56a0a1f08,,,"CHILDRENS & WOMENS H",,,,,,,,,,,,,,
-68db56a0a1f10,,,,,,,,,,,,,,,,,
-68db56a0a1f13,,,,,,,,,,,,,,,,,
-68db56a0a1f16,,,"ARaymond Canada",,"(905) 549-4661",,HAMILTON,,"L8H 5Z4",,,,,,,,
-68db56a0a1f18,,,,,,,,,,,,,,,,,
-68db56a0a1f1b,,,,,"416) 743-7980",,Etobicoke,,M9W4Y1,,,,,,,,
-68db56a0a1f1e,,,,,"(416) 246-1782",,"North York",,M9L2X6,,,,,,,,
-68db56a0a1f21,,,,,,,"North York",,M3J2K8,,,,,,,,
-68db56a0a1f23,,,,,"905) 549-4661",,Hamilton,,L8H5Z4,,,,,,,,
-68db56a0a1f26,,,"ALS LABORATORY GROUP",,,,,,,,,,,,,,
-68db56a0a1f2c,,,,,"(905) 812-3856",,Mississauga,,L5N6B9,,,,,,,,
-68db56a0a1f2e,,,"ALS CANADA LTD",,,,,,,,,,,,,,
-68db56a0a1f31,,,"MAXIM TECHNOLOGIES I",,,,,,,,,,,,,,
-68db56a0a1f34,,,"ALS ENVIRONMENTAL",,,,,,,,,,,,,,
-68db56a0a1f37,,,"REDLEN TECHNOLOGY IN",,,,,,,,,,,,,,
-68db56a0a1f3a,,,"RESPONSE BIOMEDICAL",,,,,,,,,,,,,,
-68db56a0a1f3d,,,"IDEXX REFERENCE LABO",,,,,,,,,,,,,,
-68db56a0a1f40,,,"CAMPBELL RIVER GEN H",,,,,,,,,,,,,,
-68db56a0a1f43,,,"ENIGMA INTERCONNECT",,,,,,,,,,,,,,
-68db56a0a1f45,,,"INSPECTORATE AMERICA",,,,,,,,,,,,,,
-68db56a0a1f48,,,"SURREY MEMORIAL HOSP",,,,,,,,,,,,,,
-68db56a0a1f4b,,,"GREENLIGHT INNOVATIO",,,,,,,,,,,,,,
-68db56a0a1f4e,,,"EYENCE OPTICAL LABOR",,,,,,,,,,,,,,
-68db56a0a1f51,,,"NATURAL FACTORS",,,,,,,,,,,,,,
-68db56a0a1f53,,,"VANCOUVER GEN HOSP",,,,,,,,,,,,,,
-68db56a0a1f56,,,"EAGLE PICHER MEDICAL",,,,,,,,,,,,,,
-68db56a0a1f59,,,"SGS CANADA INC",,,,,,,,,,,,,,
-68db56a0a1f5c,,,"CFIA LAB SER DIV BUR",,,,,,,,,,,,,,
-68db56a0a1f5e,,,"TRINITY WESTERN UNIV",,,,,,,,,,,,,,
-68db56a0a1f61,,,"CHILDRENS & FAMILY R",,,,,,,,,,,,,,
-68db56a0a1f64,,,"VIVA PHARMACEUTICAL",,,,,,,,,,,,,,
-68db56a0a1f67,,,UBC,,,,,,,,,,,,,,
-68db56a0a1f6a,,,UBC,,,,,,,,,,,,,,
-68db56a0a1f6d,,,"BC CANCER AGENCY",,,,,,,,,,,,,,
-68db56a0a1f70,,,"RAMSHORN CANADA INVE",,,,,,,,,,,,,,
-68db56a0a1f72,,,"SAINT PAULS HOSP",,,,,,,,,,,,,,
-68db56a0a1f75,,,"SIPCO INDUSTRIES LTD",,,,,,,,,,,,,,
-68db56a0a1f78,,,"ACTIVATION LABORATOR",,,,,,,,,,,,,,
-68db56a0a1f7b,,,"METRO VANCOUVER",,,,,,,,,,,,,,
-68db56a0a1f7e,,,"PACIFIC AGRI FOOD RE",,,,,,,,,,,,,,
-68db56a0a1f81,,,"UBC MICROBIOLOGY",,,,,,,,,,,,,,
-68db56a0a1f83,,,"UBC MICROBIOLOGY",,,,,,,,,,,,,,
-68db56a0a1f86,,,"NORTHERN LIPIDS INC",,,,,,,,,,,,,,
-68db56a0a1f89,,,"VIVA PHARMACEUTICAL",,,,,,,,,,,,,,
-68db56a0a1f8c,,,"UBC MICROBIOLOGY RM",,,,,,,,,,,,,,
-68db56a0a1f8e,,,"UBC MICROBIOLOGY RM2",,,,,,,,,,,,,,
-68db56a0a1f91,,,"WEST COAST GEN HOSP",,,,,,,,,,,,,,
-68db56a0a1f94,,,"Canada Malting",,"(403) 571-7000",,Calgary,AB,"T2G 4M9",,,,,,,,
-68db56a0a1f97,,,"VANCOUVER ISLAND UNI",,,,,,,,,,,,,,
-68db56a0a1f9a,,,,,,,,,,,,,,,,,
-68db56a0a1f9d,,,,,,,,,,,,,,,,,
-68db56a0a1fa2,,,,,,,,,,,,,,,,,
-690507e9c30e8,Susan,Elkins,"York Region",susan.elkins@york.ca,,,,,,,,"2025-10-31 20:03",,,,,
-CNT_20251003023317_00422f,,,,,,,,,,,,,,,,,
-CNT_20251003023317_034b4c,,,,,,,,,,,,,,,,,
-CNT_20251003023317_067182,,,,,,,,,,,,,,,,,
-CNT_20251003023317_0f6026,,,"HS TOOL & PARTS",,,,,,,,,,,,,,
-CNT_20251003023317_1106e6,,,,,,,,,,,,,,,,,
-CNT_20251003023317_144adb,,,"Clemmer Steelcraft Technologies Inc",,"519) 271-4750",,Stratford,ON,"N5A 6T3",,,,,,,,
-CNT_20251003023317_18cb3b,,,,,"(905) 840-4207",,Brampton,,L7A1A7,,,,,,,,
-CNT_20251003023317_1b3f86,,,,,,,,,,,,,,,,,
-CNT_20251003023317_233480,,,,,"(905) 560-6534",,Hamilton,,L8E2W3,,,,,,,,
-CNT_20251003023317_27c6bc,,,"Chemetics Inc",,905-619-5200,,Pickering,,"L1W 4C2",,,,,,,,
-CNT_20251003023317_28bf7b,,,,,,,,,,,,,,,,,
-CNT_20251003023317_30999a,,,"David W Wilson Manufacturing Ltd",,"(519) 458-8911",,Cathcart,ON,"N0E 1B0",,,,,,,,
-CNT_20251003023317_327195,,,,,,,,,,,,,,,,,
-CNT_20251003023317_353f9b,,,"Toronto Research Chemicals",,4166659696,,"North York",ON,"M3j 2J8",,,,,,,,
-CNT_20251003023317_3f3969,,,,,,,,,,,,,,,,,
-CNT_20251003023317_46feac,,,,,,,,,,,,,,,,,
-CNT_20251003023317_6247e2,,,"PEMBERTON SEED POTAT",,,,,,,,,,,,,,
-CNT_20251003023317_6369ce,,,,,,,,,,,,,,,,,
-CNT_20251003023317_6d20e9,,,"ABBOTSFORD COMMUNITY",,,,,,,,,,,,,,
-CNT_20251003023317_7358a9,,,"BURNABY HOSP SITE",,,,,,,,,,,,,,
-CNT_20251003023317_73f600,,,"SURREY MEMORIAL HOSP",,,,,,,,,,,,,,
-CNT_20251003023317_74a413,,,,,,,,,,,,,,,,,
-CNT_20251003023317_75649a,,,,,"(519) 457-3400",,London,,N5V4T7,,,,,,,,
-CNT_20251003023317_75d5f9,,,"AGAT LABORATORIES LT",,,,,,,,,,,,,,
-CNT_20251003023317_7aed5c,,,"Quality Plating Company",,"(416) 536-7228","60 Crockford Blvd",Scarborough,ON,"M1R 3C3",,,,,,,,
-CNT_20251003023317_a0bc71,,,"Estee Lauder",,"905) 470-0792",,Markham,,L3R4C1,,,,,,,,
-CNT_20251003023317_8b7de7,,,,,"(905) 565-1800",,Mississauga,,L5T1Z7,,,,,,,,
-CNT_20251003023317_8ca0c2,Andy,Boorn,"MDS Inc",,"905) 660-9005","71 Four Valley Dr",Concord,ON,"L4K 4V8",,,,,,,,
-CNT_20251003023317_8e0ffd,,,,,,,Mississauga,,L4W2S6,,,,,,,,
-CNT_20251003023317_8fa378,,,,,"(519) 837-1881",,Guelph,,N1K1E6,,,,,,,,
-CNT_20251003023317_929e1a,,,"BASF Inc",,"1 833-256-7811",,Etobicoke,,M9W1K1,,,,,,,,
-CNT_20251003023317_95d289,,,,,,,,,,,,,,,,,
-CNT_20251003023317_9c34f3,,,,,,,,,,,,,,,,,
-CNT_20251003023317_9d2fb6,,,,,"(905) 670-1040",,Mississauga,,L5T1H5,,,,,,,,
-CNT_20251003023317_a0bc75,,,"Clemmer Steelcraft Technologies Inc",,"519) 271-4750","904 Downie St",Stratford,ON,"N5A 6T3",,,,,,,,
-CNT_20251003023317_a5eb5b,,,,,,,,,,,,,,,,,
-CNT_20251003023317_aa4b5a,,,"ROYAL COLUMBIAN HOSP",,,,,,,,,,,,,,
-CNT_20251003023317_c27d59,,,,,,,,,,,,,,,,,
-CNT_20251003023317_c4067f,,,,,,,,,,,,,,,,,
-CNT_20251003023317_c44135,,,,,,,,,,,,,,,,,
-CNT_20251003023317_c6ce21,,,"Saint-Gobain Ceramic Materials Canada Inc",,"(905) 295-4311","8001 Daly St","Niagara Falls",ON,"L2G 6S2",,,,,,,,
-CNT_20251003023317_cf7ce3,,,"Molex Electronics",,"(905) 944-1411",,Scarborough,,M1V4A9,,,,,,,,
-CNT_20251003023317_d2c40d,,,,,"905) 470-6844",,Markham,,L3R6E9,,,,,,,,
-CNT_20251003023317_e45c3c,,,,,,,,,,,,,,,,,
-CNT_20251003023317_ecf31f,Erin,,"Solar Window Cleaning",admin@solarwindowcleaning.com,"(416) 269-2288","203 - 2481 Kingston Rd",Scarborough,ON,M1N1V4,,,,,,,,
-CNT_20251003023317_ff1caf,,,LIFELABS,,"(905) 543-9224",,Hamilton,,L8H3E3,,,,,,,,
-CNT_20251031153042_0712f0,,,,,"(905) 825-1218",,,,,,,,,,,,
-CNT_20251031153042_14656c,,,,,"(613) 287-4945",,,,,,,,,,,,
-CNT_20251031153042_1da4dc,,,,,"(905) 278-0180",,,,,,,,,,,,
-CNT_20251031153042_28f806,,,,,"(416) 286-6062",,,,,,,,,,,,
-CNT_20251031153042_29d700,,,,,"(905) 332-6626",,,,,,,,,,,,
-CNT_20251031153042_317590,,,,,"(905) 648-9611",,,,,,,,,,,,
-CNT_20251031153042_320936,,,,,"(905) 814-6511",,,,,,,,,,,,
-CNT_20251031153042_34a487,,,,,"(416) 752-3437",,,,,,,,,,,,
-CNT_20251031153042_4d8c61,,,,,"(905) 677-8747",,,,,,,,,,,,
-CNT_20251031153042_57c2a0,,,,,"(905) 761-6837",,,,,,,,,,,,
-CNT_20251031153042_5f4aa6,,,,,"(905) 332-0111",,,,,,,,,,,,
-CNT_20251031153042_6e1ae6,,,,,"(416) 752-2224",,,,,,,,,,,,
-CNT_20251031153042_755f90,,,,,"(905) 602-8550",,,,,,,,,,,,
-CNT_20251031153042_82a68f,,,,,"(416) 750-8433",,,,,,,,,,,,
-CNT_20251031153042_8575a0,,,,,"(416) 665-9696",,,,,,,,,,,,
-CNT_20251031153042_85c13f,,,,,"(905) 883-3600",,,,,,,,,,,,
-CNT_20251031153042_8922aa,,,"Canada Custom Packagers Inc",,"(416) 638-1111",,,,,,,,,,,,
-CNT_20251031153042_8d7f2e,,,,,"(905) 479-4141",,,,,,,,,,,,
-CNT_20251031153042_91030d,,,,,"(519) 228-6538",,,,,,,,,,,,
-CNT_20251031153042_95f910,,,,,"(519) 895-0944",,,,,,,,,,,,
-CNT_20251031153042_9e9154,,,,,"(416) 757-3611",,,,,,,,,,,,
-CNT_20251031153042_a2cfb1,,,,,"(416) 633-7310",,,,,,,,,,,,
-CNT_20251031153042_a6bc97,,,,,"(905) 673-2424",,,,,,,,,,,,
-CNT_20251031153042_ab6ade,,,,,"(416) 534-4254",,,,,,,,,,,,
-CNT_20251031153042_c459c8,,,,,"(905) 760-2185",,,,,,,,,,,,
-CNT_20251031153042_d05854,,,,,"(519) 748-5409",,,,,,,,,,,,
-CNT_20251031153042_d301b2,,,,,"(416) 252-5602",,,,,,,,,,,,
-CNT_20251031153042_ddabb6,,,,,"(519) 524-8351",,"$1,534",,,,,,,,,,
-CNT_20251031153042_ed80da,,,,,"(905) 335-7022",,,,,,,,,,,,
-CNT_20251031153042_f5bd45,,,,,"(416) 757-2366",,,,,,,,,,,,
+first_name,last_name,company,email,phone,address,city,province,postal_code,country,notes,linkedin,created_at,last_modified,is_customer,tank_number,delivery_date,tags
+Wayne,Arsenault,"AIRBORN FLEXIBLE CIR",arsenaultw@airbornflex.com,"(416) 752-2224",,"East York",ON,"L3R 4C1d",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LEYSONS PRODUCTS",,"905) 648-7832",,Ancaster,,"M9W 4Y1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Activation Labratories",ancaster@actlabs.com,"905) 648-9611",,Ancaster,,"M9L 2X6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVATION LABORATOR",,,,Ancaster,,"M3J 2K8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVATION LABORATOR",,,,,,"M1N 1V4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"JANA LABORATORIES",,"905 726 8550",,Aurora,ON,"L7A 1A7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"O I CANADA",,"905) 457-2423",,Brampton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Hamid,Moazami,"A Berger Precision Limited",,"905 840 4207",,Brampton,ON,"l7A 1A7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NEWTRON GROUP",,"(905) 458-1400",,Brampton,,"L9G 4V5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GRAFF DIAMOND PRODUC",juan@graffdiamond.com,"1 800-465-9021",,Brampton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Richardo,,"Asahi Refining",,"(905) 453-6120",,Brampton,,"L4W 2S6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Joe,,"INOX INDUSTRIES",joe@inoxindustries.com,"(905) 799-9996",,Brampton,,"M1R 3C3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Woods,,"CHROMOFLO TECHNOLOGI",,"(905) 451-3810",,Brampton,,"L5T 1H5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Vince,Pietrantonio,"Embassy Ingredients",,"905) 789-3200",,Brampton,,"L5T 1Z7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHROMAFLOW TECHNOLOG",,"(905) 451-3810",,Brampton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Newtron Group 1192901 ONTARIO LTD",,905.458.1400,,Brampton,,"L6T 3Y3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Bob,,"Syncoat Chemcials Ltd",,"(905) 270-2391",,Brantford,ON,"L5N 6B9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Tammy,,"HAWCO PRODUCTS LTD",tammy@hawcoproducts.com,"(519) 759-2443",,Brantford,,"N3T 5M1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+"Ext 209",,"JOHNSEN ULTRAVAC",,,,Burlington,ON,"L7M 1A8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Enzo,,"Canada Brick",,"(905) 633-7384",,Burlington,,"M1V 4A9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Diane,Iles,"ASK COSMETICS INC",,"(905) 634-2454",,Burlington,,"N5A 6T3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"OC TANNER MFG LTD",service@octanner.com,"905 632 7255",,Burlington,,"L5E 1E4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAPO INDUSTRIES LTD",purchasing@capoindustries.com,"905 332 6626",,Burlington,,"L7L 5R6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,Rampf,,"905) 331-8042",,Burlington,,"L7L 6A6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Janet,Augland,"ATOTECH CANADA LTD",,"(905) 332-0111",,Burlington,,"L7L 5R6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WILLARD MFG INC",,"905) 633-6905",,Brampton,,"L6T 5G5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Ohmar,Chijaini,"ARZON LTD",ochijani@arzonlimited.com,"905) 332-5600",,Burlington,,"L7L 7P3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADA MALTING CO LT",,,,Calgary,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Bryan,,"Cambridge Customer Chrome",ccc@cambridgecustomchrome.com,"226 988 3449",,Cambridge,,"N3C 3W2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Robert,Krebsz,"INDUSTRIAL PROCESSIN",rkrebsz@industrialprocessing.ca,"(519) 621-2571",,Cambridge,,"N1R 7Z1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INDUSTRIAL PROCESSIN",,"(519) 621-2571",,Cambridge,,"N1R 7Z1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Innovative Steam Technologies",,"(519) 740-0036",,Cambridge,,"N1R 7P4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Honeywell Aerospace",,15196222300,,Cambridge,,"N1R 7H6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADIAN GEN TOWERS",,"(519) 623-1630",,Cambridge,,"N1R 5T6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DAVID W WILSON MFG L",,,,Cathcart,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LAKE SUPERIOR POWER",,"(905) 984-8383",,Catherines,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AB SCIEX LP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAGNA EXTERIORS AND",,"(905) 669-2888",,Concord,,"L4K 4J5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CO EX TEC",,"(905) 738-8710",,Concord,,"L4K 2X3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DCL INTERNATIONAL",,"905 660 6450",,Concord,,"L4K 4T5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"K-G PACKAGING INC",,v,,Concord,,"L4K 1Y8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALLBRAND ELECTRONICS",,"905 479 4141",,Concord,,"L4K 2Y7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Mark,Henry,"The Plating House",,"(416) 661-3964","C1-116 Viceroy Rd",Concord,ON,"L4K 2L8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MULTIMATIC MANUFACTU",,"(905) 879-0200",,Concord,,"L4K 4V6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Johnathan,Lake,"ANTON MANUFACTURING",,"905 879 0500",,Concord,,"L4K 2N2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+"Corey ",Multin,"TRACKLESS VEHICLES L",,"(519) 688-0370",,Courtland,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Myles,Melcher,"CARMEUSE LIME",myles.melchers@carmuse.com,"1 866-780-0974",,Dundas,,"L9H 5E2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Schaeffler Canada",,"(905) 829-2750",,"E Unit 101",,"Rd E Unit 101,",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AIRBORN FLEXIBLE CIR",,"(416) 752-2224",,"East York",,"M4B 1Y9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AIRBORN FLEXIBLE CIR",,,,"East York",,"M4B 1Y9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Sulco Chemcials Ltd",,"(519) 669-5166",,Elmira,,"N3B 2Z5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,"(416) 747-4000",,Etobicoke,,"M9W 1R3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"National Silicates Ltd",,"(416) 255-7771",,Etobicoke,,"M8Z 5C7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Kinectrics Inc",,"416) 207-6000",,Etobicoke,,"M8Z 5G5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MMG CANADA LTD TT EL",melissa.marques@mmgca.com,"(416) 251-2831",,Etobicoke,,"M8Z 5J4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Roger,Dolicker,"Acadian Platers Company",,"(416) 743-7130",,Etobicoke,,"M9W 1R8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,Ultraform,,"(416) 749-9323",,Etobicoke,,"M9V 3Y8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Chris,Goodwin,"Nanowave Inc",cgoodwin@nanowavetech.com,"416 252 5602",,Etobicoke,,"M8W 4W3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ESSILOR CANADA",,"416) 252-5458",,Etobicoke,,"M8Z 1K2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ESSILOR CANADA",,"(416) 252-5458",,Etobicoke,,"M8Z 1K2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BASF CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Continuous Colour Coat Ltd",,"416 743 7980",,Rexdale,ON,"M9W 4Y1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Dave,Damen,"STAINLESS PIPING SYS",,"(416) 679-2937",,Etobicoke,,"M9W 6N4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KIK CORP",,"(416) 740-7400",,Etobicoke,,"M9W 1G1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CALEDON LABORATORY C",,"(905) 877-0101",,Georgetown,,"L7G 4R9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COMMUNICATIONS & POW",,"(905) 877-0161",,Georgetown,,"L7G 2J4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INTEL VAC",,"1 800-959-5517",,Georgetown,,"L7G 4X6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HPG INC",,,,Georgetown,,"L7G 0C6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SIFTO CANADA INC",,,,Goderich,,"N7A 2L9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SEMEX - GUELPH LABOR",,"(519) 821-5060",,Guelph,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADIAN SOLAR MANUF",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NESTLE WATERS CANADA",,"(519) 763-9462",,Guelph,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GUELPH UTILITY POLE",,"(519) 822-3901",,Guelph,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MOLD MASTERS LTD",,"(905) 877-0185",,"Halton Hills",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DALPRO TECHNOLOGIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"A RAYMOND TINNERMAN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HAMILTON PAPER BOX C",,"(905) 548-0999",,Hamilton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PIONEER BALLOON CANA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CFF SPECIALTY",,"905) 549-2603",,Hamilton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"A RAYMOND TINNERMAN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"A RAYMOND TINNERMAN",,"(905) 549-4661",,Hamilton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAF T CAB",,,,"Huron Park",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TETRA CHEM INDUSTRIE",,"(519) 485-4370",,Ingersoll,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SKYWORKS SOLUTIONS I",,,,Kanata,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAVARIN SPRINGS INC",,,,Kitchener,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCI LAB MATERIAL TES",,"519) 895-0500",,Kitchener,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KUNTZ ELECTROPLATING",,"(519) 893-7680",,Kitchener,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ULTRATEC SPECIAL EFF",,"519) 659-7972",,London,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCANDIA METAL FINISH",,"(519) 451-4365",,London,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ZUCORA INC",,"1 800-388-2640",,London,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"STRATHCRAFT TROPHIES",,"1 877-661-1103",,London,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TROJAN TECHNOLOGIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CREATION TECHNOLOGIE",,905.754.0055,,Markham,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DATA CIRCUITS",,"(905) 477-4400",,Markham,,"L3R 2Z3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UMICORE PRECIOUS MET",,"(905) 475-9566",,Markham,,"L3R 1B7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DATA CIRCUITS",,"905) 477-4400",,Markham,,"L3R 2Z3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,STENTECH,,"905) 472-7773",,Markham,,"L6E 1A4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SIBER CIRCUITS INC",,"905) 470-0515",,Markham,,"L3R 5J6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PANCAP INC",,,,,On,"L3R 6E9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ESTEE LAUDER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SILLIKER LABORATORIE",,"905) 479-5255",,Markham,,"L3R 5V5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,ARAMARK,,"(905) 472-8065",,Markham,,"L3S 3L5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RAYTHEON ELCAN OPTIC",,"(705) 526-5401",,Midland,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RECOCHEM INC",,"(905) 878-5544",,Milton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KARMAX HEAVY STAMPIN",,"905) 878-5571",,Milton,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Darshan,,"BRYCE INDUSTRIES INC",,"(905) 678-1548",,Mississauga,,"L5S 1B1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAMBRIDGE MATERIAL T",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,"(905) 822-4111",,Mississauga,,"L5K 1B3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MERSEN CANADA TORONT",,"(416) 252-9371",,Mississauga,,"L5T 1Z1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HOPE AERO PROPELLER",,,,Mississauga,,"L4T 3T1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PVD ADVANCED TECHNOL",,"(905) 564-1859",,Mississauga,,"L5T 1L9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GENTEK BUILDING PROD",,"(416) 745-6133",,Mississauga,,"L5T 1Z4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AXIOMATIC TECHNOLOGI",,"(905) 602-9270",,Mississauga,,"L4Z 1Z8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COVALON TECHNOLOGIES",,"(905) 568-8400",,Mississauga,,"L4W 5S7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROTOMETRICS CANADA I",,"905) 858-3800",,Mississauga,,"L5N 6P9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROLLSTAR METAL FORMI",,,,Mississauga,,"L4V 1L1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MGA RESEARCH CORPORA",,"905) 670-3330",,Mississauga,,"L4W 4T2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"XEROX RESEARCH CENTR",,"(905) 823-7091",,Mississauga,,"L5K 2L1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DAHL BROTHERS LTD",,"905) 822-2330",,Mississauga,,"L5J 2M4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HENKEL CANADA CORPRO",,,,Mississauga,,"L5N 6C3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PEARLON PRODUCTS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PRATT & WHITNEY",,"905) 564-7500",,Mississauga,,"L5T 1J3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Michael,V,"BASIC PACKAGING IND",michaelv@basicpackaging.com,"905) 890-0922",,Mississauga,,"L4Z 1P1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TRILLIUM MEDITEC INC",,"416) 840-3428",,Mississauga,,"L4V 1T4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Michael,Cheek,"ALPHACHEM LTD",mrcheek@alphachem.ca,"(905) 821-2995",,Mississauga,,"L5N 5Z6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ARMSTRONG MFG INC",,"(905) 566-1395",,Mississauga,,"L4Y 1Y7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NATIONAL BAIT CO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,QSDM,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DANTE GROUP",,"905) 678-9916",,Mississauga,,"L5S 1N6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PROTEC FINISHERS",,"(905) 564-5338",,Mississauga,,"L5T 1C4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BURCKHARDT COMPRESSI",,"844 307 0222",,Mississauga,ON,"L4W 4M2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDROGENICS CORP",,"905) 361-3660",,Mississauga,,"L5T 2N6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,INFASCO,,"(905) 677-8920",,Mississauga,,"L4V 1P8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,LABSTAT,,,,N,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MARITIME HOUSE METAL",,"'+1 (613) 354 3808",,Napanee,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAF DRIVES INC",,"(519) 662-6489",,"New Hamburg",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CLOSURES TECHNICAL C",,"(905) 898-2665",,Newmarket,,"L3Y 4X7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAINT GOBAIN CERAMIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CYTEC CANADA INC",,"(905) 356-9000",,"Niagara Falls",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ISOMERS LABORATORIES",,"(416) 787-2465",,"North York",,"M6B 1W3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SECURITY MIRROR IND",,"416) 244-3393",,"North York",,"M6M 2P5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DE HAVILLAND INC",,,,"North York",,"M3K 1Y5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TORONTO RESEARCH CHE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FOUR STAR PLATING",,"416) 745-1742",,"North York",,"M9L 1X5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ABC GROUP TECH CENTR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SOUTHERN GRAPHICS",,"(416) 512-6692",,"North York",,"M2N 6S6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,"416) 667-2700",,"North York",,"M2R 3T4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Mohamed,Sadeghian,"CDN CUSTOM PACKAGING",msadeghian@cdncustompackaging.com,,,"North York",ON,"M3J 3J9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THOMSON RESEARCH",,"416) 955-1881",,"North York",,"M3C 1Y9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DANA CANADA CORP",,"905) 849-1200",,Oakville,,"L6K 3E4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DANA CANADA CORP",,"905) 849-1200",,Oakville,,"L6K 3E4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VIROX TECHNOLOGIES I",,"(905) 813-0110",,Oakville,,"L6H 6R1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,MANCOR,,"905) 844-0581",,Oakville,,"L6J 7X6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALLCOLOUR PAINT LTD",,"(905) 827-4173",,Oakville,,"L6L 2X5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ATOTECH CANADA LTD",,"1 905 332 0111",,Ontario,,"L7L 5R6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,15195509021,,Mississauga,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GAMMA CLEAN",,"(905) 576-4450",,Oshawa,,"L1J 8M8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TECHFORM PRODUCTS LT",,"(705) 549-7406",,Penetanguishene,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"REENA ENTERPRISES LT",,,,Scarborough,,"M1X 1E7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Andrew,Douglas,"CAMECO FUEL MFG INC",,"905 885 1129",,"Port Hope",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NOVX SYSTEMS INC",,"(905) 474-5051",,"Richmond Hill",,"L4B 4N1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SILCHEM INC",,"905) 709-5867",,"Richmond Hill",,"L4B 1H7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ARTAFLEX INC",,"(905) 470-0109",,"Richmond Hill",,"L4B 1B4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,POLYBRITE,,,,"Richmond Hill",,"L4C 1A8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Ramana,Wignarajah,"WGI MFG INC",Ramana.Wignarajah@ia.ca,"416) 412-2970","3 Pullman Crt",Scarborough,,"M1X 1E4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AQUABOND INC",,"(416) 754-7211","440 Passmore Ave",Scarborough,ON,"M1V 5J8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNDERWRITERS LABORAT",,,,Scarborough,,"M1R 5P8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PFC CIRCUITS",,"416 750 8433","11 Canadian Road",Scarborough,ON,"M1R 5G1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACT COSMETICS CANADA",,"(416) 285-6228","1-11 Canadian Road",Scarborough,ON,"M1R 5G1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"QUALITY PLATING LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAE POWER",,"416) 298-0560","1810 Birchmount Road",Scarborough,ON,"M1P 2H7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HEROUX DEVTEK",,,,Scarborough,,"M1P 2E3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THE SOLAR GROUP INC",admin@solarwindowcleaning.com,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ELIZABETH GRANT",,"1 877-751-1999","381 Kennedy Rd",Scarborough,ON,"M1K 2A1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BESTWIND INDUSTRIES",,"(416) 289-3993","705 Progress Ave",Scarborough,ON,"M1H 2X1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,CHEMTURA,,"(416) 284-1662","10 Chemical Crt",Scarborough,ON,"M1E 3X7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AMPHENOL CANADA CORP",,"(416) 291-4401","5950 14h Ave",Markham,ON,"L3S 4M4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TTM Technologies",,"(416) 208-2100","8150 Sheppard Ave E",Scarborough,ON,"M1B 5K2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PURDUE PHARMA",,"'+1 800-387-5349",,Pickering,,"L1W 3W8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Safran Landing Systems",,"905) 683-3100",,Ajax,,"L1S 2G8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AEROSPACE METAL FINI",,"905) 939-8830",,Schomberg,,"L0G 1T0",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DYNAMIC AND PROTO CI",,"(905) 643-9900",,"Stoney Creek",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Stratford Agri Analysis Inc",,"(519) 273-4411","1131 Erie Street",Stratford,ON,"N5A 6S4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CLEMMER TECHOLOGIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INTERNATIONAL GRAPHI",,"1 800-565-5345","505 Douro St",Stratford,ON,"N5A 3S9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EASTERN POWER LTD",,"416) 234-1301","2275 Lake Shore Blvd W",Toronto,ON,"M3V 3Y3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BABCOCK & WILCOX",,"1 855-696-9588","75 Savage Dr",Cambridge,ON,"N1T 1S5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LEASIDE CURLING CLUB",,"(647) 748-2875",,Toronto,,"M4G 1X6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MONDELEZ CANADA INC",,"(647) 243-5400","5 Bermondsey Road",Toronto,ON,"M6J 3L9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HOUSE OF HORVATH INC",,,,Toronto,,"M6J 2Z2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COMMERCIAL ALCOHOLS",,"(416) 304-1700","1400-20 Toronto St",Toronto,ON,"M5C 2B8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADA COLOUR & CHEM",,"(416) 443-5500","175 Bloor St E",Toronto,ON,"M4W 3R8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BRENNTAG CANADA INC",,"(416) 259-8231","133 The West Mall",Etobicoke,ON,"M9C 1C2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MORGAN SOLAR INC",,"(416) 203-1655","100 Symes Road",Toronto,ON,"M6N 0A8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RELECTRONICS SERVICE",,519-884-8665,"785 Bridge Street W",Waterloo,ON,"N2V 2K1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BEN MACHINE PRODUCTS",,"(905) 856-7707","1-8065 Huntington Road",Woodbridge,ON,"L4H 3T9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FISCHER CANADA",,"519) 746-0088","190 Frobisher Dr",Waterloo,ON,"N2V 2A2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESTEX COATINGS",,"519) 884-2260","639 Colby Dr",Waterloo,ON,"N2V 1B4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,ACCU-AUTOMATION,,"(519) 725-9090","141 Dearborn Pl",Waterloo,ON,"N2J 4N5",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VALLEY BLADES LTD",,"(519) 885-5500","425 Phillip St",Waterloo,ON,"N2L 3X2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HAUSER INDUSTRIES IN",,"1 800-268-7328","330 Weber St N",Waterloo,ON,"N2J 3H6",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Rochan,,"CROVEN CRYSTALS",,"905) 668-3324","500 Beech St",Whitby,ON,"L1N 7T8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVE BURGESS MOULD",,"519) 737-1341",,Windsor,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESCAST CASTING WING",,"(519) 357-3450",,Wingham,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"P3T LAB",,"905) 851-9237",,Woodbridge,,"L4L 2A4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AD FIRE SYSTEMS",,"(905) 660-4077",,Woodbridge,,"L4L 5Y3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,RAYTHEON,,"905) 265-1723",,Woodbridge,,"L4L 8V1",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Rosen,,"SPUTTEK INC",info@sputtek.com,"(416) 213-9833","110 Sharer Rd",Woodbridge,ON,"L4L 8P4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FIRESTONE TEXTILES",,"(519) 537-6231",,Woodstock,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,yes,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TRANSCANADA ENERGY L",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NATIONAL RESEARCH CO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LONDON HEALTH SCIENC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SULCO CHEMICALS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX PHARMACHEM IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HOME HARDWARE STORES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON INC WHITBY O",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HONDA CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BELVEDERE INTL 26741",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ELCAN OPTICAL TECH R",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CML HEALTHCARE INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NIAGARA HEALTH SYSTE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TARO PHARMACEUTICALS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LAKERIDGE HEALTH OSH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CDN CUSTOM PACKAGING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MILTON HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Daniel,Vanderstern,"Toronto Zoo",purchasing@torontozoo.ca,"416 392 5916","2000 Meadowvale Road",Scarborough,ON,"M1B 5K7",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TORONTO GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BIO AGRI MIX LP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NIAGARA HEALTH SYSTE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GENERAL MOTORS COMPA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WELLSPRING PHARMACEU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,EPM,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX PHARMACHEM IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BIO CLEAN SERVICES I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THE WILLIAM OSLER HE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROYAL VICTORIA HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PURDUE PHARMA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SPRAY PAK INDUSTRIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TORONTO GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SGS CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,PATHEON,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MARKHAM STOUFFVILLE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GEORGETOWN HOSP CAMP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GO TRANSIT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ATLANTIC POWER - NIP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COMPOUND METAL COATI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON WHITBY INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CITY OF TORONTO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PILLAR5 PHARMA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PANCAP INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,PATHEON,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDRO ONE NETWORKS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDRO ONE NETWORKS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"REMBRANDT CHARMS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COOPER STANDARD AUTO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX PHARMACHEM IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HAMILTON CIVIC HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COLMAR CORP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TARO PHARMACEUTICALS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAINT JOSEPHS HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDRO ONE NETWORKS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WATERLOO",,,,,,,,,,,"2026-02-19 22:02:43",0,,,
+,,"CARILLION ELLISDON S",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FORD WINDSOR ENGINE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SUNNYBROOK HEALTH SC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EAST WINDSOR COGENER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VALE CANADA LIMITED",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PARMALAT CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MRHH MACKENZIE RICHM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MULTI CHAIR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BABCOCK & WILCOX",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHALMERS REGIONAL HO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHARLSTON INTERNATIO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACUREN GROUP INC",,19058390015,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WATERL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BABCOCK & WILCOX",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PIONEER HI BRED",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"L 3 COMMUNICATIONS C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON WHITBY INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,PATHEON,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,APOTEX,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WATERL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON YM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CINRAM LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LHSC UNIVERSITY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COMMUNICATIONS AND P",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"US STEEL CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ST JOSEPH HAMILTON",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HOLLYS ANODIZING SER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ARCELORMITTAL DOFASC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEDICAL LAB OF WINDS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MULTI CHAIR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DOMINION DIAMOND MAR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DIKSON SERVICE CANAD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BABCOCK & WILCOX LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SYNFINE RESEARCH LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HOUSE OF HORVATH CIG",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDRO ONE NETWORKS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDRO ONE NETWORKS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAC ESTEE LAUDER THE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"JIMS POLISHING & BUF",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BASF COATINGS & INKS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PRINCESS MARGARET HO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAPLE LEAF CONSUMER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ST JOSEPHS HEALTH CA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CORA WEGMAN INTL INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON WHITBY INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THUNDER BAY REGIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TEKPRO GLOBAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WILFRED LAURIER UNIV",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COCA COLA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAMBRIDGE MEMORIAL H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AIR BORN FLEXIBLE CI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Mars Canada",,,"661 University",,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVATION LABORATOR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HONDA OF CANADA MFG",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AGRICULTURE AGRI FOO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MARS CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PIONEER HI BRED PROD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROYAL BUILDING PRODU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RELECTRONICS SERVICE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CMI COD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HJ HEINZ CO OF CANAD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LAKERIDGE HEALTH COR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNILEVER CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FOUR COUNTIES HEALTH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MT SINAI HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COMMERCIAL ALCOHOL S",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF TORONT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"US STEEL CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AIR CANADA CENTRE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FAST TRACK MAINTENAN",,"(519) 570-0012",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KOREX CANADA LD",,"(416) 231-7800",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ONTARIO DIE CO LTD",,"'+1 519-745-1002",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BIO BASIC CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BRITANNIA SILVERSMIT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MERIDIAN LIGHTWEIGHT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,INTELLIPHARMACEUTICS,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,HONEYWELL,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANTEX DESIGN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MOLD MASTERS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HANSON BRICK LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THE EMERSON GROUP IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SOUTHLAKE REGIONAL H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ORILLIA SOLDIER MEMO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TEMPO AEROSPACE INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GEORGETOWN & DISTRIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THUNDER BAY REGIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WINDSO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NOVA CENTURY SCIENTI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ST JOSEPHS HEALTH CE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SELECTONE PAINTS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WATERL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Robbie,,"MAPLE LEAF FOODS INC",,,"7474 McLean Road",Aberfoyle,ON,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ENNIS PAINT CANADA U",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAMBRIDGE MATERIALS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LABSTAT INTERNATIONA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSA INTERNATIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TRISTAR COATINGS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WATERL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ORANGEVILLE CURLING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PIRAMAL HEALTHCARE C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ST JOSEPHS HAMILTON",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VIROX TECHNOLOGIES I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHANDCO MANUFACTURIN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCARBOROUGH HOSPITAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAGELLAN AEROSPACE K",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVAR CANADA LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"METRO ONTARIO INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AQUARIAN CHEMICALS I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESCAST INDUSTRIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KOCH HEAT TRANSFER C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NIAGARA HEALTH SYSTE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SPECTRONIC PLATING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,HONEYWELL,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,TECHNIC,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TRIBOCHEM INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCI LAB MATIERALS TE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KINCARDINE CURLING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"METRICAN MFG CO INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SANOFI PASTEUR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EMBASSY FLAVOURS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LIFEQUEST CENTRE FOR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SGS LAKEFIELD RESEAR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVATION LABORATOR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACCUREX HEALTH CARE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"QUADRAD MFG",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VALLEY REGIONAL HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COATINGS 85",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TORONTO GENERAL HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ABS GLOBAL CANADA IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SUNCOR ENERGY INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CATARAQUI GULF & COU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HIGHBURY CANCO CORP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PARMALAT CANADA RESE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HEROUX DEUTEK",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ADM AGRI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NALCO CANADA CO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BELCO OPTICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALEXANDRA HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PULSE SCIENTIFIC INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BFC TECHNOLOGIES INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCI LAB MATERIALS TE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DR JEAN PAUL DAVIS D",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SOUTHWEST UNITED CAN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"STRATHROY MIDDLESEX",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COCO PAVING INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"REDEEMER COLLEGE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AMPHENOL CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GLENLEVEN MOTORS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ARCELORMITTAL DOFASC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"XAGENIC CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VALE CANADA LIMITED",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GREY BRUCE REGIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BLUEWATER CURLING CL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ADM AGRI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PROLLENIUM MEDICAL T",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"METRO TOR LIBRARY BO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PAVACO PRODUCTS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BASF CANADA COCO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WATERL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DAVICENNA NC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCHOTT GEMTRON CANAD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCARBOROUGH HOSPITAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANDRE LABORATORY INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VOGUE OPTICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MILTON PHOTOGRAPHIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"STEELCRAFT INC - QCI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SOUTH WEST HEALTH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WILFRID LAURIER UNIV",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KITCHENER WATERLOO C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,TECHNIC,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SGS CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PATHEON INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WATERLOO COLLEGIATE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WATERLOO COLLEGIATE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WATERLOO COLLEGIATE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WATERLOO OXFORD SECO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MGA RESEARCH CORPORA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF WESTER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KENSINGTON EYE INSTI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"METRO TORONTO PUBLIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"REIDELL CHEMICALS LT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KLEAR VIEW WINDOW CL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VIP HOME & YARD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MOLD MASTERS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CITI IND CHEMICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"OTTAWA HEART INSTITU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ATI TECHNOLOGIES ULC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LONDON HEALTH SCIENC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MARA TECHNOLOGIES IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BRANTFORD GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GEORGETOWN PHOTGRAPH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SCHAEFFLER CANADA IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BLUFFERS PARK YACHT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF TORONT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GALT COLLEGIATE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SUPERFINISH CO LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Ilya,,"Prism Powder Coating",,"905 660 5361","321 Edgeley Boulevard",Vaughan,ON,"L4K 3Y2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SOUTH BRUCE GREY HEA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HAMILTON GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF TORONT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FOREST HEIGHTS CI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"APOTEX INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CLOVERDALE PAINT INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SERIF COATINGS & CHE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THUNDER BAY REGIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BASF CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LIFELABS LP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NESTLE CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MOLD MASTERS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INTERNATIONAL CUSTOM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVE METAL FINISHI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,PLASTICO,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PAPIERS DE PUBLICATI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ESSILOR INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LALLEMAND SOLUTIONS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PURIBEC INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANCO CHEMICAL PARTNE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CIRCUITS ASTRO INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NUMED INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHUM HOTEL DIEU DE M",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FPINNOVATIONS PAPRIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"QUEEN ELIZABETH HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KLOCKNER PENTAPLAST",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HAGEN INDUSTRIES LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,PHARMASCIENCE,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VERNICO PRODUITS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PRO OPTIC CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ULTRAPERF TECHNOLOGI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VOGUE OPTICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SOUVENIRS AVANTI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SEKISUI DIAGNOSTICS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SIGNATURE AEROSPACE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DBM REFLEX ENTREPRIS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADA COLOUR AND CH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LABORATORIES DERMO C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ABRASIVE TECHNOLOGY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EGS EUROCAM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANALOGIC CANADA CORP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADA LAFARGE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BIONICHE LIFE SCIENC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ELECTRO LOH PLATING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"IMPORT FAB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BIO VECTRA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BOMBARDIER AEROSPACE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANCO CHEMICALS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DIAMOND PRODUCTIONS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DBM REFLEX ENTREPRIS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MOORE CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"OTTAWA HOSP GROUP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HOPITAL JEAN TALON L",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TECHNO SPEC USINE B",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,CHUS,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INTERSAC INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HORIZON HEALTH NETWO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LES INDUSTRIES POWER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PYROGENESIS CANADA I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANDREW PELLER LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"E Z EM CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LES INSECTICIDES PUR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ST JEAN PHOTOCHEMICA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AEROSPACE WELDING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSSS DE SAINT JEROME",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RECYCLAGE ECOSOLUTIO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSSS DARGENTEUIL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MISTRAS OPTIMUS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"KEANS PUMP SHOP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SILLIKER CANADA COMP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FORMICA CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SHIELDCOR LABS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COLLEGE EDOUARD MONT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GAMMA DYNACARE MEDIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MR ROLLER INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,SANDOZ,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LABORATOIRE MIRO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SIGNATURE AEROSPACE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ADVANCED POWDERS & C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ANODISATION VERDUN I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COLAROME INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LERNAPHARM LORIS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CSSS PIERRE DE SAURE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AEROSPACE WELDING IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SHRINERS HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"OTTAWA HOSPITAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SHARELLI INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PRO STAR CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CENTRE DE COLONOSCOP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VALLEY REGIONAL HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GROUPE MARCELLE INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESTERN HEALTH CARE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TELESTA THEREAPEUTIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VELAN INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"OTTAWA HOSPITAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COLLEGE BOIS DE BOUL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ST LAMBERT CURLING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"JONES LANG LASALLE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DBM REFLEX ENTERPRIS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LABOVAL INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MP REPRODUCTIONS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MCGILL UNIVERSITY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ESSILOR CANADA LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"QUADRA CHEMICALS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALBERTA POWER 2000 L",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAPITAL POWER CORPOR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NALCO CANADA CO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ATCO POWER CANADA LT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BRENNTAG CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF ALBERT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,AGRIUM,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GILEAD ALBERTA ULC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GILEAD ALBERTA ULC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALBERTA INNOVATES TE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"STURGEON COMMUNITY H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESTERN HARDCHROME P",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MISERICORDIA COMMUNI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DACRO INDUSTRIES INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESTLOCK CURLING CLU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CITY OF EDMONTON",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PETRUS RESOURCES LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BENTALL KENNEDY (CAN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PEACE ANALYTICAL LAB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DAVID B CLIMENHAGA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LOGICAN TECHNOLOGIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MDS AERO TEST CORP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CARO ANALYTICAL SERV",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AIR LIQUIDE CANADA I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GIMBEL EYE CENTER ED",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MORINVILLE CURLING S",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CLYDE CURLING CLUB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FORT SMITH CURLING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CITY OF EDMONTON ENG",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADIAN SALT CO LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TRANE NORTHWEST",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROYAL ALBERTA MUSEUM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GILEAD ALBERTA ULC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ENMAX SHEPARD SERVIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CROSSFIELD ENERGY CE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EVRAZ INC NA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"OLDS HOSP AND CARE C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GIMBEL EYE CENTRE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CALGARY LAB SERVICES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MDS AERO TEST CORP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CALGARY LAB SERVICES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVERSITY OF CALGAR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ENMAX CROSSFIELD ENE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DALYNN BIOLOGICALS I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAXXAM ANALYTICS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CROSSFIELD CURLING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PPG CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CALGARY LAB SERVICES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACADIA RECREATION CE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"IRRICANA CURLING CLU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EVRAZ INC NA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEADOW LAKE MECHANIC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ENGINEERED POWER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CFR CHEMICALS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BRENNTAG CANADA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FIELD AVIATION COMPA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LETHBRIDGE CURLING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WESTMAN REGIONAL LAB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CORE LABORATORIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EARTH RENEW STRATHMO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PIC CANADA LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AGAT LAB WATER LAB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADA MALTING LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INDUS CURLING CLUB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THREE HILLS CURLING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BIO CHEM CONSULTING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEDICINE HAT COLLEGE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VERSA POWER SYSTEM L",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADIAN BLOOD SERVI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INTERNATIONAL LABORA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CORE LABORATORIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALS LABORATORY GROUP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BANFF MINERAL SPRING",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EVRAZ INC NA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAMERON CANADA CORP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"STRATHMORE CURLING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AGAT LABORATORIES CO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEDICINE HAT COLLEGE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SPRINGBANK PARK CURL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DIDSBURY CURLING CLU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CARBON CURLING CLUB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"FIELD AVIATION CO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DELIA CURLING CLUB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INEOS CANADA PARTNER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYDROQUAL LABORATORI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHESTERMERE REGIONAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HYPERION RESEARCH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEDICAL EXAMINER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAXXAM ANALYTICS ALB",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BROOKS HEALTH CENTRE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,SP3,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CORE LABORATORIES CA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROCKY MOUNTAIN ANALY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MPB TECHNOLOGIES INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAXXAM ANALYTICS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WAVELINK ANTENNA SYS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GOLDRAY INDUSTRIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALBERTA BASE ANODIZI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"C & M ENGINEERING LT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UNIVAR CANADA LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALBERTA PROCESSING C",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NOVA RESEARCH & TECH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CORE LABORATORIES",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"YORKTON REGIONAL HOS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"METAL TECH LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADIAN PRAIRIES AN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADA MALTING LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TOM BAKER CANCER CEN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NOVA CHEMICALS TECH",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EVRAZ INC NA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEDICINE HAT HOSPITA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACCURATE STAMP & SEA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MEDICINE HAT REGIONA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VULCAN GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALBERTA COLLEGE OF A",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HIGH RIVER GENERAL H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TAYLOR TOOLWORKS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"COCHRANE CURLING CLU",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CROSSFIELD ENERGY CE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NATURAL FACTORS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AVCORP INDUSTRIES IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VIKING AIR LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANFOR PULP LP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NEOVA TECHNOLOGIES I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DORIGO SYSTEMS LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"POLYBOTTLE GROUP LIM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"DORIGO SYSTEMS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"THOMPSON FOUNDRY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BRENNTAG CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACME ANALYTICAL LABO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EXOVA CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHILDRENS & WOMENS H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"LOCKERROOMNET MARKET",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"STEMCELL TECHNOLOGIE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CANADIAN FOOD INSPEC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHILDRENS & WOMENS H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ARaymond Canada",,"(905) 549-4661",,HAMILTON,,"L8H 5Z4",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"416) 743-7980",,Etobicoke,,M9W4Y1,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 246-1782",,"North York",,M9L2X6,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,"North York",,M3J2K8,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"905) 549-4661",,Hamilton,,L8H5Z4,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALS LABORATORY GROUP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 812-3856",,Mississauga,,L5N6B9,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALS CANADA LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"MAXIM TECHNOLOGIES I",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ALS ENVIRONMENTAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"REDLEN TECHNOLOGY IN",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RESPONSE BIOMEDICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"IDEXX REFERENCE LABO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CAMPBELL RIVER GEN H",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ENIGMA INTERCONNECT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"INSPECTORATE AMERICA",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SURREY MEMORIAL HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"GREENLIGHT INNOVATIO",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EYENCE OPTICAL LABOR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NATURAL FACTORS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VANCOUVER GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"EAGLE PICHER MEDICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SGS CANADA INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CFIA LAB SER DIV BUR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"TRINITY WESTERN UNIV",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"CHILDRENS & FAMILY R",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VIVA PHARMACEUTICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,UBC,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,UBC,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BC CANCER AGENCY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"RAMSHORN CANADA INVE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SAINT PAULS HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SIPCO INDUSTRIES LTD",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ACTIVATION LABORATOR",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"METRO VANCOUVER",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PACIFIC AGRI FOOD RE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UBC MICROBIOLOGY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UBC MICROBIOLOGY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"NORTHERN LIPIDS INC",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VIVA PHARMACEUTICAL",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UBC MICROBIOLOGY RM",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"UBC MICROBIOLOGY RM2",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"WEST COAST GEN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Canada Malting",,"(403) 571-7000",,Calgary,AB,"T2G 4M9",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"VANCOUVER ISLAND UNI",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Susan,Elkins,"York Region",susan.elkins@york.ca,,,,,,,,,"2025-10-31 20:03:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"HS TOOL & PARTS",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Clemmer Steelcraft Technologies Inc",,"519) 271-4750",,Stratford,ON,"N5A 6T3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 840-4207",,Brampton,,L7A1A7,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 560-6534",,Hamilton,,L8E2W3,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Chemetics Inc",,905-619-5200,,Pickering,,"L1W 4C2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"David W Wilson Manufacturing Ltd",,"(519) 458-8911",,Cathcart,ON,"N0E 1B0",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Toronto Research Chemicals",,4166659696,,"North York",ON,"M3j 2J8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"PEMBERTON SEED POTAT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ABBOTSFORD COMMUNITY",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BURNABY HOSP SITE",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"SURREY MEMORIAL HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(519) 457-3400",,London,,N5V4T7,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"AGAT LABORATORIES LT",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Quality Plating Company",,"(416) 536-7228","60 Crockford Blvd",Scarborough,ON,"M1R 3C3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Estee Lauder",,"905) 470-0792",,Markham,,L3R4C1,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 565-1800",,Mississauga,,L5T1Z7,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Andy,Boorn,"MDS Inc",,"905) 660-9005","71 Four Valley Dr",Concord,ON,"L4K 4V8",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,Mississauga,,L4W2S6,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(519) 837-1881",,Guelph,,N1K1E6,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"BASF Inc",,"1 833-256-7811",,Etobicoke,,M9W1K1,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 670-1040",,Mississauga,,L5T1H5,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Clemmer Steelcraft Technologies Inc",,"519) 271-4750","904 Downie St",Stratford,ON,"N5A 6T3",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"ROYAL COLUMBIAN HOSP",,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Saint-Gobain Ceramic Materials Canada Inc",,"(905) 295-4311","8001 Daly St","Niagara Falls",ON,"L2G 6S2",,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Molex Electronics",,"(905) 944-1411",,Scarborough,,M1V4A9,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"905) 470-6844",,Markham,,L3R6E9,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,,,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+Erin,,"Solar Window Cleaning",admin@solarwindowcleaning.com,"(416) 269-2288","203 - 2481 Kingston Rd",Scarborough,ON,M1N1V4,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,LIFELABS,,"(905) 543-9224",,Hamilton,,L8H3E3,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 825-1218",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(613) 287-4945",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 278-0180",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 286-6062",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 332-6626",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 648-9611",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 814-6511",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 752-3437",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 677-8747",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 761-6837",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 332-0111",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 752-2224",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 602-8550",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 750-8433",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 665-9696",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 883-3600",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,"Canada Custom Packagers Inc",,"(416) 638-1111",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 479-4141",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(519) 228-6538",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(519) 895-0944",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 757-3611",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 633-7310",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 673-2424",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 534-4254",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 760-2185",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(519) 748-5409",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 252-5602",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(519) 524-8351",,"$1,534",,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(905) 335-7022",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+,,,,"(416) 757-2366",,,,,,,,"0000-00-00 00:00:00","0000-00-00 00:00:00",0,,0000-00-00,""
+d,d,df,,,,,,,,,,"2026-02-19 04:07:01","2026-02-19 04:07:01",0,,,
+Robert,Lee,a,robertja98@gmail.com,6473550944,,Toronto,Ontario,"M6B 4E4",Canada,,,"2026-02-19 04:19:38","2026-02-19 04:19:38",0,,,
+dfa,dfd,test,dl@ddd.com,,,lkdds,fdklsa,"FDS KLd",asldkf,,,"2026-02-23 23:54:03","2026-02-23 23:54:03",0,,,
