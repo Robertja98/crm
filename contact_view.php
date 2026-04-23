@@ -197,8 +197,6 @@ function getContactOpportunities($contact, $opportunities) {
     });
 }
 
-// ...existing code...
-
 ?>
 
 <style>

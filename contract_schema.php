@@ -30,6 +30,4 @@ return [
     'created_by',          // User who created contract
     'modified_date',       // Last modification date
     'modified_by',          // User who last modified
-    'tank_quantity',         // Quantity of tanks
-    'tank_size',            // Size of tanks
 ];

@@ -188,7 +188,7 @@ function logAuditAction($action, $entity_type, $entity_id, $changes, $summary, $
 function getAuditStats($days = 30) {
     if (!file_exists(AUDIT_LOG_FILE)) {
         return [];
-    // ...existing code...
+    }
     $cutoff_ts = strtotime("-$days days");
     
     $stats = [
@@ -214,7 +214,6 @@ function getAuditStats($days = 30) {
         }
     }
     return $stats;
-}
 }
 
 /**

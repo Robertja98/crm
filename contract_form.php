@@ -642,7 +642,6 @@ if (!isset($contentContainerStarted)) {
     echo '<div class="content-container">';
     $contentContainerStarted = true;
 }
-// ...existing code...
 // At the very end, before layout_end.php:
 if (isset($contentContainerStarted)) {
     echo '</div>';

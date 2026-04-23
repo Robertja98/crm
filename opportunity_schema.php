@@ -1,6 +1,6 @@
 <?php
 return [
-  'id',
+  'opportunity_id',
   'contact_id',
   'value',
   'stage',

@@ -145,7 +145,6 @@ function getStageColor($stage) {
   <title>Opportunities Pipeline</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    ...existing code...
   </style>
 </head>
 <body>

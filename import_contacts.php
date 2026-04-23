@@ -1,23 +1,5 @@
-      // If the CSV header uses 'entry_text' (not 'discussion_text'), map preview schema for display
-      if ($is_discussion && in_array('entry_text', $header) && !in_array('discussion_text', $header)) {
-        $schema = array_map(function($col) {
-          return $col === 'discussion_text' ? 'entry_text' : $col;
-        }, $schema);
-      }
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-  session_name('CRM_SESSION');
-}
-session_start();
-// Debug output for session and cookies
-if (!headers_sent()) {
-  echo '<div style="background:#ffe; color:#333; padding:8px; margin-bottom:8px; font-size:12px;">';
-  echo '<strong>SESSION DEBUG:</strong><br>$_SESSION: <pre>' . htmlspecialchars(print_r($_SESSION, true)) . '</pre>';
-  echo '$_COOKIE: <pre>' . htmlspecialchars(print_r($_COOKIE, true)) . '</pre>';
-  echo '</div>';
-}
 require_once __DIR__ . '/layout_start.php';
-require_once __DIR__ . '/simple_auth/middleware.php';
 require_once 'csrf_helper.php';
 initializeCSRFToken();
 

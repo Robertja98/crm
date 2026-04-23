@@ -4,7 +4,6 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require_once 'layout_start.php';
 require_once 'tasks_mysql.php';
-// ...existing code...
 
 $tasks = fetch_tasks_mysql();
 

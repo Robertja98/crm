@@ -11,11 +11,6 @@ require_once 'csrf_helper.php';
 require_once 'sanitize_helper.php';
 require_once 'audit_handler.php';
 
-// Start session for CSRF if not already started
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 // Initialize CSRF token
 initializeCSRFToken();
 

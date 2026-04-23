@@ -62,8 +62,6 @@ function updateContactById($id, $schema, $postData) {
     $conn->close();
 }
 
-// ...existing code...
-
 // Helper: create delivery file
 function createDeliveryFileIfNeeded($contactId) {
     $deliveryFile = __DIR__ . "/{$contactId}_deliveries.csv";
