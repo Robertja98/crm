@@ -3,6 +3,8 @@ backups/
 logs/
 debug_log.txt
 error_log.txt
+simple_auth/login_debug.log
+simple_auth/sessions/
 *.bak
 GODADDY_DEPLOYMENT_CHECKLIST.md
 .env
