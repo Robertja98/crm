@@ -92,6 +92,12 @@ $initials = strtoupper(substr($user_name, 0, 2));
             <span>Export</span>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="mass_email.php" class="nav-link <?= $currentPage === 'mass_email.php' ? 'active' : '' ?>">
+            <span class="nav-icon">✉️</span>
+            <span>Mass Email</span>
+          </a>
+        </li>
       </ul>
     </div>
     
