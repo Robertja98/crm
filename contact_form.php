@@ -56,9 +56,7 @@ $prefill_company = isset($_GET['company']) ? trim($_GET['company']) : '';
           <?php if ($field === 'contact_id') continue; ?>
           <div class="form-group">
             <label for="<?= e($field) ?>"><?= e(ucwords(str_replace('_', ' ', $field))) ?>:</label>
-            <?php if ($field === 'linkedin'): ?>
-              <input type="url" name="linkedin" id="linkedin" class="form-control" placeholder="LinkedIn profile URL">
-            <?php elseif ($field === 'notes'): ?>
+            <?php if ($field === 'notes'): ?>
               <textarea name="notes" id="notes" class="form-control" placeholder="Notes"></textarea>
             <?php elseif ($field === 'company'): ?>
               <input type="text" name="company" id="company" class="form-control" required aria-required="true" value="<?= htmlspecialchars($prefill_company) ?>">

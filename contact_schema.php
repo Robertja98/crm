@@ -12,11 +12,10 @@ return [
         'postal_code',
         'country',
         'notes',
-        'linkedin',
         'created_at',
         'last_modified',
         'is_customer',
-        'delivery_date',
+        'tank_number',
         'delivery_date',
         'tags'
 ];
