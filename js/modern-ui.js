@@ -4,6 +4,7 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+  const SIDEBAR_SCROLL_KEY = 'crmSidebarScrollTop';
   // Force open fieldPanel if openPanel=1 is in the URL
   if (window.location.search.includes('openPanel=1')) {
     var panel = document.getElementById('fieldPanel');
@@ -16,6 +17,18 @@ document.addEventListener('DOMContentLoaded', function() {
   const debugClicks = new URLSearchParams(window.location.search).get('debugClick') === '1';
   const panelToggles = document.querySelectorAll('.js-toggle-panel');
   const queryInput = document.getElementById('query');
+
+  // Keep sidebar position stable between page navigations.
+  if (sidebar) {
+    const savedSidebarScroll = sessionStorage.getItem(SIDEBAR_SCROLL_KEY);
+    if (savedSidebarScroll !== null) {
+      sidebar.scrollTop = parseInt(savedSidebarScroll, 10) || 0;
+    }
+
+    sidebar.addEventListener('scroll', function() {
+      sessionStorage.setItem(SIDEBAR_SCROLL_KEY, String(sidebar.scrollTop));
+    }, { passive: true });
+  }
   
   // Toggle sidebar on mobile
   if (menuToggle) {
@@ -59,10 +72,13 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   
   // Close mobile sidebar when clicking a link
-  const navLinks = sidebar.querySelectorAll('.nav-link');
+  const navLinks = sidebar ? sidebar.querySelectorAll('.nav-link') : [];
   navLinks.forEach(link => {
     link.addEventListener('click', function() {
-      if (window.innerWidth <= 768) {
+      if (sidebar) {
+        sessionStorage.setItem(SIDEBAR_SCROLL_KEY, String(sidebar.scrollTop));
+      }
+      if (window.innerWidth <= 768 && sidebar && sidebarOverlay) {
         sidebar.classList.remove('open');
         sidebarOverlay.classList.remove('active');
       }
