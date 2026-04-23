@@ -7,6 +7,7 @@ error_log.txt
 GODADDY_DEPLOYMENT_CHECKLIST.md
 .env
 config.local.php
+simple_auth/config.php
 node_modules/
 .DS_Store
 *.csv
