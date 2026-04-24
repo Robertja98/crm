@@ -77,19 +77,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // If company is changed, update it in the contacts table for all contacts linked to this opportunity
         if (!empty($_POST['company_id'])) {
           $conn = get_mysql_connection();
-          // Update all contacts for this opportunity to the new company
-          $stmt = $conn->prepare("UPDATE contacts SET company = ? WHERE contact_id = (SELECT contact_id FROM opportunities WHERE {$opportunityIdColumn} = ?)");
-          $stmt->bind_param('ss', $_POST['company_id'], $opportunityId);
-          $stmt->execute();
-          $stmt->close();
+          $selectedCompany = trim((string) $_POST['company_id']);
+          $currentContactId = trim((string) ($opportunity['contact_id'] ?? ''));
+
+          if ($currentContactId !== '') {
+            // Opportunity is linked to a contact: update that contact's company.
+            $stmt = $conn->prepare("UPDATE contacts SET company = ? WHERE contact_id = ?");
+            if ($stmt) {
+              $stmt->bind_param('ss', $selectedCompany, $currentContactId);
+              $stmt->execute();
+              $stmt->close();
+            }
+          } else {
+            // No linked contact: try to link this opportunity to an existing contact in selected company.
+            $stmtFind = $conn->prepare("SELECT contact_id FROM contacts WHERE company = ? ORDER BY contact_id ASC LIMIT 1");
+            $matchedContactId = null;
+            if ($stmtFind) {
+              $stmtFind->bind_param('s', $selectedCompany);
+              $stmtFind->execute();
+              $stmtFind->bind_result($matchedContactId);
+              $stmtFind->fetch();
+              $stmtFind->close();
+            }
+
+            if ($matchedContactId !== null && $matchedContactId !== '') {
+              $stmtLink = $conn->prepare("UPDATE opportunities SET contact_id = ? WHERE {$opportunityIdColumn} = ?");
+              if ($stmtLink) {
+                $matchedContactIdStr = (string) $matchedContactId;
+                $stmtLink->bind_param('ss', $matchedContactIdStr, $opportunityId);
+                $stmtLink->execute();
+                $stmtLink->close();
+                $opportunity['contact_id'] = $matchedContactIdStr;
+              }
+            } else {
+              $errors[] = 'Selected company has no contact record. Create a contact for that company first.';
+            }
+          }
+
           $conn->close();
         }
-        $result = update_opportunity_mysql($opportunityId, $fields, $opportunityIdColumn);
+
+        $result = empty($errors) ? update_opportunity_mysql($opportunityId, $fields, $opportunityIdColumn) : false;
         if ($result) {
           header('Location: opportunities_list.php?success=2');
           exit;
         } else {
-          $error = 'Failed to update opportunity.';
+          $error = !empty($errors)
+            ? implode(', ', $errors)
+            : 'Failed to update opportunity.';
         }
       } elseif (!isset($error)) {
         $error = implode(', ', $errors);
