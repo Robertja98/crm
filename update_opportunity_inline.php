@@ -1,11 +1,17 @@
 <?php
 require_once 'db_mysql.php';
 require_once 'sanitize_helper.php';
+require_once 'csrf_helper.php';
 
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   echo json_encode(['error' => 'Invalid request']);
+  exit;
+}
+
+if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+  echo json_encode(['error' => 'CSRF validation failed']);
   exit;
 }
 
@@ -25,20 +31,41 @@ if (!in_array($field, $allowedFields)) {
 }
 
 
+function getOpportunityIdColumn(mysqli $conn): string {
+  $hasOpportunityId = false;
+  $hasId = false;
+  if ($result = $conn->query("SHOW COLUMNS FROM opportunities LIKE 'opportunity_id'")) {
+    $hasOpportunityId = $result->num_rows > 0;
+    $result->free();
+  }
+  if ($result = $conn->query("SHOW COLUMNS FROM opportunities LIKE 'id'")) {
+    $hasId = $result->num_rows > 0;
+    $result->free();
+  }
+  if ($hasOpportunityId) {
+    return 'opportunity_id';
+  }
+  return $hasId ? 'id' : 'opportunity_id';
+}
+
+
 $conn = get_mysql_connection();
-$old_stmt = $conn->prepare("SELECT $field FROM opportunities WHERE id = ?");
-$old_stmt->bind_param('i', $id);
+$idColumn = getOpportunityIdColumn($conn);
+$safeField = str_replace('`', '', $field);
+
+$old_stmt = $conn->prepare("SELECT `{$safeField}` FROM opportunities WHERE {$idColumn} = ?");
+$old_stmt->bind_param('s', $id);
 $old_stmt->execute();
 $old_stmt->bind_result($old_value);
 $old_stmt->fetch();
 $old_stmt->close();
 
-$stmt = $conn->prepare("UPDATE opportunities SET $field = ? WHERE id = ?");
+$stmt = $conn->prepare("UPDATE opportunities SET `{$safeField}` = ? WHERE {$idColumn} = ?");
 if (!$stmt) {
   echo json_encode(['error' => 'DB error']);
   exit;
 }
-$stmt->bind_param('si', $value, $id);
+$stmt->bind_param('ss', $value, $id);
 if ($stmt->execute()) {
   // Log edit
   require_once 'opportunity_edit_log.php';

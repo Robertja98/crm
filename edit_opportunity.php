@@ -4,18 +4,39 @@
 // IMPORTANT: Do not output anything before header() redirects!
 
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 $schema = require __DIR__ . '/opportunity_schema.php';
 $contactSchema = require __DIR__ . '/contact_schema.php';
 
+function getOpportunityIdColumn(): string {
+  $conn = get_mysql_connection();
+  $hasOpportunityId = false;
+  $hasId = false;
+  if ($result = $conn->query("SHOW COLUMNS FROM opportunities LIKE 'opportunity_id'")) {
+    $hasOpportunityId = $result->num_rows > 0;
+    $result->free();
+  }
+  if ($result = $conn->query("SHOW COLUMNS FROM opportunities LIKE 'id'")) {
+    $hasId = $result->num_rows > 0;
+    $result->free();
+  }
+  $conn->close();
+  if ($hasOpportunityId) {
+    return 'opportunity_id';
+  }
+  return $hasId ? 'id' : 'opportunity_id';
+}
+
 // Get opportunity ID
 $opportunityId = $_GET['id'] ?? $_POST['id'] ?? null;
+$opportunityIdColumn = getOpportunityIdColumn();
 
 if (!$opportunityId) {
     header('Location: opportunities_list.php?error=' . urlencode('No opportunity ID provided'));
     exit;
 }
 
-$opportunity = fetch_opportunity_mysql($opportunityId, $schema);
+$opportunity = fetch_opportunity_mysql($opportunityId, $schema, $opportunityIdColumn);
 if (isset($opportunity) && is_array($opportunity)) {
 }
 if (!$opportunity) {
@@ -25,6 +46,10 @@ if (!$opportunity) {
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+    $error = 'CSRF validation failed';
+  }
+
     // Validate inputs
     $errors = [];
     // Contact is now optional; only company is required
@@ -41,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['expected_close'])) {
         $errors[] = 'Expected close date is required';
     }
-    if (empty($errors)) {
+    if (!isset($error) && empty($errors)) {
         // Update opportunity
         $fields = [
           'value' => $_POST['value'],
@@ -53,13 +78,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['company_id'])) {
           $conn = get_mysql_connection();
           // Update all contacts for this opportunity to the new company
-          $stmt = $conn->prepare("UPDATE contacts SET company = ? WHERE contact_id = (SELECT contact_id FROM opportunities WHERE id = ?)");
-          $stmt->bind_param('si', $_POST['company_id'], $opportunityId);
+          $stmt = $conn->prepare("UPDATE contacts SET company = ? WHERE contact_id = (SELECT contact_id FROM opportunities WHERE {$opportunityIdColumn} = ?)");
+          $stmt->bind_param('ss', $_POST['company_id'], $opportunityId);
           $stmt->execute();
           $stmt->close();
           $conn->close();
         }
-        $result = update_opportunity_mysql($opportunityId, $fields);
+        $result = update_opportunity_mysql($opportunityId, $fields, $opportunityIdColumn);
         if ($result) {
           header('Location: opportunities_list.php?success=2');
           exit;
@@ -91,10 +116,10 @@ set_exception_handler(function($e) {
 });
 
 
-function fetch_opportunity_mysql($id, $schema) {
+function fetch_opportunity_mysql($id, $schema, $idColumn = 'opportunity_id') {
   $conn = get_mysql_connection();
   $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
-  $stmt = $conn->prepare("SELECT $fields FROM opportunities WHERE id = ? LIMIT 1");
+  $stmt = $conn->prepare("SELECT $fields FROM opportunities WHERE {$idColumn} = ? LIMIT 1");
   if (!$stmt) {
     return null;
   }
@@ -110,7 +135,7 @@ function fetch_opportunity_mysql($id, $schema) {
   return $row;
 }
 
-function update_opportunity_mysql($id, $fields) {
+function update_opportunity_mysql($id, $fields, $idColumn = 'opportunity_id') {
   if (empty($fields)) {
     return false;
   }
@@ -126,7 +151,7 @@ function update_opportunity_mysql($id, $fields) {
     $types .= 's';
   }
 
-  $sql = 'UPDATE opportunities SET ' . implode(', ', $set) . ' WHERE id = ?';
+  $sql = 'UPDATE opportunities SET ' . implode(', ', $set) . " WHERE {$idColumn} = ?";
   $params[] = $id;
   $types .= 's';
 
@@ -439,6 +464,7 @@ function update_opportunity_mysql($id, $fields) {
   </div>
   <?php endif; ?>
   <form method="POST" id="opportunityForm">
+    <?php renderCSRFInput(); ?>
     <input type="hidden" name="id" value="<?= htmlspecialchars($opportunityId) ?>">
     
     <div class="form-section">
@@ -465,8 +491,8 @@ function update_opportunity_mysql($id, $fields) {
           // Get current company for this opportunity
           $current_company = '';
           $conn = get_mysql_connection();
-          $stmt = $conn->prepare("SELECT company FROM contacts WHERE contact_id = (SELECT contact_id FROM opportunities WHERE id = ?)");
-          $stmt->bind_param('i', $opportunityId);
+          $stmt = $conn->prepare("SELECT company FROM contacts WHERE contact_id = (SELECT contact_id FROM opportunities WHERE {$opportunityIdColumn} = ?)");
+          $stmt->bind_param('s', $opportunityId);
           $stmt->execute();
           $stmt->bind_result($current_company);
           $stmt->fetch();

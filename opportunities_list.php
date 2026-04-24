@@ -7,6 +7,11 @@ $contactSchema = require 'contact_schema.php';
 require_once 'db_mysql.php';
 require_once 'sanitize_helper.php';
 
+function getOpportunityKey(array $opp): string {
+  $key = $opp['opportunity_id'] ?? ($opp['id'] ?? '');
+  return trim((string) $key);
+}
+
 function fetch_table_mysql($table, $schema) {
     $conn = get_mysql_connection();
     $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
@@ -94,10 +99,11 @@ if ($searchQuery) {
         $contactId = trim($opp['contact_id'] ?? '');
         $contactName = $contactMap[$contactId]['name'] ?? '';
         $contactCompany = $contactMap[$contactId]['company'] ?? '';
+    $opportunityKey = getOpportunityKey((array) $opp);
         
         return stripos($contactName, $searchQuery) !== false ||
                stripos($contactCompany, $searchQuery) !== false ||
-               stripos($opp['id'] ?? '', $searchQuery) !== false ||
+         stripos($opportunityKey, $searchQuery) !== false ||
                stripos($opp['stage'] ?? '', $searchQuery) !== false;
     });
 }
@@ -111,6 +117,11 @@ usort($filteredOpportunities, function($a, $b) use ($sortBy, $sortOrder, $contac
     if ($sortBy === 'contact_id') {
         $aVal = $contactMap[trim($a['contact_id'] ?? '')]['name'] ?? '';
         $bVal = $contactMap[trim($b['contact_id'] ?? '')]['name'] ?? '';
+    }
+
+    if ($sortBy === 'id') {
+      $aVal = getOpportunityKey((array) $a);
+      $bVal = getOpportunityKey((array) $b);
     }
     
     // Numeric sorting for value and probability
@@ -704,6 +715,7 @@ function getStageColor($stage) {
       <tbody>
         <?php foreach ($filteredOpportunities as $opp): ?>
           <?php
+            $oppId = getOpportunityKey((array) $opp);
             $contactId = trim($opp['contact_id'] ?? '');
             $contactInfo = $contactMap[$contactId] ?? ['name' => 'Unknown Contact', 'company' => ''];
             // If no company found via contact, try to use company from opportunity (if present)
@@ -712,7 +724,7 @@ function getStageColor($stage) {
               $company = $opp['company'];
             }
             // Hardcoded fallback for Opportunity #11 if company is still empty
-            if (empty($company) && ($opp['id'] ?? null) == 11) {
+            if (empty($company) && $oppId === '11') {
               $company = 'Prism Powder Coating';
             }
             $stage = $opp['stage'] ?? 'Unknown';
@@ -722,7 +734,7 @@ function getStageColor($stage) {
             $weightedValue = $value * ($probability / 100);
           ?>
           <tr>
-            <td class="cell-id">#<?= htmlspecialchars($opp['id']) ?></td>
+            <td class="cell-id">#<?= htmlspecialchars($oppId) ?></td>
             <td class="cell-contact"><?= htmlspecialchars($contactInfo['name']) ?></td>
             <td class="cell-company"><strong><?= htmlspecialchars($company ?: '—') ?></strong></td>
             <td class="cell-value"><?= formatCurrency($value) ?></td>
@@ -735,9 +747,9 @@ function getStageColor($stage) {
             </td>
             <td class="cell-date"><?= htmlspecialchars($opp['expected_close'] ?? '—') ?></td>
             <td class="cell-actions">
-              <a href="edit_opportunity.php?id=<?= urlencode($opp['id']) ?>" class="btn-action btn-edit" title="Edit">✏️ Edit</a>
+              <a href="edit_opportunity.php?id=<?= urlencode($oppId) ?>" class="btn-action btn-edit" title="Edit">✏️ Edit</a>
               <form method="POST" action="delete_opportunity.php" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this opportunity?');">
-                <input type="hidden" name="id" value="<?= htmlspecialchars($opp['id']) ?>">
+                <input type="hidden" name="id" value="<?= htmlspecialchars($oppId) ?>">
                 <button type="submit" class="btn-action btn-delete" title="Delete">🗑️ Delete</button>
               </form>
             </td>

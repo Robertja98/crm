@@ -1,7 +1,6 @@
 <?php
-include_once(__DIR__ . '/layout_start.php');
-
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 $opportunitySchema = require 'opportunity_schema.php';
 $contactSchema = require 'contact_schema.php';
 function fetch_table_mysql($table, $schema) {
@@ -21,19 +20,28 @@ function fetch_table_mysql($table, $schema) {
 }
 $opportunities = fetch_table_mysql('opportunities', $opportunitySchema);
 
-// Group opportunities by stage
-$opportunitiesByStage = [];
-foreach ($opportunities as $opp) {
-    $stage = $opp['stage'] ?? 'Prospecting';
-    if (!isset($opportunitiesByStage[$stage])) {
-        $opportunitiesByStage[$stage] = [];
-    }
-    $opportunitiesByStage[$stage][] = $opp;
+function getOpportunityKey(array $opp): string {
+    $key = $opp['opportunity_id'] ?? ($opp['id'] ?? '');
+    return trim((string) $key);
 }
 
-// Display pipeline board
-?>
-<?php
+function getOpportunityIdColumn(mysqli $conn): string {
+    $hasOpportunityId = false;
+    $hasId = false;
+    if ($result = $conn->query("SHOW COLUMNS FROM opportunities LIKE 'opportunity_id'")) {
+        $hasOpportunityId = $result->num_rows > 0;
+        $result->free();
+    }
+    if ($result = $conn->query("SHOW COLUMNS FROM opportunities LIKE 'id'")) {
+        $hasId = $result->num_rows > 0;
+        $result->free();
+    }
+    if ($hasOpportunityId) {
+        return 'opportunity_id';
+    }
+    return $hasId ? 'id' : 'opportunity_id';
+}
+
 $pageTitle = 'Sales Pipeline Board';
 include_once(__DIR__ . '/layout_start.php');
 
@@ -42,14 +50,16 @@ $contacts = fetch_table_mysql('contacts', $contactSchema);
 // Index contacts by ID
 $contactsById = [];
 foreach ($contacts as $c) {
-    $contactsById[$c['id'] ?? ''] = $c;
+    $key = trim((string) ($c['contact_id'] ?? ($c['id'] ?? '')));
+    if ($key !== '') {
+        $contactsById[$key] = $c;
+    }
 }
 
 // Define pipeline stages (matches opportunities system)
 $stages = [
     'Prospecting' => ['color' => '#6366F1', 'icon' => '🔍'],
-    'Qualification' => ['color' => '#8B5CF6', 'icon' => '✓'],
-    'Proposal' => ['color' => '#EC4899', 'icon' => '📄'],
+    'Proposal' => ['color' => '#8B5CF6', 'icon' => '📄'],
     'Negotiation' => ['color' => '#F59E0B', 'icon' => '💬'],
     'Closed Won' => ['color' => '#10B981', 'icon' => '🎉'],
     'Closed Lost' => ['color' => '#EF4444', 'icon' => '❌']
@@ -91,32 +101,47 @@ foreach ($stages as $stageName => $stageInfo) {
 
 // Handle AJAX stage update
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_stage'])) {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'CSRF validation failed']);
+        exit;
+    }
+
     $oppId = $_POST['opportunity_id'] ?? '';
     $newStage = $_POST['new_stage'] ?? '';
-    
-    // Find and update the opportunity
-    foreach ($opportunities as &$opp) {
-        if ($opp['id'] === $oppId) {
-            $opp['stage'] = $newStage;
-            
-            // Auto-adjust probability based on stage
-            $probabilities = [
-                'Prospecting' => 10,
-                'Qualification' => 25,
-                'Proposal' => 50,
-                'Negotiation' => 75,
-                'Closed Won' => 100,
-                'Closed Lost' => 0
-            ];
-            $opp['probability'] = $probabilities[$newStage] ?? $opp['probability'];
-            break;
-        }
+
+    $probabilities = [
+        'Prospecting' => 10,
+        'Proposal' => 25,
+        'Negotiation' => 50,
+        'Closed Won' => 100,
+        'Closed Lost' => 0
+    ];
+
+    if (!isset($probabilities[$newStage])) {
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'Invalid stage']);
+        exit;
     }
-    
-    writeCSV('opportunities.csv', $opportunities, $opportunitySchema);
-    
+
+    $conn = get_mysql_connection();
+    $idColumn = getOpportunityIdColumn($conn);
+    $stmt = $conn->prepare("UPDATE opportunities SET stage = ?, probability = ? WHERE {$idColumn} = ?");
+    if (!$stmt) {
+        $conn->close();
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'error' => 'Failed to prepare statement']);
+        exit;
+    }
+
+    $newProbability = $probabilities[$newStage];
+    $stmt->bind_param('sis', $newStage, $newProbability, $oppId);
+    $ok = $stmt->execute();
+    $stmt->close();
+    $conn->close();
+
     header('Content-Type: application/json');
-    echo json_encode(['success' => true]);
+    echo json_encode(['success' => (bool) $ok]);
     exit;
 }
 
@@ -506,10 +531,10 @@ if (!function_exists('formatCurrency')) {
                         ?>
                         <div class="deal-card" 
                              draggable="true" 
-                             data-id="<?= htmlspecialchars($opp['id']) ?>"
+                             data-id="<?= htmlspecialchars(getOpportunityKey((array) $opp)) ?>"
                              style="border-left-color: <?= $stageInfo['color'] ?>;">
                             <div class="deal-header">
-                                <span class="deal-id">#<?= htmlspecialchars($opp['id']) ?></span>
+                                <span class="deal-id">#<?= htmlspecialchars(getOpportunityKey((array) $opp)) ?></span>
                                 <span class="deal-value"><?= formatCurrency($opp['value'] ?? 0) ?></span>
                             </div>
                             
@@ -529,7 +554,7 @@ if (!function_exists('formatCurrency')) {
                             </div>
                             
                             <div class="deal-actions">
-                                <a href="edit_opportunity.php?id=<?= htmlspecialchars($opp['id']) ?>" class="deal-action-btn">✏️ Edit</a>
+                                <a href="edit_opportunity.php?id=<?= htmlspecialchars(getOpportunityKey((array) $opp)) ?>" class="deal-action-btn">✏️ Edit</a>
                                 <a href="contact_view.php?id=<?= htmlspecialchars($opp['contact_id']) ?>" class="deal-action-btn">👤 Contact</a>
                             </div>
                         </div>
@@ -608,6 +633,7 @@ function handleDrop(e) {
             formData.append('update_stage', '1');
             formData.append('opportunity_id', oppId);
             formData.append('new_stage', newStage);
+            formData.append('csrf_token', '<?= htmlspecialchars(getCSRFToken(), ENT_QUOTES, 'UTF-8') ?>');
             
             fetch('pipeline_board.php', {
                 method: 'POST',
