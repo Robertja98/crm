@@ -1,8 +1,10 @@
 <?php
 require_once 'db_mysql.php';
 require_once 'archive_customer.php';
+require_once __DIR__ . '/csrf_helper.php';
+require_once __DIR__ . '/simple_auth/middleware.php';
 
-$customerId = trim($_GET['customer_id'] ?? $_POST['customer_id'] ?? '');
+$customerId = trim((string) ($_GET['customer_id'] ?? $_POST['customer_id'] ?? ''));
 
 if ($customerId === '') {
   header('Location: customers_list.php');
@@ -10,7 +12,13 @@ if ($customerId === '') {
 }
 
 // ── POST: confirmed delete ────────────────────────────────────────────────────
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$requestMethod = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+if ($requestMethod === 'POST') {
+  if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+    header('Location: customers_list.php?error=invalid_request');
+    exit;
+  }
+
   archive_customer($customerId);
 
   $conn = get_mysql_connection();
@@ -56,8 +64,20 @@ $customer = $stmt->get_result()->fetch_assoc();
 $stmt->close();
 
 // Count tanks
-$tRow = $conn->query("SELECT COUNT(*) AS cnt FROM equipment WHERE customer_id = '{$conn->real_escape_string($customerId)}'");
-$tankCount = $tRow ? (int)$tRow->fetch_assoc()['cnt'] : 0;
+$tankCount = 0;
+$tankStmt = $conn->prepare('SELECT COUNT(*) AS cnt FROM equipment WHERE customer_id = ?');
+if ($tankStmt) {
+  $tankStmt->bind_param('s', $customerId);
+  $tankStmt->execute();
+  $countResult = $tankStmt->get_result();
+  if ($countResult && ($countRow = $countResult->fetch_assoc())) {
+    $tankCount = (int) ($countRow['cnt'] ?? 0);
+  }
+  if ($countResult) {
+    $countResult->free();
+  }
+  $tankStmt->close();
+}
 $conn->close();
 
 if (!$customer) {
@@ -83,6 +103,7 @@ include_once(__DIR__ . '/layout_start.php');
   <p style="color:#c00;"><strong>This cannot be undone.</strong> The customer record will be archived in the audit log and removed. <?= $tankCount > 0 ? "$tankCount tank(s) will be unlinked but not deleted." : '' ?></p>
 
   <form method="POST">
+    <?php renderCSRFInput(); ?>
     <input type="hidden" name="customer_id" value="<?= htmlspecialchars($customerId) ?>">
     <a href="customers_list.php" class="btn-outline" style="margin-right:10px;">Cancel</a>
     <button type="submit" class="btn-danger">🗑️ Confirm Delete</button>

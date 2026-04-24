@@ -71,46 +71,77 @@ $perPage = 25;
 
 $conn = get_mysql_connection();
 
-// Build WHERE clause
-$where = [];
+// Build WHERE clause and bind params for prepared statements
+$whereParts = [];
+$bindTypes = '';
+$bindValues = [];
+
 if ($query !== '') {
-  $q = mysqli_real_escape_string($conn, $query);
-  $where[] = "(LOWER(first_name) LIKE '%$q%' OR LOWER(last_name) LIKE '%$q%' OR LOWER(email) LIKE '%$q%' OR LOWER(company) LIKE '%$q%')";
+  $likeVal = '%' . $query . '%';
+  $whereParts[] = '(LOWER(first_name) LIKE ? OR LOWER(last_name) LIKE ? OR LOWER(email) LIKE ? OR LOWER(company) LIKE ?)';
+  $bindTypes .= 'ssss';
+  $bindValues[] = $likeVal;
+  $bindValues[] = $likeVal;
+  $bindValues[] = $likeVal;
+  $bindValues[] = $likeVal;
 }
 if ($statusFilter !== '') {
-  $sf = mysqli_real_escape_string($conn, $statusFilter);
-  $where[] = "status = '$sf'";
+  $whereParts[] = 'status = ?';
+  $bindTypes .= 's';
+  $bindValues[] = $statusFilter;
 }
 if ($tagFilter !== '') {
-  $tf = mysqli_real_escape_string($conn, $tagFilter);
-  $where[] = "FIND_IN_SET('$tf', tags)";
+  $whereParts[] = 'FIND_IN_SET(?, tags)';
+  $bindTypes .= 's';
+  $bindValues[] = $tagFilter;
 }
-$whereClause = $where ? ('WHERE ' . implode(' AND ', $where)) : '';
+$whereClause = $whereParts ? ('WHERE ' . implode(' AND ', $whereParts)) : '';
 
 // Build ORDER BY
-if ($sortField && in_array($sortField, $schema)) {
-  $orderBy = "ORDER BY `$sortField` " . ($sortDirection === 'desc' ? 'DESC' : 'ASC');
+if ($sortField && in_array($sortField, $schema, true)) {
+  $orderBy = 'ORDER BY `' . $sortField . '` ' . ($sortDirection === 'desc' ? 'DESC' : 'ASC');
 } else {
   $orderBy = '';
 }
 
-// Get total count for pagination
-$countSql = "SELECT COUNT(*) as cnt FROM contacts $whereClause";
-$countRes = $conn->query($countSql);
-$total = ($countRes && ($row = $countRes->fetch_assoc())) ? intval($row['cnt']) : 0;
-if ($countRes) $countRes->free();
-
-// Build SELECT
 $selectCols = implode(',', array_map(function($col) { return "`$col`"; }, $activeColumns));
 $offset = ($page - 1) * $perPage;
-$sql = "SELECT $selectCols FROM contacts $whereClause $orderBy LIMIT $perPage OFFSET $offset";
+
+// Helper: run prepared statement with dynamic params and return result set
+function run_parameterized(mysqli $conn, string $sql, string $types, array $values): ?mysqli_result {
+  $stmt = $conn->prepare($sql);
+  if (!$stmt) {
+    return null;
+  }
+  if ($types !== '') {
+    $stmt->bind_param($types, ...$values);
+  }
+  $stmt->execute();
+  $res = $stmt->get_result();
+  $stmt->close();
+  return $res ?: null;
+}
+
+// Get total count for pagination
+$countRes = run_parameterized($conn, "SELECT COUNT(*) as cnt FROM contacts $whereClause", $bindTypes, $bindValues);
+$total = ($countRes && ($row = $countRes->fetch_assoc())) ? intval($row['cnt']) : 0;
+if ($countRes) {
+  $countRes->free();
+}
+
+// Main select
 $contacts = [];
-$res = $conn->query($sql);
-if ($res) {
-  while ($row = $res->fetch_assoc()) {
+$dataRes = run_parameterized(
+  $conn,
+  "SELECT $selectCols FROM contacts $whereClause $orderBy LIMIT $perPage OFFSET $offset",
+  $bindTypes . 'ii',
+  array_merge($bindValues, [$perPage, $offset])
+);
+if ($dataRes) {
+  while ($row = $dataRes->fetch_assoc()) {
     $contacts[] = $row;
   }
-  $res->free();
+  $dataRes->free();
 }
 
 // Extract unique values for dynamic filters (status, tags)

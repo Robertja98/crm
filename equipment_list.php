@@ -479,7 +479,26 @@ if ($requestMethod === 'POST') {
 // Fetch data
 $conn = get_mysql_connection();
 ensure_equipment_components_table($conn);
-$result = $conn->query("SELECT * FROM equipment WHERE LOWER(COALESCE(ownership, '')) NOT IN ('customer-owned', 'customer owned') ORDER BY tank_size DESC, equipment_id ASC");
+$page = max(1, (int) ($_GET['page'] ?? 1));
+$perPage = 20;
+$offset = ($page - 1) * $perPage;
+
+$countResult = $conn->query("SELECT COUNT(*) AS total FROM equipment WHERE LOWER(COALESCE(ownership, '')) NOT IN ('customer-owned', 'customer owned')");
+$countRow = $countResult ? $countResult->fetch_assoc() : null;
+$totalEquipment = (int) ($countRow['total'] ?? 0);
+if ($countResult) {
+    $countResult->free();
+}
+$totalPages = max(1, (int) ceil($totalEquipment / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $perPage;
+}
+
+$stmtEquipment = $conn->prepare("SELECT * FROM equipment WHERE LOWER(COALESCE(ownership, '')) NOT IN ('customer-owned', 'customer owned') ORDER BY tank_size DESC, equipment_id ASC LIMIT ? OFFSET ?");
+$stmtEquipment->bind_param('ii', $perPage, $offset);
+$stmtEquipment->execute();
+$result = $stmtEquipment->get_result();
 $equipment = [];
 while ($row = $result ? $result->fetch_assoc() : null) {
     $equipment[] = $row;
@@ -487,6 +506,7 @@ while ($row = $result ? $result->fetch_assoc() : null) {
 if ($result) {
     $result->free();
 }
+$stmtEquipment->close();
 
 $result = $conn->query('SELECT item_id, item_name, category, description, quantity_in_stock, unit FROM inventory ORDER BY item_name ASC, item_id ASC');
 $products = [];
@@ -502,21 +522,33 @@ if ($result) {
 $resinProducts = array_values(array_filter($products, 'is_resin_pool_product'));
 
 $componentsByEquipment = [];
-$result = $conn->query('SELECT equipment_id, component_slot, item_id, quantity_required FROM equipment_components');
-while ($row = $result ? $result->fetch_assoc() : null) {
-    $equipmentId = $row['equipment_id'];
-    $slot = $row['component_slot'];
+$equipmentIds = array_map(static function ($row) {
+    return (string) ($row['equipment_id'] ?? '');
+}, $equipment);
+$equipmentIds = array_values(array_filter(array_unique($equipmentIds)));
+if (!empty($equipmentIds)) {
+    $placeholders = implode(',', array_fill(0, count($equipmentIds), '?'));
+    $stmtComp = $conn->prepare('SELECT equipment_id, component_slot, item_id, quantity_required FROM equipment_components WHERE equipment_id IN (' . $placeholders . ')');
+    $types = str_repeat('s', count($equipmentIds));
+    $stmtComp->bind_param($types, ...$equipmentIds);
+    $stmtComp->execute();
+    $result = $stmtComp->get_result();
+    while ($row = $result ? $result->fetch_assoc() : null) {
+        $equipmentId = $row['equipment_id'];
+        $slot = $row['component_slot'];
 
-    if (!isset($componentsByEquipment[$equipmentId])) {
-        $componentsByEquipment[$equipmentId] = [];
+        if (!isset($componentsByEquipment[$equipmentId])) {
+            $componentsByEquipment[$equipmentId] = [];
+        }
+        $componentsByEquipment[$equipmentId][$slot] = [
+            'item_id' => $row['item_id'],
+            'quantity_required' => (float) $row['quantity_required']
+        ];
     }
-    $componentsByEquipment[$equipmentId][$slot] = [
-        'item_id' => $row['item_id'],
-        'quantity_required' => (float) $row['quantity_required']
-    ];
-}
-if ($result) {
-    $result->free();
+    if ($result) {
+        $result->free();
+    }
+    $stmtComp->close();
 }
 
 $result = $conn->query('SELECT customer_id, address FROM customers ORDER BY customer_id');
@@ -587,7 +619,7 @@ function workflow_label($state)
 }
 
 $metrics = [
-    'total' => count($equipment),
+    'total' => $totalEquipment,
     'in-service' => 0,
     'pool-ready' => 0,
     'shop-production' => 0,
@@ -1335,6 +1367,20 @@ require_once 'layout_start.php';
                 </tbody>
             </table>
         </div>
+
+        <?php if ($totalPages > 1): ?>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px;">
+                <div class="text-muted">Page <?= (int) $page ?> of <?= (int) $totalPages ?></div>
+                <div style="display:flex;gap:8px;">
+                    <?php if ($page > 1): ?>
+                        <a class="btn btn-cancel" href="equipment_list.php?page=<?= (int) ($page - 1) ?>">Previous</a>
+                    <?php endif; ?>
+                    <?php if ($page < $totalPages): ?>
+                        <a class="btn btn-primary" href="equipment_list.php?page=<?= (int) ($page + 1) ?>">Next</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 

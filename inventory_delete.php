@@ -1,8 +1,17 @@
 <?php
 require_once 'db_mysql.php';
+require_once __DIR__ . '/csrf_helper.php';
+require_once __DIR__ . '/simple_auth/middleware.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $itemId = trim($_POST['item_id'] ?? '');
+$requestMethod = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+if ($requestMethod === 'POST') {
+    $csrfToken = $_POST['csrf_token'] ?? '';
+    if (!verifyCSRFToken($csrfToken)) {
+        header('Location: inventory_list.php?error=invalid_request');
+        exit;
+    }
+
+    $itemId = trim((string) ($_POST['item_id'] ?? ''));
     if ($itemId !== '') {
         $conn = get_mysql_connection();
         $stmt = $conn->prepare('DELETE FROM inventory WHERE item_id = ?');

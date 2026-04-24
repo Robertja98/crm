@@ -1,5 +1,4 @@
 <?php
-require_once 'layout_start.php';
 require_once 'equipment_mysql.php';
 
 $schema = require __DIR__ . '/equipment_schema.php';
@@ -21,7 +20,44 @@ $componentSlotsUi = array_filter(
 $resinQuantityOptions = ['1', '2', '3.5'];
 
 $dateFields = ['install_date', 'purchase_date', 'last_service_date', 'next_service_date', 'warranty_expiry', 'created_date', 'modified_date'];
+$editableFields = [
+  'equipment_id' => 'Equipment ID',
+  'equipment_type' => 'Equipment Type',
+  'manufacturer' => 'Manufacturer',
+  'model_number' => 'Model / Primary PN',
+  'serial_number' => 'Serial / Assembly Tag',
+  'ownership' => 'Ownership',
+  'tank_size' => 'Tank Size',
+  'resin_type' => 'Resin Type',
+  'regeneration_id' => 'Regeneration ID',
+  'status' => 'Workflow Status',
+  'purchase_date' => 'Purchase Date',
+  'purchase_value' => 'Purchase Value ($)',
+  'purchase_order' => 'Purchase Order',
+  'warranty_expiry' => 'Warranty Expiry',
+  'notes' => 'Notes'
+];
 $errors = [];
+
+function redirect_with_fallback_form($url)
+{
+  $target = (string) $url;
+  if ($target === '') {
+    $target = 'equipment_list.php';
+  }
+
+  if (!headers_sent()) {
+    header('Location: ' . $target);
+    exit;
+  }
+
+  $safe = htmlspecialchars($target, ENT_QUOTES, 'UTF-8');
+  echo '<!doctype html><html><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=' . $safe . '"></head><body>';
+  echo '<script>window.location.href=' . json_encode($target) . ';</script>';
+  echo '<a href="' . $safe . '">Continue</a>';
+  echo '</body></html>';
+  exit;
+}
 
 function ensure_equipment_components_table_form(mysqli $conn)
 {
@@ -199,7 +235,8 @@ if ($edit_mode && $equipment) {
   }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+$requestMethod = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
+if ($requestMethod === 'POST') {
   $formData = $_POST;
   $equipmentId = trim((string) ($_POST['equipment_id'] ?? ''));
   $isEdit = isset($_POST['edit_mode']) && $_POST['edit_mode'] === '1';
@@ -232,7 +269,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if ($isEdit) {
         $fields = [];
         $values = [];
-        foreach ($schema as $field) {
+        foreach (array_keys($editableFields) as $field) {
           if ($field === 'equipment_id') {
             continue;
           }
@@ -262,6 +299,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           $fields[] = '`' . $field . '`';
           if ($field === 'equipment_id') {
             $values[] = $equipmentId;
+            continue;
+          }
+          if (!array_key_exists($field, $editableFields)) {
+            $values[] = null;
             continue;
           }
           $val = $_POST[$field] ?? '';
@@ -337,8 +378,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       $conn->commit();
       $conn->close();
-      header('Location: equipment_list.php');
-      exit;
+      redirect_with_fallback_form('equipment_list.php');
     } catch (Throwable $e) {
       $conn->rollback();
       $errors[] = $e->getMessage();
@@ -356,6 +396,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $conn->close();
+
+require_once 'layout_start.php';
 ?>
 
 <style>
@@ -462,9 +504,8 @@ $conn->close();
     <div class="eq-panel">
       <h3>Tank Fields</h3>
       <div class="eq-grid">
-        <?php foreach ($schema as $field): ?>
+        <?php foreach ($editableFields as $field => $label): ?>
           <?php
-          $label = ucwords(str_replace('_', ' ', $field));
           $value = $formData[$field] ?? '';
           $isDate = in_array($field, $dateFields, true);
           $isTextArea = ($field === 'notes');
@@ -473,6 +514,29 @@ $conn->close();
             <label for="<?= htmlspecialchars($field) ?>"><?= htmlspecialchars($label) ?></label>
             <?php if ($isTextArea): ?>
               <textarea name="<?= htmlspecialchars($field) ?>" id="<?= htmlspecialchars($field) ?>" rows="4"><?= htmlspecialchars((string) $value) ?></textarea>
+            <?php elseif ($field === 'ownership'): ?>
+              <select name="ownership" id="ownership">
+                <option value="">Select</option>
+                <option value="rental" <?= strtolower(trim((string) $value)) === 'rental' ? 'selected' : '' ?>>Rental</option>
+                <option value="purchased" <?= strtolower(trim((string) $value)) === 'purchased' ? 'selected' : '' ?>>Purchased</option>
+              </select>
+            <?php elseif ($field === 'tank_size'): ?>
+              <?php $tankSizeSelected = trim((string) $value); ?>
+              <select name="tank_size" id="tank_size">
+                <option value="">Select</option>
+                <option value="1" <?= $tankSizeSelected === '1' ? 'selected' : '' ?>>1</option>
+                <option value="2" <?= $tankSizeSelected === '2' ? 'selected' : '' ?>>2</option>
+                <option value="3.5" <?= $tankSizeSelected === '3.5' ? 'selected' : '' ?>>3.5</option>
+              </select>
+            <?php elseif ($field === 'status'): ?>
+              <?php $statusSelected = strtolower(trim((string) $value)); ?>
+              <select name="status" id="status">
+                <option value="Active" <?= $statusSelected === 'active' ? 'selected' : '' ?>>Active</option>
+                <option value="Available" <?= $statusSelected === 'available' ? 'selected' : '' ?>>Available</option>
+                <option value="In Service" <?= $statusSelected === 'in service' ? 'selected' : '' ?>>In Service</option>
+                <option value="Maintenance" <?= $statusSelected === 'maintenance' ? 'selected' : '' ?>>Maintenance</option>
+                <option value="Inactive" <?= $statusSelected === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+              </select>
             <?php else: ?>
               <input
                 type="<?= $isDate ? 'date' : 'text' ?>"

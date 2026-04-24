@@ -182,6 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status_action'])) {
                 <div class="d-flex gap-2 mt-3">
                   <a href="inventory_edit.php?item_id=<?= urlencode($item['item_id']) ?>" class="btn btn-sm btn-primary">Edit</a>
                   <form action="inventory_delete.php" method="post" style="display:inline;">
+                    <?php renderCSRFInput(); ?>
                     <input type="hidden" name="item_id" value="<?= htmlspecialchars($item['item_id']) ?>">
                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Delete this item?');">Delete</button>
                   </form>

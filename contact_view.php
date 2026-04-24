@@ -28,27 +28,47 @@ function redirect_safely(string $url): void {
 
 // Handle contact update form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
-    $contactId = mysqli_real_escape_string($conn, $_POST['contact_id']);
+    $contactId = trim((string) ($_POST['contact_id'] ?? ''));
     $fields = [
         'first_name', 'last_name', 'company', 'email', 'phone', 'address',
         'city', 'province', 'postal_code', 'country', 'notes', 'tags', 'is_customer'
     ];
     $updates = [];
+    $params = [];
+    $types = '';
+
     foreach ($fields as $field) {
-        if (isset($_POST[$field])) {
-            $value = mysqli_real_escape_string($conn, $_POST[$field]);
-            if ($field === 'is_customer') {
-                $value = $_POST[$field] ? '1' : '0';
-            }
-            $updates[] = "`$field` = '" . $value . "'";
+        if (!isset($_POST[$field])) {
+            continue;
         }
+
+        $value = $_POST[$field];
+        if ($field === 'is_customer') {
+            $value = !empty($_POST[$field]) ? '1' : '0';
+        }
+
+        $updates[] = "`$field` = ?";
+        $params[] = $value;
+        $types .= 's';
     }
-    if (!empty($updates)) {
-        $sql = "UPDATE contacts SET " . implode(", ", $updates) . ", last_modified = NOW() WHERE contact_id = '" . $contactId . "'";
-        $saveSuccess = mysqli_query($conn, $sql);
+
+    if (!empty($updates) && $contactId !== '') {
+        $sql = "UPDATE contacts SET " . implode(", ", $updates) . ", last_modified = NOW() WHERE contact_id = ?";
+        $params[] = $contactId;
+        $types .= 's';
+
+        $stmt = $conn->prepare($sql);
+        if ($stmt) {
+            $stmt->bind_param($types, ...$params);
+            $saveSuccess = $stmt->execute();
+            $stmt->close();
+        } else {
+            $saveSuccess = false;
+        }
     } else {
         $saveSuccess = false;
     }
+
     // Reload the page to show updated info and avoid resubmission
     if ($saveSuccess) {
       redirect_safely("contact_view.php?id=" . urlencode($contactId) . "&updated=1");
@@ -59,13 +79,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
 $contactId = $_GET['id'] ?? $_POST['contact_id'] ?? null;
 $contact = null;
 if ($contactId) {
-  $safeContactId = mysqli_real_escape_string($conn, $contactId);
-  $result = mysqli_query($conn, "SELECT * FROM contacts WHERE contact_id = '" . $safeContactId . "'");
-  if ($result && ($row = mysqli_fetch_assoc($result))) {
-    $contact = $row;
-  }
-  if ($result) {
-    mysqli_free_result($result);
+  $stmt = $conn->prepare('SELECT * FROM contacts WHERE contact_id = ? LIMIT 1');
+  if ($stmt) {
+    $stmt->bind_param('s', $contactId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result && ($row = $result->fetch_assoc())) {
+      $contact = $row;
+    }
+    if ($result) {
+      $result->free();
+    }
+    $stmt->close();
   }
 }
 
@@ -80,8 +105,13 @@ if ($contact && isset($contact['contact_id'])) {
 // Safety: verify contact was loaded
 if (!$contact) {
   // Try to fetch the record even if fields are missing
-  $safeContactId = mysqli_real_escape_string($conn, $contactId);
-  $result = mysqli_query($conn, "SELECT * FROM contacts WHERE contact_id = '" . $safeContactId . "'");
+  $stmtRetry = $conn->prepare('SELECT * FROM contacts WHERE contact_id = ? LIMIT 1');
+  $result = null;
+  if ($stmtRetry) {
+    $stmtRetry->bind_param('s', $contactId);
+    $stmtRetry->execute();
+    $result = $stmtRetry->get_result();
+  }
   if ($result && ($row = mysqli_fetch_assoc($result))) {
     $contact = $row;
     ?>
@@ -90,7 +120,13 @@ if (!$contact) {
     </div>
     <?php
     mysqli_free_result($result);
+    if ($stmtRetry) {
+      $stmtRetry->close();
+    }
   } else {
+    if ($stmtRetry) {
+      $stmtRetry->close();
+    }
     // Diagnostic: Show all available contact IDs
     $result = mysqli_query($conn, "SELECT contact_id, first_name, last_name FROM contacts ORDER BY contact_id LIMIT 20");
     ?>
@@ -119,13 +155,18 @@ $opportunitySchema = is_array($opportunitySchema) && !empty($opportunitySchema)
   ? $opportunitySchema
   : ['opportunity_id', 'contact_id', 'value', 'stage', 'probability', 'expected_close'];
 $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $opportunitySchema));
-$safeContactId = mysqli_real_escape_string($conn, $contactId);
-$result = mysqli_query($conn, "SELECT $fields FROM opportunities WHERE contact_id = '$safeContactId'");
-if ($result) {
-  while ($row = mysqli_fetch_assoc($result)) {
-    $opportunities[] = $row;
+$stmtOpp = $conn->prepare("SELECT $fields FROM opportunities WHERE contact_id = ?");
+if ($stmtOpp) {
+  $stmtOpp->bind_param('s', $contactId);
+  $stmtOpp->execute();
+  $result = $stmtOpp->get_result();
+  if ($result) {
+    while ($row = mysqli_fetch_assoc($result)) {
+      $opportunities[] = $row;
+    }
+    mysqli_free_result($result);
   }
-  mysqli_free_result($result);
+  $stmtOpp->close();
 }
 
 // Find orphaned opportunities (missing contact_id)
@@ -142,10 +183,14 @@ if (!empty($contact['company'])) {
 
 // Handle admin action to link orphaned opportunity
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['link_opportunity_id'], $_POST['contact_id'])) {
-    $oppId = (int)$_POST['link_opportunity_id'];
-    $contactId = (int)$_POST['contact_id'];
-  $sql = "UPDATE opportunities SET contact_id = '" . $contactId . "' WHERE opportunity_id = '" . $oppId . "'";
-    mysqli_query($conn, $sql);
+    $oppId = (int) $_POST['link_opportunity_id'];
+    $contactId = trim((string) ($_POST['contact_id'] ?? ''));
+    $stmtLink = $conn->prepare('UPDATE opportunities SET contact_id = ? WHERE opportunity_id = ?');
+    if ($stmtLink) {
+      $stmtLink->bind_param('si', $contactId, $oppId);
+      $stmtLink->execute();
+      $stmtLink->close();
+    }
     redirect_safely("contact_view.php?id=" . urlencode($contactId) . "&linked=1");
 }
 
@@ -182,13 +227,29 @@ if (empty($selectDiscussionFields)) {
 
 $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $selectDiscussionFields));
 
-$safeContactId = mysqli_real_escape_string($conn, $contactId);
-$whereClauses = ["contact_id = '$safeContactId'"];
+// Build discussion query using prepared statement; include manual_contact_id column if available
 if (in_array('manual_contact_id', $availableDiscussionFields, true)) {
-  $whereClauses[] = "manual_contact_id = '$safeContactId'";
+  $discussionQuery = "SELECT $fields FROM discussion_log WHERE contact_id = ? OR manual_contact_id = ? ORDER BY timestamp DESC";
+  $stmtDisc = $conn->prepare($discussionQuery);
+  if ($stmtDisc) {
+    $stmtDisc->bind_param('ss', $contactId, $contactId);
+    $stmtDisc->execute();
+    $result = $stmtDisc->get_result();
+  } else {
+    $result = null;
+  }
+} else {
+  $discussionQuery = "SELECT $fields FROM discussion_log WHERE contact_id = ? ORDER BY timestamp DESC";
+  $stmtDisc = $conn->prepare($discussionQuery);
+  if ($stmtDisc) {
+    $stmtDisc->bind_param('s', $contactId);
+    $stmtDisc->execute();
+    $result = $stmtDisc->get_result();
+  } else {
+    $result = null;
+  }
 }
-$discussionQuery = "SELECT $fields FROM discussion_log WHERE " . implode(' OR ', $whereClauses) . " ORDER BY timestamp DESC";
-$result = mysqli_query($conn, $discussionQuery);
+
 if ($result) {
   $seen = [];
   while ($row = mysqli_fetch_assoc($result)) {
@@ -199,7 +260,10 @@ if ($result) {
       $seen[$uniqueKey] = true;
     }
   }
-  mysqli_free_result($result);
+  $result->free();
+}
+if (isset($stmtDisc) && $stmtDisc) {
+  $stmtDisc->close();
 }
 if (!is_array($discussions)) $discussions = [];
 $contactDiscussions = $discussions;

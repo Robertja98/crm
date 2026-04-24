@@ -94,94 +94,54 @@ set_exception_handler(function($e) {
 function fetch_opportunity_mysql($id, $schema) {
   $conn = get_mysql_connection();
   $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
-  $idEsc = mysqli_real_escape_string($conn, $id);
-  $result = mysqli_query($conn, "SELECT $fields FROM opportunities WHERE id='$idEsc'");
-  if (!$result) return null;
-  $row = mysqli_fetch_assoc($result);
-  mysqli_free_result($result);
+  $stmt = $conn->prepare("SELECT $fields FROM opportunities WHERE id = ? LIMIT 1");
+  if (!$stmt) {
+    return null;
+  }
+
+  $stmt->bind_param('s', $id);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  $row = $result ? $result->fetch_assoc() : null;
+  if ($result) {
+    $result->free();
+  }
+  $stmt->close();
   return $row;
 }
 
 function update_opportunity_mysql($id, $fields) {
+  if (empty($fields)) {
+    return false;
+  }
+
   $conn = get_mysql_connection();
   $set = [];
+  $params = [];
+  $types = '';
+
   foreach ($fields as $k => $v) {
-    $set[] = '`' . mysqli_real_escape_string($conn, $k) . '`=' . (is_null($v) ? 'NULL' : "'" . mysqli_real_escape_string($conn, $v) . "'");
+    $set[] = '`' . str_replace('`', '', (string) $k) . '` = ?';
+    $params[] = $v;
+    $types .= 's';
   }
-  $setStr = implode(',', $set);
-  $idEsc = mysqli_real_escape_string($conn, $id);
-  $sql = "UPDATE opportunities SET $setStr WHERE id='$idEsc'";
-  $result = mysqli_query($conn, $sql);
-  return $result !== false;
+
+  $sql = 'UPDATE opportunities SET ' . implode(', ', $set) . ' WHERE id = ?';
+  $params[] = $id;
+  $types .= 's';
+
+  $stmt = $conn->prepare($sql);
+  if (!$stmt) {
+    return false;
+  }
+
+  $stmt->bind_param($types, ...$params);
+  $ok = $stmt->execute();
+  $stmt->close();
+  return $ok;
 }
 
 // No CSV or contacts array used; all company data is fetched directly from the SQL database for the dropdown below.
-
-// Get opportunity ID
-$opportunityId = $_GET['id'] ?? $_POST['id'] ?? null;
-
-if (!$opportunityId) {
-    header('Location: opportunities_list.php?error=' . urlencode('No opportunity ID provided'));
-    exit;
-}
-
-
-$opportunity = fetch_opportunity_mysql($opportunityId, $schema);
-if (isset($opportunity) && is_array($opportunity)) {
-}
-if (!$opportunity) {
-  header('Location: opportunities_list.php?error=' . urlencode('Opportunity not found'));
-  exit;
-}
-
-// Handle form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validate inputs
-    $errors = [];
-    
-    if (empty($_POST['contact_id'])) {
-      $errors[] = 'Contact is required';
-    }
-    
-    if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
-        $errors[] = 'Valid opportunity value is required';
-    }
-    
-    if (!isset($_POST['probability']) || $_POST['probability'] === '' || !is_numeric($_POST['probability']) || $_POST['probability'] < 0 || $_POST['probability'] > 100) {
-        $errors[] = 'Probability must be between 0 and 100';
-    }
-    
-    if (empty($_POST['stage'])) {
-        $errors[] = 'Stage is required';
-    }
-    
-    if (empty($_POST['expected_close'])) {
-        $errors[] = 'Expected close date is required';
-    }
-    
-    if (empty($errors)) {
-        // Update opportunity
-        $fields = [
-          'contact_id' => $_POST['contact_id'],
-          'value' => $_POST['value'],
-          'stage' => $_POST['stage'],
-          'probability' => $_POST['probability'],
-          'expected_close' => $_POST['expected_close'],
-        ];
-        $result = update_opportunity_mysql($opportunityId, $fields);
-        if ($result) {
-          header('Location: opportunities_list.php?success=2');
-          exit;
-        } else {
-          echo '<div style="position:fixed;top:144px;left:0;right:0;z-index:2147483647;background:#fee;color:#900;border-bottom:3px solid #f00;padding:24px 40px;font-size:22px;font-family:monospace;box-shadow:0 4px 16px rgba(0,0,0,0.18);text-align:center;">Failed to update opportunity. Check for output before header() or DB errors.</div>';
-          flush();
-          $error = 'Failed to update opportunity.';
-        }
-    } else {
-        $error = implode(', ', $errors);
-    }
-
-  }
 ?>
 <style>
   .page-header p {

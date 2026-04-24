@@ -63,7 +63,10 @@ $conn->close();
             <td>
               <a href="customer_view.php?id=<?= urlencode($contact['customer_id']) ?>" class="btn-primary">👁 View</a>
               <a href="edit_customer.php?customer_id=<?= urlencode($contact['customer_id']) ?>" class="btn-warning">✏️ Edit</a>
-              <a href="delete_customer.php?customer_id=<?= urlencode($contact['customer_id']) ?>" class="btn-danger" onclick="return confirm('Are you sure you want to delete this customer? This will archive their info and remove them permanently.');">🗑️ Delete</a>
+              <form method="GET" action="delete_customer.php" style="display:inline;">
+                <input type="hidden" name="customer_id" value="<?= htmlspecialchars($contact['customer_id']) ?>">
+                <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this customer? This will archive their info and remove them permanently.');">🗑️ Delete</button>
+              </form>
               <?php if (!empty($contact['contact_id'])): ?>
                 <a href="contact_view.php?id=<?= urlencode($contact['contact_id']) ?>" class="btn-secondary">👤 View Contact</a>
               <?php endif; ?>
@@ -77,7 +80,7 @@ $conn->close();
           </tr>
         <?php else: ?>
           <tr style="background:#fffbe6;color:#c00;">
-            <td colspan="5"><strong>Incomplete Customer Record:</strong> Customer ID <?= htmlspecialchars($contact['customer_id']) ?> has missing contact info. <a href="customer_view.php?id=<?= urlencode($contact['customer_id']) ?>" class="btn-primary">👁 View</a><?php if (!empty($contact['customer_id'])): ?> <a href="edit_customer.php?customer_id=<?= urlencode($contact['customer_id']) ?>" class="btn-warning">✏️ Edit</a> <a href="delete_customer.php?customer_id=<?= urlencode($contact['customer_id']) ?>" class="btn-danger" onclick="return confirm('Are you sure you want to delete this customer? This will archive their info and remove them permanently.');">🗑️ Delete</a><?php endif; ?></td>
+            <td colspan="5"><strong>Incomplete Customer Record:</strong> Customer ID <?= htmlspecialchars($contact['customer_id']) ?> has missing contact info. <a href="customer_view.php?id=<?= urlencode($contact['customer_id']) ?>" class="btn-primary">👁 View</a><?php if (!empty($contact['customer_id'])): ?> <a href="edit_customer.php?customer_id=<?= urlencode($contact['customer_id']) ?>" class="btn-warning">✏️ Edit</a> <form method="GET" action="delete_customer.php" style="display:inline;"><input type="hidden" name="customer_id" value="<?= htmlspecialchars($contact['customer_id']) ?>"><button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this customer? This will archive their info and remove them permanently.');">🗑️ Delete</button></form><?php endif; ?></td>
           </tr>
         <?php endif; ?>
       <?php endforeach; ?>
