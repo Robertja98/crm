@@ -388,6 +388,7 @@ if ($requestMethod === 'POST') {
     }
   }
 }
+}
 
 // Render form data for component slots
 foreach ($componentSlots as $slot => $label) {
@@ -396,7 +397,6 @@ foreach ($componentSlots as $slot => $label) {
     if ($itemId !== '') {
       $componentMap[$slot] = ['item_id' => $itemId, 'quantity_required' => $qty];
     }
-  }
 }
 
 $conn->close();
