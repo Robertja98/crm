@@ -372,18 +372,7 @@ $openFieldPanel = !empty($fieldSaveError) ||
                         $hasCustomer = $stmt->fetch();
                         $stmt->close();
                         $conn->close();
-                        if (!$hasCustomer):
                       ?>
-                        <form method="POST" action="add_customer.php" class="d-inline ms-1" onsubmit="return confirm('Convert this company to a customer?');">
-                          <?php renderCSRFInput(); ?>
-                          <input type="hidden" name="company" value="<?= escapeAttr($contact['company']) ?>">
-                          <input type="hidden" name="contact_id" value="<?= escapeAttr($contact['contact_id']) ?>">
-                          <input type="hidden" name="address" value="<?= escapeAttr($contact['address']) ?>">
-                          <button type="submit" class="btn btn-sm btn-outline-warning" title="Convert company to customer">
-                            <i class="bi bi-building"></i> Convert to Customer
-                          </button>
-                        </form>
-                      <?php endif; ?>
                     <?php endif; ?>
                   </div>
                 </td>
