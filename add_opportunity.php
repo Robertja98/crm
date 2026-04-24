@@ -33,7 +33,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   // Validate inputs
   if (empty($errors)) {
-  // Contact is now optional; only company is required
+  // Company is required and is used to resolve a linked contact.
+  if (empty($_POST['company_id'])) {
+    $errors[] = 'Company is required';
+  }
   if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
     $errors[] = 'Valid opportunity value is required';
   }
@@ -48,7 +51,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   if (empty($errors)) {
     $conn = get_mysql_connection();
-    $contact_id = $_POST['contact_id'] ?? null;
+    $selectedCompany = trim((string) ($_POST['company_id'] ?? ''));
+    $contact_id = null;
+
+    $stmtContact = $conn->prepare("SELECT contact_id FROM contacts WHERE company = ? ORDER BY contact_id ASC LIMIT 1");
+    if ($stmtContact) {
+      $stmtContact->bind_param('s', $selectedCompany);
+      $stmtContact->execute();
+      $stmtContact->bind_result($resolvedContactId);
+      if ($stmtContact->fetch()) {
+        $contact_id = $resolvedContactId;
+      }
+      $stmtContact->close();
+    }
+
+    if ($contact_id === null || $contact_id === '') {
+      $errors[] = 'Selected company has no contact record. Please add a contact for that company first.';
+      $conn->close();
+    }
+
+    if (empty($errors)) {
     $value = number_format((float)$_POST['value'], 2, '.', '');
     $stage = $_POST['stage'];
     $probability = (int)$_POST['probability'];
@@ -69,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       } else {
         $error = 'Failed to save opportunity: ' . $stmt->error;
       }
+    }
     }
   } else {
     $error = implode(', ', $errors);
@@ -367,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <select name="company_id" id="company_id" required>
             <option value="">Select a company...</option>
             <?php foreach ($companies as $company): ?>
-              <option value="<?= htmlspecialchars($company) ?>">
+              <option value="<?= htmlspecialchars($company) ?>" <?= (isset($_POST['company_id']) && $_POST['company_id'] === $company) ? 'selected' : '' ?>>
                 <?= htmlspecialchars($company) ?>
               </option>
             <?php endforeach; ?>
