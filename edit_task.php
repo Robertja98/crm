@@ -1,6 +1,7 @@
 
 <?php
 require_once 'tasks_mysql.php';
+require_once __DIR__ . '/csrf_helper.php';
 
 $timestamp = $_GET['timestamp'] ?? '';
 $tasks = fetch_tasks_mysql(['timestamp' => $timestamp]);
@@ -11,6 +12,11 @@ if (!$taskToEdit) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        echo "CSRF validation failed.";
+        exit;
+    }
+    
     $fields = [
         'title' => $_POST['title'],
         'due_date' => $_POST['due_date'],
@@ -25,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <h3>Edit Task</h3>
 <form method="POST">
+  <?php renderCSRFInput(); ?>
   <input type="hidden" name="timestamp" value="<?= htmlspecialchars($taskToEdit['timestamp']) ?>">
   <input type="text" name="title" value="<?= htmlspecialchars($taskToEdit['title']) ?>" required>
   <input type="date" name="due_date" value="<?= htmlspecialchars($taskToEdit['due_date']) ?>" required>

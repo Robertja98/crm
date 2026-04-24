@@ -73,6 +73,7 @@ include_once(__DIR__ . '/layout_start.php');
         <a href="inventory_list.php" class="btn btn-outline-secondary">← Back</a>
     </div>
     <form method="post">
+    <?php renderCSRFInput(); ?>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
             <?php foreach ($formFields as $f => $label): ?>
                 <div style="display:flex; flex-direction:column; <?= in_array($f, ['description','notes'], true) ? 'grid-column:1/3;' : '' ?>">

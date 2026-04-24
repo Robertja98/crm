@@ -27,8 +27,12 @@ $companies = fetch_companies_mysql();
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+    $errors[] = 'CSRF validation failed';
+  }
+  
   // Validate inputs
-  $errors = [];
+  if (empty($errors)) {
   // Contact is now optional; only company is required
   if (!isset($_POST['value']) || $_POST['value'] === '' || !is_numeric($_POST['value']) || $_POST['value'] < 0) {
     $errors[] = 'Valid opportunity value is required';
@@ -68,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   } else {
     $error = implode(', ', $errors);
+  }
   }
 }
 ?>
@@ -348,6 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="form-container">
   <form method="POST" id="opportunityForm">
+    <?php renderCSRFInput(); ?>
     
     <div class="form-section">
       <div class="form-section-title">

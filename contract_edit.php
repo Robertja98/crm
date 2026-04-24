@@ -164,6 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php endif; ?>
 <div class="form-container">
     <form method="POST" id="contractForm">
+        <?php renderCSRFInput(); ?>
         <!-- Contact & Customer Information -->
         <div class="form-section">
             <div class="form-section-title">👤 Contact & Customer Information</div>

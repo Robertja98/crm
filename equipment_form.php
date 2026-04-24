@@ -237,6 +237,9 @@ if ($edit_mode && $equipment) {
 
 $requestMethod = strtoupper((string) ($_SERVER['REQUEST_METHOD'] ?? 'GET'));
 if ($requestMethod === 'POST') {
+  if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+    $errors[] = 'CSRF validation failed';
+  } else {
   $formData = $_POST;
   $equipmentId = trim((string) ($_POST['equipment_id'] ?? ''));
   $isEdit = isset($_POST['edit_mode']) && $_POST['edit_mode'] === '1';
@@ -384,9 +387,10 @@ if ($requestMethod === 'POST') {
       $errors[] = $e->getMessage();
     }
   }
+}
 
-  $componentMap = [];
-  foreach ($componentSlots as $slot => $label) {
+// Render form data for component slots
+foreach ($componentSlots as $slot => $label) {
     $itemId = trim((string) ($_POST['comp_item_' . $slot] ?? ''));
     $qty = trim((string) ($_POST['comp_qty_' . $slot] ?? '1'));
     if ($itemId !== '') {
@@ -497,6 +501,7 @@ require_once 'layout_start.php';
   <?php endif; ?>
 
   <form method="POST">
+    <?php renderCSRFInput(); ?>
     <?php if ($edit_mode): ?>
       <input type="hidden" name="edit_mode" value="1">
     <?php endif; ?>

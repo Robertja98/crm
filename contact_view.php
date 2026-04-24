@@ -578,6 +578,7 @@ function getContactOpportunities($contact, $opportunities) {
     <div class="accordion-content">
       <div class="accordion-body">
         <form method="post">
+          <?php renderCSRFInput(); ?>
           <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['contact_id']) ?>">
 
           <!-- Quick Status Section -->

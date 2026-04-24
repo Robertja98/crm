@@ -46,6 +46,9 @@ if (!$customer) {
 
 // ── Handle POST updates ──────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        echo '<div class="alert alert-danger">CSRF validation failed</div>';
+    } else {
     $conn = get_mysql_connection();
     
     if ($_POST['action'] === 'update_customer') {
@@ -67,6 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     $conn->close();
     header("Location: customer_view.php?id=" . urlencode($customerId));
     exit;
+    }
 }
 
 // ── Fetch equipment for this customer ────────────────────────────────────────
@@ -464,6 +468,7 @@ $conn->close();
     <!-- ── CUSTOMER INFO FORM (Editable inline) ────────────────────────────────── -->
     <div class="section-header">📋 Customer Information</div>
     <form method="post">
+        <?php renderCSRFInput(); ?>
         <input type="hidden" name="action" value="update_customer">
         <div class="form-grid">
             <?php foreach ($customerSchema as $field): ?>

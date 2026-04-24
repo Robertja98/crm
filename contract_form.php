@@ -102,6 +102,11 @@ $equipment = fetch_mysql('equipment', require __DIR__ . '/equipment_schema.php')
 
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        echo '<div style="color:red;"><b>CSRF validation failed.</b></div>';
+        exit;
+    }
+    
     // Generate contract ID (find max contract_id in DB)
     $conn = get_mysql_connection();
     $result = $conn->query("SELECT COUNT(*) AS cnt FROM contracts");
@@ -359,6 +364,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <div class="form-container">
     <form method="POST" id="contractForm">
+        <?php renderCSRFInput(); ?>
         <!-- Customer & (Optional) Contact Information -->
         <div class="form-section">
             <div class="form-section-title">🏢 Customer & (Optional) Contact</div>
