@@ -383,10 +383,6 @@ $openFieldPanel = !empty($fieldSaveError) ||
                             <i class="bi bi-building"></i> Convert to Customer
                           </button>
                         </form>
-                      <?php else: ?>
-                        <a href="update_address.php?customer_id=<?= urlencode($customerId) ?>" class="btn btn-sm btn-outline-info ms-1" title="Update company address">
-                          <i class="bi bi-geo-alt"></i> Update Address
-                        </a>
                       <?php endif; ?>
                     <?php endif; ?>
                   </div>
