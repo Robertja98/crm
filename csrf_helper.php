@@ -4,11 +4,46 @@
  * Prevents Cross-Site Request Forgery attacks
  */
 
+/**
+ * Ensure session is available for CSRF checks, matching auth session settings when possible.
+ */
+function ensureCSRFSessionStarted() {
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        return;
+    }
+
+    $authConfigPath = __DIR__ . '/simple_auth/config.php';
+    if (file_exists($authConfigPath)) {
+        $config = require $authConfigPath;
+        $security = $config['security'] ?? [];
+
+        if (!empty($security['session_name'])) {
+            session_name($security['session_name']);
+        }
+
+        if (PHP_VERSION_ID >= 70300) {
+            session_set_cookie_params([
+                'lifetime' => $security['session_lifetime'] ?? 86400,
+                'path' => '/',
+                'domain' => '',
+                'secure' => $security['session_cookie_secure'] ?? false,
+                'httponly' => $security['session_cookie_httponly'] ?? true,
+                'samesite' => $security['session_cookie_samesite'] ?? 'Lax',
+            ]);
+        }
+    }
+
+    if (!headers_sent()) {
+        session_start();
+    }
+}
+
 
 /**
  * Initialize CSRF token in session
  */
 function initializeCSRFToken() {
+    ensureCSRFSessionStarted();
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
@@ -19,6 +54,7 @@ function initializeCSRFToken() {
  * Get the current CSRF token
  */
 function getCSRFToken() {
+    ensureCSRFSessionStarted();
     initializeCSRFToken();
     return $_SESSION['csrf_token'];
 }
@@ -27,6 +63,7 @@ function getCSRFToken() {
  * Verify CSRF token from POST/REQUEST
  */
 function verifyCSRFToken($token) {
+    ensureCSRFSessionStarted();
     if (empty($_SESSION['csrf_token'])) {
         return false;
     }

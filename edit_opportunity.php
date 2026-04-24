@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
           $error = 'Failed to update opportunity.';
         }
-    } else {
+      } elseif (!isset($error)) {
         $error = implode(', ', $errors);
     }
 }
