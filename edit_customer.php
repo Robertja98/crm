@@ -1,6 +1,7 @@
 <?php
 include_once(__DIR__ . '/layout_start.php');
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 $schema = require __DIR__ . '/customer_schema.php';
 $errors = [];
 $success = false;
@@ -19,6 +20,9 @@ if (isset($_GET['customer_id'])) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['customer_id'])) {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        $errors[] = 'CSRF validation failed';
+    } else {
     $customerId = trim($_POST['customer_id']);
     $conn = get_mysql_connection();
     $fields = [];
@@ -55,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['customer_id'])) {
     $customer = $result ? $result->fetch_assoc() : [];
     $stmt->close();
     $conn->close();
+    }
 }
 ?>
 
@@ -75,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['customer_id'])) {
 
   <?php if (!empty($customer)): ?>
   <form method="POST">
+    <?php renderCSRFInput(); ?>
     <input type="hidden" name="customer_id" value="<?= htmlspecialchars($customer['customer_id']) ?>">
     <fieldset style="margin-bottom:20px;">
       <legend><strong>Main Customer Info</strong></legend>

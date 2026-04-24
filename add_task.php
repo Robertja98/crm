@@ -1,8 +1,13 @@
 
 <?php
 require_once 'tasks_mysql.php';
+require_once 'csrf_helper.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        echo "<div style='color:red;'><strong>Error:</strong> CSRF validation failed</div><a href='index.php'>Go back</a>";
+        exit;
+    }
     $title = trim($_POST['title']);
     $due_date = $_POST['due_date'];
     $status = $_POST['status'];

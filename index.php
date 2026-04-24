@@ -4,6 +4,7 @@ header('Content-Type: text/html; charset=UTF-8');
 
 require_once 'layout_start.php';
 require_once 'tasks_mysql.php';
+require_once 'csrf_helper.php';
 
 $tasks = fetch_tasks_mysql();
 
@@ -211,6 +212,7 @@ if ($nextMonth > 12) {
 </form>
 
 <form method="POST" action="add_task.php" class="calendar-add-form" onsubmit="return validateForm()">
+  <?php renderCSRFInput(); ?>
   <input type="text" name="title" id="title" placeholder="Task Title" required>
   <input type="date" name="due_date" id="due_date" required>
   <select name="status" id="status" required>

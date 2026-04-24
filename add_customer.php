@@ -1,6 +1,7 @@
 <?php
 include_once(__DIR__ . '/layout_start.php');
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 
 $schema     = require __DIR__ . '/customer_schema.php';
 $itemFields = require __DIR__ . '/customer_item_config.php';
@@ -21,6 +22,9 @@ $conn->close();
 
 // ── Handle POST ──────────────────────────────────────────────────────────────
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+    $errors[] = 'CSRF validation failed';
+  } else {
   $contactId = trim($_POST['contact_id'] ?? $_GET['contact_id'] ?? '');
 
   if ($contactId === '') {
@@ -109,6 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $success = true;
     }
   }
+  }
 }
 
 // ── Load contact for display ──────────────────────────────────────────────────
@@ -153,6 +158,7 @@ $fieldLabels = [
   <?php endif; ?>
 
   <form method="POST">
+    <?php renderCSRFInput(); ?>
     <!-- Customer Info -->
     <fieldset style="margin-bottom:20px;">
       <legend><strong>Customer Info</strong></legend>
