@@ -4,11 +4,14 @@ function load_env($envFile = __DIR__ . '/.env') {
     if (!file_exists($envFile)) return;
     $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
-        if (strpos(trim($line), '#') === 0) continue;
+        $line = trim($line);
+        if ($line === '' || strpos($line, '#') === 0) continue;
+        if (strpos($line, '=') === false) continue;
         list($name, $value) = array_map('trim', explode('=', $line, 2));
-        if (!array_key_exists($name, $_ENV)) {
-            putenv("$name=$value");
-            $_ENV[$name] = $value;
-        }
+        if ($name === '') continue;
+
+        // Always apply current .env values so stale process/system env does not override local config.
+        putenv("$name=$value");
+        $_ENV[$name] = $value;
     }
 }

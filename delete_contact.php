@@ -30,6 +30,7 @@ $deleted_contact = null;
 
 try {
     $conn = get_mysql_connection();
+    $conn->begin_transaction();
     // Find and capture contact before deletion (for audit log)
     $stmt = $conn->prepare("SELECT * FROM contacts WHERE contact_id = ? LIMIT 1");
     $stmt->bind_param('s', $idToDelete);
@@ -39,10 +40,20 @@ try {
     $stmt->close();
 
     if ($deleted_contact) {
+        // Detach linked customer records first to satisfy FK fk_customers_contact_id.
+        $unlinkStmt = $conn->prepare("UPDATE customers SET contact_id = NULL WHERE contact_id = ?");
+        $unlinkStmt->bind_param('s', $idToDelete);
+        if (!$unlinkStmt->execute()) {
+            throw new Exception('Failed to unlink customer records: ' . $unlinkStmt->error);
+        }
+        $unlinkStmt->close();
+
         // Delete the contact
         $delStmt = $conn->prepare("DELETE FROM contacts WHERE contact_id = ?");
         $delStmt->bind_param('s', $idToDelete);
-        $delStmt->execute();
+        if (!$delStmt->execute()) {
+            throw new Exception('Failed to delete contact: ' . $delStmt->error);
+        }
         $delStmt->close();
 
         auditDeleteContact($deleted_contact);
@@ -51,6 +62,7 @@ try {
             'name' => ($deleted_contact['first_name'] ?? '') . ' ' . ($deleted_contact['last_name'] ?? ''),
         ]);
     }
+    $conn->commit();
     $conn->close();
 
     // Redirect to contacts_list.php (PHP header, JS, and HTML fallback)
@@ -64,15 +76,14 @@ try {
         exit;
     }
 } catch (Exception $e) {
+    if (isset($conn) && $conn instanceof mysqli) {
+        $conn->rollback();
+    }
     showError('Error deleting contact', htmlspecialchars($e->getMessage()));
     logError('Contact deletion failed', [
         'id' => $idToDelete,
         'exception' => $e->getMessage(),
     ]);
-    // ✅ AUDIT: Log failed deletion
-    if ($deleted_contact) {
-        auditDeleteContact($deleted_contact);
-    }
     echo "<p><a href='contacts_list.php'>Go back</a></p>";
     exit;
 }

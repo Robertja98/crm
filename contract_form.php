@@ -135,6 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'contract_status' => 'Active',
         'equipment_type' => $_POST['equipment_type'],
         'monthly_fee' => $monthlyFee,
+        'regen_fee' => isset($_POST['regen_fee']) && $_POST['regen_fee'] !== '' ? (float)$_POST['regen_fee'] : null,
+        'tank_sale_price' => isset($_POST['tank_sale_price']) && $_POST['tank_sale_price'] !== '' ? (float)$_POST['tank_sale_price'] : null,
         'annual_value' => $annualValue,
         'payment_frequency' => $_POST['payment_frequency'],
         'contract_term' => $contractTerm,
@@ -145,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'notice_period' => $noticePeriod,
         'evoqua_account' => $_POST['evoqua_account'] ?? '',
         'evoqua_contract' => $_POST['evoqua_contract'] ?? '',
-        'equipment_ids' => $_POST['equipment_ids'] ?? '',
+        'equipment_ids' => implode(',', array_filter(array_map('trim', (array)($_POST['equipment_ids'] ?? [])))),
         'service_frequency' => $_POST['service_frequency'],
         'last_service_date' => valid_date_or_null($_POST['last_service_date'] ?? ''),
         'next_service_date' => valid_date_or_null($_POST['next_service_date'] ?? ''),
@@ -408,13 +410,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     contactSelect.appendChild(opt);
                 });
             }
-            customerSelect.addEventListener('change', updateContactOptions);
-            // On page load, if a customer is preselected, populate contacts
-            if (customerSelect.value) updateContactOptions();
+            customerSelect.addEventListener('change', function() {
+                updateContactOptions();
+                updateTankOptions();
+            });
+            // On page load, if a customer is preselected, populate contacts and tanks
+            if (customerSelect.value) { updateContactOptions(); updateTankOptions(); }
             </script>
             </div>
         </div>
         
+        <!-- Tank Ownership -->
+        <div class="form-section">
+            <div class="form-section-title">🛢️ Tank Ownership & Fees</div>
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="equipment_ids">Select Tank(s) on this Contract</label>
+                    <select name="equipment_ids[]" id="equipment_ids" multiple style="min-height:80px;">
+                        <option value="">— Select a customer first —</option>
+                    </select>
+                    <div class="form-help">Hold Ctrl/Cmd to select multiple tanks</div>
+                </div>
+
+                <div class="form-group" id="ownership_display" style="display:none;">
+                    <label>Tank Ownership Type</label>
+                    <div id="ownership_badge" style="padding:10px 14px;border-radius:8px;font-weight:700;font-size:14px;display:inline-block;"></div>
+                    <div class="form-help" id="ownership_help"></div>
+                </div>
+
+                <!-- Rental: monthly fee + regen fee -->
+                <div class="form-group" id="row_monthly_fee">
+                    <label for="monthly_fee">Monthly Rental Fee ($) *</label>
+                    <input type="number" name="monthly_fee" id="monthly_fee" step="0.01" min="0" onchange="calculateAnnualValue()">
+                    <div class="form-help">Charged monthly for tank rental</div>
+                </div>
+
+                <div class="form-group" id="row_regen_fee">
+                    <label for="regen_fee">Regeneration Fee ($ / service)</label>
+                    <input type="number" name="regen_fee" id="regen_fee" step="0.01" min="0">
+                    <div class="form-help">Fee charged per regeneration/exchange visit</div>
+                </div>
+
+                <!-- Purchased: one-time tank sale -->
+                <div class="form-group" id="row_tank_sale_price" style="display:none;">
+                    <label for="tank_sale_price">Tank Sale Price ($)</label>
+                    <input type="number" name="tank_sale_price" id="tank_sale_price" step="0.01" min="0">
+                    <div class="form-help">One-time sale price for the tank</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="annual_value">Annual Contract Value ($)</label>
+                    <div class="calculated-value" id="annual_value_display">$0.00</div>
+                    <div class="form-help">Calculated automatically from monthly fee × 12</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Contract Details -->
         <div class="form-section">
             <div class="form-section-title">📄 Contract Details</div>
@@ -428,7 +479,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="Upsell">Upsell</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="equipment_type">Equipment Type *</label>
                     <select name="equipment_type" id="equipment_type" required>
@@ -441,19 +492,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                
-                <div class="form-group">
-                    <label for="monthly_fee">Monthly Fee ($) *</label>
-                    <input type="number" name="monthly_fee" id="monthly_fee" step="0.01" min="0" required 
-                           onchange="calculateAnnualValue()">
-                </div>
-                
-                <div class="form-group">
-                    <label for="annual_value">Annual Contract Value ($)</label>
-                    <div class="calculated-value" id="annual_value_display">$0.00</div>
-                    <div class="form-help">Calculated automatically</div>
-                </div>
-                
+
                 <div class="form-group">
                     <label for="payment_frequency">Payment Frequency *</label>
                     <select name="payment_frequency" id="payment_frequency" required>
@@ -462,7 +501,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="Annual">Annual</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="contract_term">Contract Term (Months) *</label>
                     <select name="contract_term" id="contract_term" required onchange="calculateDates()">
@@ -569,7 +608,103 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <script>
-function calculateAnnualValue() {
+// Pass equipment data to JS
+const allEquipment = <?= json_encode(array_map(fn($e) => [
+    'equipment_id' => $e['equipment_id'],
+    'customer_id'  => $e['customer_id'],
+    'serial_number'=> $e['serial_number'] ?? '',
+    'tank_size'    => $e['tank_size'] ?? '',
+    'resin_type'   => $e['resin_type'] ?? '',
+    'ownership'    => $e['ownership'] ?? '',
+], $equipment)) ?>;
+
+const ownershipColors = {
+    'rental':          { bg:'#DBEAFE', color:'#1D4ED8', label:'Rental — Monthly Fee + Regen Fee' },
+    'customer-owned':  { bg:'#D1FAE5', color:'#065F46', label:'Customer-Owned — Regen Fee Only' },
+    'purchased':       { bg:'#FEF3C7', color:'#92400E', label:'Purchased — Tank Sale + Regen Fee' },
+};
+
+function updateTankOptions() {
+    const customerId = document.getElementById('customer_id').value;
+    const sel = document.getElementById('equipment_ids');
+    sel.innerHTML = '';
+    const tanks = allEquipment.filter(e => String(e.customer_id) === String(customerId));
+    if (!tanks.length) {
+        sel.innerHTML = '<option value="" disabled>No tanks found — add tanks to this customer first</option>';
+        setOwnershipUI(null);
+        return;
+    }
+    tanks.forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t.equipment_id;
+        opt.dataset.ownership = t.ownership || '';
+        let label = t.equipment_id;
+        if (t.serial_number) label += ' — S/N: ' + t.serial_number;
+        if (t.tank_size)     label += ' (' + t.tank_size + ')';
+        if (t.ownership)     label += ' [' + t.ownership + ']';
+        else                 label += ' ⚠️ no ownership set';
+        opt.textContent = label;
+        sel.appendChild(opt);
+    });
+    // Auto-select first and trigger ownership UI
+    sel.options[0].selected = true;
+    setOwnershipUI(tanks[0].ownership || null);
+}
+
+document.getElementById('equipment_ids').addEventListener('change', function() {
+    const selected = Array.from(this.selectedOptions);
+    // Use the ownership of the first selected tank
+    const ownership = selected.length ? selected[0].dataset.ownership : null;
+    setOwnershipUI(ownership);
+});
+
+function setOwnershipUI(ownership) {
+    const badge   = document.getElementById('ownership_badge');
+    const help    = document.getElementById('ownership_help');
+    const display = document.getElementById('ownership_display');
+    const rowMonthly   = document.getElementById('row_monthly_fee');
+    const rowRegen     = document.getElementById('row_regen_fee');
+    const rowSale      = document.getElementById('row_tank_sale_price');
+
+    if (!ownership) {
+        display.style.display = '';
+        badge.textContent = '⚠️ Ownership not set on this tank';
+        badge.style.background = '#FEF3C7';
+        badge.style.color = '#92400E';
+        help.innerHTML = 'Go to <a href="equipment_list.php" target="_blank">Equipment</a> and set the ownership on this tank before creating a contract.';
+        rowMonthly.style.display = 'none';
+        rowRegen.style.display   = 'none';
+        rowSale.style.display    = 'none';
+        return;
+    }
+
+    const info = ownershipColors[ownership] || { bg:'#F3F4F6', color:'#374151', label: ownership };
+    badge.textContent = info.label;
+    badge.style.background = info.bg;
+    badge.style.color = info.color;
+    display.style.display = '';
+
+    // Show/hide fee fields based on ownership
+    if (ownership === 'rental') {
+        rowMonthly.style.display = '';
+        rowRegen.style.display   = '';
+        rowSale.style.display    = 'none';
+        document.getElementById('monthly_fee').required = true;
+    } else if (ownership === 'customer-owned') {
+        rowMonthly.style.display = 'none';
+        rowRegen.style.display   = '';
+        rowSale.style.display    = 'none';
+        document.getElementById('monthly_fee').required = false;
+        document.getElementById('monthly_fee').value = '';
+    } else if (ownership === 'purchased') {
+        rowMonthly.style.display = 'none';
+        rowRegen.style.display   = '';
+        rowSale.style.display    = '';
+        document.getElementById('monthly_fee').required = false;
+        document.getElementById('monthly_fee').value = '';
+    }
+    calculateAnnualValue();
+}
     const monthlyFee = parseFloat(document.getElementById('monthly_fee').value) || 0;
     const annualValue = monthlyFee * 12;
     document.getElementById('annual_value_display').textContent = '$' + annualValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');

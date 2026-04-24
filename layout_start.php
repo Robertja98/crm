@@ -2,14 +2,6 @@
 // Force correct session name before any output
 require_once __DIR__ . '/csrf_helper.php';
 initializeCSRFToken();
-// Debug output for session and CSRF
-if (!headers_sent()) {
-    echo '<div style="background:#eef; color:#333; padding:8px; margin-bottom:8px; font-size:12px;">';
-    echo '<strong>Debug:</strong> Session status: ' . session_status() . '<br>';
-    echo 'Session name: ' . session_name() . '<br>';
-    echo 'CSRF token in session: <code>' . htmlspecialchars($_SESSION['csrf_token'] ?? 'unset') . '</code><br>';
-    echo '</div>';
-}
 // Layout start code here
 require_once __DIR__ . '/simple_auth/middleware.php';
 require_once __DIR__ . '/backup_handler.php';

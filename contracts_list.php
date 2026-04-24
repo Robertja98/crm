@@ -127,7 +127,8 @@ foreach ($contracts as &$contract) {
 .btn-primary { background: linear-gradient(135deg, #10B981 0%, #059669 100%); color: white; }
 .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
 .contracts-table { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.contracts-table table { width: 100%; border-collapse: collapse; }
+.contracts-table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.contracts-table table { width: 100%; min-width: 900px; border-collapse: collapse; }
 .contracts-table th { background: #F9FAFB; padding: 16px; text-align: left; font-size: 12px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #E5E7EB; }
 .contracts-table td { padding: 16px; border-bottom: 1px solid #F3F4F6; font-size: 14px; }
 .contracts-table tr:hover { background: #F9FAFB; }
@@ -207,6 +208,7 @@ foreach ($contracts as &$contract) {
 
 <!-- Contracts Table -->
 <div class="contracts-table">
+<div class="contracts-table-scroll">
     <?php if (empty($contracts)): ?>
         <div class="empty-state">
             <div class="empty-state-icon">📋</div>
@@ -298,4 +300,5 @@ foreach ($contracts as &$contract) {
             </tbody>
         </table>
     <?php endif; ?>
-</div>
+</div><!-- end contracts-table-scroll -->
+</div><!-- end contracts-table -->

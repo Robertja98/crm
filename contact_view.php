@@ -14,6 +14,18 @@ require_once 'db_mysql.php';
 // Explicitly create the database connection after all includes
 $conn = get_mysql_connection();
 
+function redirect_safely(string $url): void {
+  if (!headers_sent()) {
+    header('Location: ' . $url);
+    exit;
+  }
+
+  $escaped = htmlspecialchars($url, ENT_QUOTES, 'UTF-8');
+  echo '<script>window.location.href=' . json_encode($url) . ';</script>';
+  echo '<noscript><meta http-equiv="refresh" content="0;url=' . $escaped . '"></noscript>';
+  exit;
+}
+
 // Handle contact update form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
     $contactId = mysqli_real_escape_string($conn, $_POST['contact_id']);
@@ -39,8 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_id'])) {
     }
     // Reload the page to show updated info and avoid resubmission
     if ($saveSuccess) {
-        header("Location: contact_view.php?id=" . urlencode($contactId) . "&updated=1");
-        exit;
+      redirect_safely("contact_view.php?id=" . urlencode($contactId) . "&updated=1");
     }
 }
 
@@ -103,7 +114,10 @@ if (!$contact) {
 
 // Load opportunities for this contact
 $opportunities = [];
-$opportunitySchema = ['id', 'contact_id', 'value', 'stage', 'probability', 'expected_close'];
+$opportunitySchema = require 'opportunity_schema.php';
+$opportunitySchema = is_array($opportunitySchema) && !empty($opportunitySchema)
+  ? $opportunitySchema
+  : ['opportunity_id', 'contact_id', 'value', 'stage', 'probability', 'expected_close'];
 $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $opportunitySchema));
 $safeContactId = mysqli_real_escape_string($conn, $contactId);
 $result = mysqli_query($conn, "SELECT $fields FROM opportunities WHERE contact_id = '$safeContactId'");
@@ -114,11 +128,10 @@ if ($result) {
   mysqli_free_result($result);
 }
 
-// Find orphaned opportunities (missing contact_id, but possibly matching company)
+// Find orphaned opportunities (missing contact_id)
 $orphanedOpportunities = [];
 if (!empty($contact['company'])) {
-  $safeCompany = mysqli_real_escape_string($conn, $contact['company']);
-  $result = mysqli_query($conn, "SELECT * FROM opportunities WHERE (contact_id IS NULL OR contact_id = '') AND company_id = '" . $safeCompany . "'");
+  $result = mysqli_query($conn, "SELECT * FROM opportunities WHERE contact_id IS NULL OR contact_id = ''");
   if ($result) {
     while ($row = mysqli_fetch_assoc($result)) {
       $orphanedOpportunities[] = $row;
@@ -131,10 +144,9 @@ if (!empty($contact['company'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['link_opportunity_id'], $_POST['contact_id'])) {
     $oppId = (int)$_POST['link_opportunity_id'];
     $contactId = (int)$_POST['contact_id'];
-    $sql = "UPDATE opportunities SET contact_id = '" . $contactId . "' WHERE id = '" . $oppId . "'";
+  $sql = "UPDATE opportunities SET contact_id = '" . $contactId . "' WHERE opportunity_id = '" . $oppId . "'";
     mysqli_query($conn, $sql);
-    header("Location: contact_view.php?id=" . urlencode($contactId) . "&linked=1");
-    exit;
+    redirect_safely("contact_view.php?id=" . urlencode($contactId) . "&linked=1");
 }
 
 // NOTE: If a discussion_log entry's contact_id does not exist in the contacts table,
@@ -147,11 +159,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['link_opportunity_id']
 // Load discussions for this contact by contact_id or manual_contact_id
 $discussions = [];
 $discussionSchema = require 'discussion_schema.php';
-$fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $discussionSchema));
-$fields = '`id`, ' . $fields . ', `manual_contact_id`'; // Ensure id and manual_contact_id are included
+$desiredDiscussionFields = array_values(array_unique(array_merge(['id'], (array) $discussionSchema, ['manual_contact_id'])));
+$availableDiscussionFields = [];
+$columnsResult = mysqli_query($conn, "SHOW COLUMNS FROM discussion_log");
+if ($columnsResult) {
+  while ($column = mysqli_fetch_assoc($columnsResult)) {
+    $name = $column['Field'] ?? '';
+    if ($name !== '') {
+      $availableDiscussionFields[] = $name;
+    }
+  }
+  mysqli_free_result($columnsResult);
+}
+
+$selectDiscussionFields = array_values(array_filter($desiredDiscussionFields, function($field) use ($availableDiscussionFields) {
+  return in_array($field, $availableDiscussionFields, true);
+}));
+
+if (empty($selectDiscussionFields)) {
+  $selectDiscussionFields = ['contact_id', 'author', 'timestamp', 'entry_text', 'linked_opportunity_id', 'visibility'];
+}
+
+$fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $selectDiscussionFields));
 
 $safeContactId = mysqli_real_escape_string($conn, $contactId);
-$discussionQuery = "SELECT $fields FROM discussion_log WHERE contact_id = '$safeContactId' OR manual_contact_id = '$safeContactId' ORDER BY timestamp DESC";
+$whereClauses = ["contact_id = '$safeContactId'"];
+if (in_array('manual_contact_id', $availableDiscussionFields, true)) {
+  $whereClauses[] = "manual_contact_id = '$safeContactId'";
+}
+$discussionQuery = "SELECT $fields FROM discussion_log WHERE " . implode(' OR ', $whereClauses) . " ORDER BY timestamp DESC";
 $result = mysqli_query($conn, $discussionQuery);
 if ($result) {
   $seen = [];
@@ -651,8 +687,9 @@ function getContactOpportunities($contact, $opportunities) {
           <div class="section-title">💼 Linked Opportunities</div>
           <?php if (!empty($contactOpportunities)): ?>
             <?php foreach ($contactOpportunities as $opp): ?>
+              <?php $oppId = $opp['opportunity_id'] ?? $opp['id'] ?? ''; ?>
               <div class="opportunity">
-                <div class="opportunity-title">Opportunity #<?= htmlspecialchars($opp['id']) ?></div>
+                <div class="opportunity-title">Opportunity #<?= htmlspecialchars($oppId) ?></div>
                 <div class="opportunity-details">
                   <strong>Stage:</strong> <?= htmlspecialchars($opp['stage'] ?? '—') ?> 
                   (<?= htmlspecialchars($opp['probability'] ?? '0') ?>%)
@@ -680,10 +717,11 @@ function getContactOpportunities($contact, $opportunities) {
           <div class="section-title" style="color:#d32f2f;">Orphaned Opportunities (Admin Only)</div>
           <p style="font-size:13px;">The following opportunities match this company but are not linked to any contact. You can link them below:</p>
           <?php foreach ($orphanedOpportunities as $opp): ?>
+            <?php $oppId = $opp['opportunity_id'] ?? $opp['id'] ?? ''; ?>
             <form method="post" style="margin-bottom:10px;display:inline-block;">
-              <input type="hidden" name="link_opportunity_id" value="<?= htmlspecialchars($opp['id']) ?>">
+              <input type="hidden" name="link_opportunity_id" value="<?= htmlspecialchars($oppId) ?>">
               <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['contact_id']) ?>">
-              <span style="font-weight:600;">Opportunity #<?= htmlspecialchars($opp['id']) ?></span> - <?= htmlspecialchars($opp['stage']) ?> ($<?= htmlspecialchars($opp['value']) ?>)
+              <span style="font-weight:600;">Opportunity #<?= htmlspecialchars($oppId) ?></span> - <?= htmlspecialchars($opp['stage']) ?> ($<?= htmlspecialchars($opp['value']) ?>)
               <button type="submit" class="btn-primary" style="margin-left:10px;">Link to this Contact</button>
             </form>
           <?php endforeach; ?>
@@ -735,7 +773,8 @@ function getContactOpportunities($contact, $opportunities) {
               <select name="linked_opportunity_id" style="padding: 8px; border: 1px solid #ddd; border-radius: 4px; width: 100%; font-family: inherit; font-size: 13px;">
                 <option value="">— No opportunity</option>
                 <?php foreach ($contactOpportunities as $opp): ?>
-                  <option value="<?= htmlspecialchars($opp['id']) ?>">Opportunity #<?= htmlspecialchars($opp['id']) ?> (<?= htmlspecialchars($opp['stage']) ?>)</option>
+                  <?php $oppId = $opp['opportunity_id'] ?? $opp['id'] ?? ''; ?>
+                  <option value="<?= htmlspecialchars($oppId) ?>">Opportunity #<?= htmlspecialchars($oppId) ?> (<?= htmlspecialchars($opp['stage']) ?>)</option>
                 <?php endforeach; ?>
               </select>
             </div>

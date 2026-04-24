@@ -57,7 +57,30 @@ if (!$contract) {
 
 // 3. Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Use posted values, fallback to DB values
+
+    // ── Delete ──────────────────────────────────────────────────────────────
+    if (!empty($_POST['delete_contract'])) {
+        $conn = get_mysql_connection();
+        // Audit log
+        $old = json_encode($contract);
+        $logStmt = $conn->prepare(
+            'INSERT INTO audit_log (user_id, action, entity_type, entity_id, changes, summary, timestamp) VALUES (?, "DELETE", "contracts", ?, ?, "Contract deleted", NOW())'
+        );
+        $uid = (string)($_SESSION['user_id'] ?? 0);
+        $logStmt->bind_param('sss', $uid, $contractId, $old);
+        $logStmt->execute();
+        $logStmt->close();
+        // Delete
+        $stmt = $conn->prepare('DELETE FROM contracts WHERE contract_id = ?');
+        $stmt->bind_param('s', $contractId);
+        $stmt->execute();
+        $stmt->close();
+        $conn->close();
+        header('Location: contracts_list.php?deleted=1');
+        exit;
+    }
+
+    // ── Update ───────────────────────────────────────────────────────────────
     $fields = [];
     foreach ($contractSchema as $field) {
         if ($field === 'contract_id') {
@@ -133,8 +156,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <h1>✏️ Edit Service Contract</h1>
     <p>Update SDI service agreement details</p>
 </div>
-            <button type="submit" name="delete_contract" value="1" class="btn btn-danger" style="background:#EF4444;color:white;" onclick="return confirm('Are you sure you want to delete this contract? This action cannot be undone.');">🗑️ Delete</button>
-        </div>
 
 <?php if (!empty($error)): ?>
     <div style="background: #FEE2E2; border: 2px solid #EF4444; color: #991B1B; padding: 16px; border-radius: 8px; margin-bottom: 24px;">
@@ -298,8 +319,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="form-actions">
             <button type="submit" class="btn btn-primary">💾 Save Changes</button>
             <a href="contracts_list.php" class="btn btn-secondary">Cancel</a>
-            <button type="submit" name="delete_contract" value="1" class="btn btn-danger" style="background:#EF4444;color:white;" onclick="return confirm('Are you sure you want to delete this contract? This action cannot be undone.');">🗑️ Delete</button>
         </div>
+    </form>
+
+    <!-- Delete (separate form to avoid submitting edit fields) -->
+    <form method="POST" style="margin-top:12px;" onsubmit="return confirm('Permanently delete this contract? This cannot be undone.');">
+        <input type="hidden" name="delete_contract" value="1">
+        <button type="submit" class="btn btn-danger" style="background:#EF4444;color:white;">🗑️ Delete Contract</button>
     </form>
 </div>
 <script>
@@ -308,24 +334,7 @@ function calculateAnnualValue() {
     const annualValue = monthlyFee * 12;
     document.getElementById('annual_value_display').textContent = '$' + annualValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
-    if (isset($_POST['delete_contract']) && $_POST['delete_contract'] == '1') {
-        // Delete contract
-        $conn = get_mysql_connection();
-        $stmt = $conn->prepare("DELETE FROM contracts WHERE contract_id = ?");
-        $stmt->bind_param('s', $contractId);
-        $result = $stmt->execute();
-        if ($result) {
-            $stmt->close();
-            $conn->close();
-            if (ob_get_length()) ob_end_clean();
-            header('Location: contracts_list.php?deleted=1');
-            exit;
-        } else {
-            $error = 'Failed to delete contract: ' . htmlspecialchars($stmt->error);
-        }
-    } else {
-        // ...existing code for update...
-        $fields = [];
+    $fields = [];
         foreach ($contractSchema as $field) {
             if ($field === 'contract_id') {
                 $fields[$field] = $contractId;

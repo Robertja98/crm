@@ -48,11 +48,38 @@ $current_page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 
 // Handle query and sort
 $query = strtolower(trim($_GET['query'] ?? ''));
+$field = $_GET['field'] ?? '';
 $sortFields = explode(',', $_GET['sort'] ?? '');
 $sortDirection = $_GET['direction'] ?? 'asc';
 $activeSort = array_flip($sortFields);
 
 // Load contacts from MySQL
+
+function build_contacts_search_where(mysqli $conn, array $schema, string $query, string $field): string {
+  if ($query === '') {
+    return '';
+  }
+
+  $words = preg_split('/\s+/', $query);
+  if ($field !== '' && in_array($field, $schema, true)) {
+    $searchConditions = [];
+    foreach ($words as $word) {
+      $searchConditions[] = "LOWER(`$field`) LIKE '%" . $conn->real_escape_string($word) . "%'";
+    }
+    return ' WHERE ' . implode(' AND ', $searchConditions);
+  }
+
+  $wordConds = [];
+  foreach ($words as $word) {
+    $fieldConds = [];
+    foreach ($schema as $f) {
+      $fieldConds[] = "LOWER(`$f`) LIKE '%" . $conn->real_escape_string($word) . "%'";
+    }
+    $wordConds[] = '(' . implode(' OR ', $fieldConds) . ')';
+  }
+
+  return ' WHERE ' . implode(' AND ', $wordConds);
+}
 
 function fetch_contacts_mysql($schema) {
   $conn = get_mysql_connection();
@@ -80,29 +107,7 @@ function fetch_contacts_mysql($schema) {
   // Search logic
   $query = strtolower(trim($_GET['query'] ?? ''));
   $field = $_GET['field'] ?? '';
-  $where = '';
-  if ($query !== '') {
-    $words = preg_split('/\s+/', $query);
-    if ($field && in_array($field, $schema)) {
-      // Search in specific field, all words must match
-      $searchConditions = [];
-      foreach ($words as $word) {
-        $searchConditions[] = "LOWER(`$field`) LIKE '%" . $conn->real_escape_string($word) . "%'";
-      }
-      $where = ' WHERE ' . implode(' AND ', $searchConditions);
-    } else {
-      // Search across all fields, all words must match somewhere
-      $wordConds = [];
-      foreach ($words as $word) {
-        $fieldConds = [];
-        foreach ($schema as $f) {
-          $fieldConds[] = "LOWER(`$f`) LIKE '%" . $conn->real_escape_string($word) . "%'";
-        }
-        $wordConds[] = '(' . implode(' OR ', $fieldConds) . ')';
-      }
-      $where = ' WHERE ' . implode(' AND ', $wordConds);
-    }
-  }
+  $where = build_contacts_search_where($conn, $schema, $query, $field);
   $sql = "SELECT $fields FROM contacts$where$orderBy LIMIT $limit OFFSET $offset";
   global $debugMode;
   global $debugOutput;
@@ -149,7 +154,8 @@ foreach ($contacts as $c) {
 // Pagination calculations
 $total_contacts = 0;
 $conn = get_mysql_connection();
-$count_result = $conn->query("SELECT COUNT(*) as cnt FROM contacts");
+$countWhere = build_contacts_search_where($conn, $schema, $query, $field);
+$count_result = $conn->query("SELECT COUNT(*) as cnt FROM contacts$countWhere");
 if ($count_result) {
   $row = $count_result->fetch_assoc();
   $total_contacts = (int)($row['cnt'] ?? 0);
@@ -206,8 +212,21 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
   <div class="d-flex flex-wrap align-items-center mb-3 gap-2 bg-light rounded p-3 border">
     <form method="GET" action="contacts_list.php" class="d-flex flex-wrap gap-2 align-items-center mb-0">
       <input type="text" name="query" class="form-control" placeholder="Search" value="<?= htmlspecialchars($_GET['query'] ?? '') ?>" style="min-width:220px;">
+      <?php if ($field !== ''): ?>
+        <input type="hidden" name="field" value="<?= e($field) ?>">
+      <?php endif; ?>
+      <input type="hidden" name="sort" value="<?= e($_GET['sort'] ?? '') ?>">
+      <input type="hidden" name="direction" value="<?= e($sortDirection) ?>">
+      <input type="hidden" name="per_page" value="<?= (int) $per_page ?>">
+      <?php foreach ($displayFields as $df): ?>
+        <input type="hidden" name="display[]" value="<?= e($df) ?>">
+      <?php endforeach; ?>
+      <button type="submit" class="btn btn-primary">Search</button>
+      <?php if ($query !== ''): ?>
+        <a href="contacts_list.php" class="btn btn-outline-secondary">Clear</a>
+      <?php endif; ?>
     </form>
-    <span class="ms-3 text-muted" style="font-size:15px;">Showing <strong><?= $offset + 1 ?></strong>–<strong><?= min($offset + $per_page, $total_contacts) ?></strong> of <strong><?= $total_contacts ?></strong> contacts</span>
+    <span class="ms-3 text-muted" style="font-size:15px;">Showing <strong><?= $total_contacts > 0 ? ($offset + 1) : 0 ?></strong>–<strong><?= min($offset + $per_page, $total_contacts) ?></strong> of <strong><?= $total_contacts ?></strong> contacts</span>
     <?php if ($total_pages > 1): ?>
       <span class="ms-3 text-muted" style="font-size:15px;">Page <strong><?= $current_page ?></strong> of <strong><?= $total_pages ?></strong></span>
       <nav aria-label="Contacts pagination">

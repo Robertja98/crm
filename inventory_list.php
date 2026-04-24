@@ -50,50 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status_action'])) {
     echo json_encode(['statusOptions' => $options]);
     exit;
 }
-  $ledgerStatuses = [];
-  $serialStatuses = [];
-  $statusTotalsByItem = [];
-
-  foreach ($ledgerRows as $entry) {
-      $itemId = trim($entry['item_id'] ?? '');
-      $status = trim($entry['status'] ?? '');
-      $qty = is_numeric($entry['quantity'] ?? '') ? (float)$entry['quantity'] : 0.0;
-      add_status_total($statusTotalsByItem, $itemId, $status, $qty);
-      if ($status !== '') {
-          $ledgerStatuses[] = $status;
-      }
-  }
-
-  foreach ($serialRows as $entry) {
-      $itemId = trim($entry['item_id'] ?? '');
-      $status = trim($entry['status'] ?? '');
-      add_status_total($statusTotalsByItem, $itemId, $status, 1.0);
-      if ($status !== '') {
-          $serialStatuses[] = $status;
-      }
-  }
-
-  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status_action'])) {
-      $action = trim($_POST['status_action'] ?? '');
-      $value = trim($_POST['status_value'] ?? '');
-      $options = read_status_options_mysql();
-      if ($action === 'add' && $value !== '') {
-          if (!in_array($value, $options, true)) {
-              $options[] = $value;
-          }
-      } elseif ($action === 'remove' && $value !== '') {
-          $options = array_values(array_filter($options, function($opt) use ($value) {
-              return $opt !== $value;
-          }));
-      }
-      sort($options);
-      write_status_options_mysql($options);
-      header('Content-Type: application/json');
-      echo json_encode(['statusOptions' => $options]);
-      exit;
-  }
-
-  // TODO: Implement inventory update logic using PostgreSQL if needed
 
   // Build filter array from GET
   $filters = [];
@@ -200,16 +156,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status_action'])) {
     <div style="text-align:center; color:#888;">No items found.</div>
   <?php else: ?>
     <div class="container" style="margin:32px auto;max-width:900px;">
-      <h3 style="margin-bottom:24px;">Inventory Items</h3>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+        <h3 style="margin:0;">Inventory Items</h3>
+        <a href="inventory_add.php" class="btn btn-success">+ Add Product</a>
+      </div>
       <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         <?php foreach ($filtered as $item): ?>
           <div class="col">
             <div class="card shadow-sm h-100">
               <div class="card-body">
-                <h5 class="card-title mb-2"><?= htmlspecialchars($item['item_name']) ?> <span class="badge bg-secondary ms-2">ID: <?= htmlspecialchars($item['item_id']) ?></span></h5>
-                <p class="card-text mb-1"><b>Qty:</b> <?= htmlspecialchars($item['quantity_in_stock']) ?></p>
+                <h5 class="card-title mb-2"><?= htmlspecialchars($item['item_name']) ?></h5>
+                <?php if (!empty($item['category'])): ?>
+                  <span class="badge bg-info text-dark mb-2"><?= htmlspecialchars($item['category']) ?></span>
+                <?php endif; ?>
+                <?php if (!empty($item['status'])): ?>
+                  <span class="badge bg-secondary mb-2"><?= htmlspecialchars($item['status']) ?></span>
+                <?php endif; ?>
+                <p class="card-text mb-1"><b>Qty in Stock:</b> <?= htmlspecialchars($item['quantity_in_stock'] ?? '—') ?></p>
+                <?php if (!empty($item['unit'])): ?>
+                  <p class="card-text mb-1"><b>Unit:</b> <?= htmlspecialchars($item['unit']) ?></p>
+                <?php endif; ?>
                 <?php if (!empty($item['description'])): ?>
-                  <p class="card-text text-muted" style="font-size:0.95em;"><?= htmlspecialchars($item['description']) ?></p>
+                  <p class="card-text text-muted" style="font-size:0.9em; margin-top:6px;"><?= htmlspecialchars($item['description']) ?></p>
                 <?php endif; ?>
                 <div class="d-flex gap-2 mt-3">
                   <a href="inventory_edit.php?item_id=<?= urlencode($item['item_id']) ?>" class="btn btn-sm btn-primary">Edit</a>
@@ -224,8 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['status_action'])) {
         <?php endforeach; ?>
       </div>
     </div>
-  <!-- Bootstrap CSS for modern look -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <?php endif; ?>
 </div>
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

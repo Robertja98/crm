@@ -10,7 +10,9 @@ return [
     'contract_type',        // New / Renewal / Upsell
     'contract_status',      // Draft / Active / Expiring / Expired / Cancelled
     'equipment_type',       // Softener / RO System / Filtration / DI System / Other
-    'monthly_fee',          // Monthly recurring revenue
+    'monthly_fee',          // Monthly recurring revenue (rental)
+    'regen_fee',            // Per-service regeneration fee
+    'tank_sale_price',      // One-time tank sale price (purchased tanks only)
     'annual_value',         // Total annual contract value
     'payment_frequency',    // Monthly / Quarterly / Annual
     'contract_term',        // Term length in months (12/24/36/etc)

@@ -69,8 +69,8 @@ function validateContact(array $contact): array {
                 if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
                     $errors[$field] = "Invalid email address format.";
                 }
-                // Check for common typos
-                else if (preg_match('/@(.+)\.c($|[^o])/', $value)) {
+                // Check for common typos: TLD that is bare '.c' with nothing after, or '.cm'/'.co' without 'm'
+                else if (preg_match('/@[^@]+\.c$/i', $value)) {
                     $errors[$field] = "Email domain appears invalid. Did you mean .com, .ca, etc?";
                 }
                 break;

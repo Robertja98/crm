@@ -2,113 +2,146 @@
 include_once(__DIR__ . '/layout_start.php');
 require_once 'db_mysql.php';
 
-$schema = require __DIR__ . '/customer_schema.php';
+$schema     = require __DIR__ . '/customer_schema.php';
 $itemFields = require __DIR__ . '/customer_item_config.php';
-$errors = [];
+$dateFields = ['last_service_date', 'install_date', 'purchase_date', 'next_service_date', 'warranty_expiry'];
+
+$errors  = [];
 $success = false;
-$newCustomer = [];
 
-// Get next customer ID from MySQL
+// ── Generate a unique customer_id ────────────────────────────────────────────
+$conn   = get_mysql_connection();
+$row    = $conn->query('SELECT MAX(customer_id) AS max_id FROM customers')->fetch_assoc();
+$nextId = str_pad((int)($row['max_id'] ?? 0) + 1, 5, '0', STR_PAD_LEFT);
 
+while ($conn->query("SELECT customer_id FROM customers WHERE customer_id = '{$conn->real_escape_string($nextId)}'")->num_rows > 0) {
+  $nextId = str_pad((int)$nextId + 1, 5, '0', STR_PAD_LEFT);
+}
+$conn->close();
 
+// ── Handle POST ──────────────────────────────────────────────────────────────
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $contactId = trim($_POST['contact_id'] ?? $_GET['contact_id'] ?? '');
 
-$connId = get_mysql_connection();
-$result = $connId->query('SELECT MAX(customer_id) AS max_id FROM customers');
-$row = $result ? $result->fetch_assoc() : null;
-$lastId = $row && $row['max_id'] ? intval($row['max_id']) : 0;
-$nextId = str_pad($lastId + 1, 5, '0', STR_PAD_LEFT);
-if ($result) $result->free();
-
-// Ensure customer_id is unique
-$uniqueId = $nextId;
-while (true) {
-  $checkResult = $connId->query("SELECT customer_id FROM customers WHERE customer_id = '" . $connId->real_escape_string($uniqueId) . "'");
-  if ($checkResult && $checkResult->num_rows > 0) {
-    $uniqueId = str_pad(intval($uniqueId) + 1, 5, '0', STR_PAD_LEFT);
-    $checkResult->free();
-    continue;
+  if ($contactId === '') {
+    $errors[] = 'You must select a contact before creating a customer.';
   }
-  if ($checkResult) $checkResult->free();
 
-  // Parse line items
+  // Collect and validate customer fields
+  $customerData = ['customer_id' => $nextId, 'contact_id' => $contactId];
+  foreach ($schema as $field) {
+    if (in_array($field, ['customer_id', 'contact_id'])) continue;
+    $customerData[$field] = trim($_POST[$field] ?? '');
+  }
+
+  // Collect equipment rows
   $items = [];
-  if (isset($_POST['items']) && is_array($_POST['items'])) {
-    foreach ($_POST['items'] as $item) {
-      $clean = ['customer_id' => $uniqueId];
-      foreach ($itemFields as $f) {
-        $clean[$f] = trim($item[$f] ?? '');
-      }
-      $items[] = $clean;
+  foreach ($_POST['items'] ?? [] as $item) {
+    $clean = [];
+    foreach ($itemFields as $f) {
+      $clean[$f] = trim($item[$f] ?? '');
     }
+    $items[] = $clean;
   }
 
   if (empty($errors)) {
-    // Prevent creation if no contact is selected
-    if (empty($_POST['contact_id']) && empty($selectedContactId)) {
-      $errors[] = 'You must select a contact before creating a customer.';
-    } else {
-      // Insert customer
-      $connPost = get_mysql_connection();
-      $newCustomer['customer_id'] = $uniqueId;
-      // Always use the contact_id from POST if provided, else fallback to selectedContactId
-      $newCustomer['contact_id'] = $_POST['contact_id'] ?? $selectedContactId;
-      $fieldsStr = implode(", ", $schema);
-      $placeholders = implode(", ", array_fill(0, count($schema), '?'));
-      // Set types: s for string, i for int, d for double
-      $types = '';
-      $params = [];
-      foreach ($schema as $field) {
-        if ($field === 'tank_count' || $field === 'contact_id') {
-          $types .= 'i';
-          $val = $newCustomer[$field] ?? null;
-          $params[] = ($val === '' || $val === null || !is_numeric($val)) ? null : (int)$val;
-        } else if ($field === 'last_delivery') {
-          $types .= 's';
-          $val = $newCustomer[$field] ?? '';
-          $params[] = (empty($val) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $val)) ? null : $val;
-        } else if ($field === 'last_modified') {
-          $types .= 's';
-          $val = $newCustomer[$field] ?? '';
-          $params[] = (empty($val) || !preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $val)) ? null : $val;
-        } else {
-          $types .= 's';
-          $params[] = $newCustomer[$field] ?? '';
-        }
-      }
-      $stmt = $connPost->prepare("INSERT INTO customers ($fieldsStr) VALUES ($placeholders)");
-      $stmt->bind_param($types, ...$params);
-      if (!$stmt->execute()) {
-        $errors[] = 'Failed to add customer: ' . $stmt->error;
+    $db = get_mysql_connection();
+
+    // Build customer INSERT
+    $fields       = implode(', ', $schema);
+    $placeholders = implode(', ', array_fill(0, count($schema), '?'));
+    $types        = '';
+    $params       = [];
+
+    foreach ($schema as $field) {
+      $val = $customerData[$field] ?? null;
+      if ($field === 'contact_id') {
+        $types   .= 'i';
+        $params[] = ($val === '' || $val === null || !is_numeric($val)) ? null : (int)$val;
+      } elseif ($field === 'last_delivery') {
+        $types   .= 's';
+        $params[] = preg_match('/^\d{4}-\d{2}-\d{2}$/', (string)$val) ? $val : null;
+      } elseif ($field === 'last_modified') {
+        $types   .= 's';
+        $params[] = preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', (string)$val) ? $val : null;
       } else {
-        foreach ($items as $item) {
-          $itemFieldsFull = array_merge(['customer_id'], $itemFields);
-          $fieldsStr2 = implode(", ", $itemFieldsFull);
-          $placeholders2 = implode(", ", array_fill(0, count($itemFieldsFull), '?'));
-          $types2 = str_repeat('s', count($itemFieldsFull));
-          $stmt2 = $connPost->prepare("INSERT INTO customer_items ($fieldsStr2) VALUES ($placeholders2)");
-          $stmt2->bind_param($types2, ...array_values($item));
-          if (!$stmt2->execute()) {
-            $errors[] = 'Failed to add item: ' . $stmt2->error;
-          }
-          $stmt2->close();
-        }
-        if (empty($errors)) {
-          $success = true;
-        }
+        $types   .= 's';
+        $params[] = $val === '' ? null : $val;
       }
-      $stmt->close();
-      $connPost->close();
+    }
+
+    $stmt = $db->prepare("INSERT INTO customers ($fields) VALUES ($placeholders)");
+    $stmt->bind_param($types, ...$params);
+
+    if (!$stmt->execute()) {
+      $errors[] = 'Failed to save customer: ' . $stmt->error;
+    } else {
+      // Insert each equipment row
+      foreach ($items as $item) {
+        $eqId     = 'EQ-' . strtoupper(substr(md5(uniqid('', true)), 0, 8));
+        $eqFields = array_merge(['equipment_id', 'customer_id', 'contact_id', 'equipment_type'], $itemFields);
+        $eqVals   = array_merge(
+          [$eqId, $nextId, $contactId, 'DI Tank'],
+          array_map(function ($f) use ($item, $dateFields) {
+            $v = trim($item[$f] ?? '');
+            if (in_array($f, $dateFields)) {
+              return preg_match('/^\d{4}-\d{2}-\d{2}$/', $v) ? $v : null;
+            }
+            return $v === '' ? null : $v;
+          }, $itemFields)
+        );
+
+        $fStr  = implode(', ', $eqFields);
+        $pStr  = implode(', ', array_fill(0, count($eqFields), '?'));
+        $stmt2 = $db->prepare("INSERT INTO equipment ($fStr) VALUES ($pStr)");
+        $stmt2->bind_param(str_repeat('s', count($eqFields)), ...$eqVals);
+        if (!$stmt2->execute()) {
+          $errors[] = 'Failed to save tank: ' . $stmt2->error;
+        }
+        $stmt2->close();
+      }
+    }
+
+    $stmt->close();
+    $db->close();
+
+    if (empty($errors)) {
+      $success = true;
     }
   }
-  break;
 }
+
+// ── Load contact for display ──────────────────────────────────────────────────
+$selectedContactId = trim($_GET['contact_id'] ?? $_POST['contact_id'] ?? '');
+$selectedContact   = null;
+if ($selectedContactId !== '') {
+  $c    = get_mysql_connection();
+  $stmt = $c->prepare("SELECT contact_id, CONCAT(first_name, ' ', last_name) AS full_name, company, address FROM contacts WHERE contact_id = ? LIMIT 1");
+  $stmt->bind_param('s', $selectedContactId);
+  $stmt->execute();
+  $selectedContact = $stmt->get_result()->fetch_assoc();
+  $stmt->close();
+  $c->close();
+}
+
+// Display labels for item fields
+$fieldLabels = [
+  'serial_number'    => 'Tank Serial #',
+  'tank_size'        => 'Tank Size',
+  'resin_type'       => 'Resin Type',
+  'resin_qty_cuft'   => 'Resin Qty (cu ft)',
+  'last_service_date'=> 'Last Service Date',
+  'regeneration_id'  => 'Regeneration #',
+  'purchase_order'   => 'Purchase Order',
+  'ownership'        => 'Ownership',
+];
 ?>
 
 <div class="container">
   <h2>Add New Customer</h2>
 
   <?php if ($success): ?>
-    <p style="color:green;">✅ Customer added successfully. ID: <?= $nextId ?></p>
+    <p style="color:green;">✅ Customer added successfully (ID: <?= htmlspecialchars($nextId) ?>).</p>
   <?php endif; ?>
 
   <?php if (!empty($errors)): ?>
@@ -120,57 +153,50 @@ while (true) {
   <?php endif; ?>
 
   <form method="POST">
+    <!-- Customer Info -->
     <fieldset style="margin-bottom:20px;">
-      <legend><strong>Main Customer Info</strong></legend>
-      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap:20px;">
+      <legend><strong>Customer Info</strong></legend>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
+
         <div>
-          <label><strong>Customer ID:</strong></label><br>
-          <input type="text" value="<?= $nextId ?>" readonly disabled>
-          <input type="hidden" name="customer_id" value="<?= $nextId ?>">
+          <label><strong>Customer ID</strong></label><br>
+          <input type="text" value="<?= htmlspecialchars($nextId) ?>" readonly disabled style="background:#eee;">
+          <input type="hidden" name="customer_id" value="<?= htmlspecialchars($nextId) ?>">
         </div>
+
         <div>
-          <label for="contact_id"><strong>Contact:</strong></label><br>
-          <?php
-          $selectedContactId = $_GET['contact_id'] ?? $_POST['contact_id'] ?? '';
-          $connForm3 = get_mysql_connection();
-          $result3 = $connForm3->query("SELECT contact_id, CONCAT(first_name, ' ', last_name) AS label, company, address FROM contacts WHERE contact_id = '" . $connForm3->real_escape_string($selectedContactId) . "'");
-          $row3 = $result3 ? $result3->fetch_assoc() : null;
-          if ($row3) {
-            $label = htmlspecialchars($row3['label']);
-            $company = htmlspecialchars($row3['company']);
-            $address = htmlspecialchars($row3['address']);
-            echo '<input type="hidden" name="contact_id" value="' . htmlspecialchars($selectedContactId) . '">';
-            echo '<input type="text" value="' . $label . '" readonly style="background:#eee;">';
-            echo '<input type="hidden" name="company" value="' . $company . '">';
-            echo '<input type="text" value="' . $company . '" readonly disabled style="background:#eee;margin-top:8px;">';
-            echo '<input type="hidden" name="address" value="' . $address . '">';
-            echo '<input type="text" value="' . $address . '" readonly disabled style="background:#eee;margin-top:8px;">';
-          } else {
-            echo '<span style="color:#c00;">No contact selected. Please start from a contact profile.</span>';
-          }
-          if ($result3) $result3->free();
-          $connForm3->close();
-          ?>
+          <label><strong>Contact</strong></label><br>
+          <?php if ($selectedContact): ?>
+            <input type="hidden" name="contact_id" value="<?= htmlspecialchars($selectedContactId) ?>">
+            <input type="text" value="<?= htmlspecialchars($selectedContact['full_name']) ?>" readonly style="background:#eee;">
+            <input type="text" value="<?= htmlspecialchars($selectedContact['company']) ?>" readonly disabled style="background:#eee;margin-top:6px;">
+            <input type="hidden" name="address" value="<?= htmlspecialchars($selectedContact['address']) ?>">
+            <input type="text" value="<?= htmlspecialchars($selectedContact['address']) ?>" readonly disabled style="background:#eee;margin-top:6px;">
+          <?php else: ?>
+            <span style="color:#c00;">No contact selected. Please start from a contact profile.</span>
+          <?php endif; ?>
         </div>
-        <?php foreach ($schema as $field): ?>
-          <?php if ($field === 'customer_id' || $field === 'contact_id' || $field === 'address') continue; ?>
+
+        <?php
+        $displaySchema = array_filter($schema, fn($f) => !in_array($f, ['customer_id', 'contact_id', 'address']));
+        foreach ($displaySchema as $field):
+          $label = ucwords(str_replace('_', ' ', $field));
+          $val   = htmlspecialchars($_POST[$field] ?? '');
+        ?>
           <div>
-            <label for="<?= $field ?>"><strong><?= ucfirst(str_replace('_', ' ', $field)) ?>:</strong></label><br>
-            <?php if ($field === 'tank_number'): ?>
-              <input type="number" name="tank_number" id="tank_number" value="<?= htmlspecialchars($_POST['tank_number'] ?? '') ?>" min="0">
-            <?php // Removed tank_size field: not present in DB schema ?>
-            <?php else: ?>
-              <input type="text" name="<?= $field ?>" id="<?= $field ?>" value="<?= htmlspecialchars($_POST[$field] ?? '') ?>">
-            <?php endif; ?>
+            <label><strong><?= $label ?></strong></label><br>
+            <input type="text" name="<?= $field ?>" value="<?= $val ?>">
           </div>
         <?php endforeach; ?>
+
       </div>
     </fieldset>
 
+    <!-- Tank / Equipment Line Items -->
     <fieldset>
-      <legend><strong>Tank & Delivery Line Items</strong></legend>
+      <legend><strong>Tanks</strong></legend>
       <div id="lineItems"></div>
-      <button type="button" onclick="addLineItem()" class="btn-outline">➕ Add Line Item</button>
+      <button type="button" onclick="addLineItem()" class="btn-outline" style="margin-top:8px;">➕ Add Tank</button>
     </fieldset>
 
     <div style="margin-top:20px;">
@@ -180,64 +206,44 @@ while (true) {
 </div>
 
 <script>
+const itemFields  = <?= json_encode(array_values($itemFields)) ?>;
+const fieldLabels = <?= json_encode($fieldLabels) ?>;
+
 function addLineItem() {
   const container = document.getElementById('lineItems');
-  const index = container.children.length;
-  const fields = <?= json_encode($itemFields) ?>;
-  const row = document.createElement('div');
-  row.style.marginBottom = '12px';
-  row.style.border = '1px solid #ccc';
-  row.style.padding = '10px';
-  row.style.borderRadius = '6px';
-  row.style.background = '#f9f9f9';
+  const index     = container.children.length;
 
-  let html = '<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">';
-  fields.forEach(f => {
-    html += `
-      <div>
-        <label><strong>${f.replace(/_/g, ' ')}:</strong></label><br>
-        <input type="text" name="items[${index}][${f}]" />
-      </div>
-    `;
-  });
-  html += '</div>';
-  row.innerHTML = html;
-  container.appendChild(row);
-}
+  const wrapper = document.createElement('div');
+  wrapper.style.cssText = 'margin-bottom:12px;border:1px solid #ccc;padding:12px;border-radius:6px;background:#f9f9f9;position:relative;';
 
-// Persist form values using localStorage
-window.addEventListener('DOMContentLoaded', function() {
-  const form = document.querySelector('form');
-  if (!form) return;
-  // Restore values
-  Array.from(form.elements).forEach(el => {
-    if (!el.name) return;
-    const val = localStorage.getItem('add_customer_' + el.name);
-    if (val !== null) {
-      if (el.type === 'checkbox' || el.type === 'radio') {
-        el.checked = val === 'true';
-      } else {
-        el.value = val;
-      }
-    }
-  });
-  // Save values on change
-  form.addEventListener('input', function(e) {
-    const el = e.target;
-    if (!el.name) return;
-    if (el.type === 'checkbox' || el.type === 'radio') {
-      localStorage.setItem('add_customer_' + el.name, el.checked);
+  let html = `<button type="button" onclick="this.closest('div').remove()"
+    style="position:absolute;top:8px;right:8px;background:none;border:none;font-size:1.1em;cursor:pointer;color:#c00;" title="Remove tank">✕</button>`;
+  html += '<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;padding-right:24px;">';
+
+  itemFields.forEach(f => {
+    const label = fieldLabels[f] || f.replace(/_/g, ' ');
+    let input;
+    if (f === 'ownership') {
+      input = `<select name="items[${index}][${f}]">
+        <option value="">-- Select --</option>
+        <option value="rental">Rental</option>
+        <option value="customer-owned">Customer-Owned</option>
+        <option value="purchased">Purchased</option>
+      </select>`;
+    } else if (f === 'last_service_date') {
+      input = `<input type="date" name="items[${index}][${f}]">`;
+    } else if (f === 'resin_qty_cuft') {
+      input = `<input type="number" step="0.25" min="0" name="items[${index}][${f}]">`;
     } else {
-      localStorage.setItem('add_customer_' + el.name, el.value);
+      input = `<input type="text" name="items[${index}][${f}]">`;
     }
+    html += `<div><label><strong>${label}</strong></label><br>${input}</div>`;
   });
-  // Clear storage on submit
-  form.addEventListener('submit', function() {
-    Array.from(form.elements).forEach(el => {
-      if (el.name) localStorage.removeItem('add_customer_' + el.name);
-    });
-  });
-});
+
+  html += '</div>';
+  wrapper.innerHTML = html;
+  container.appendChild(wrapper);
+}
 </script>
 
 <?php include_once(__DIR__ . '/layout_end.php'); ?>

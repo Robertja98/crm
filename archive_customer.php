@@ -14,21 +14,22 @@ function archive_customer($customerId) {
         $conn->close();
         return false;
     }
-    // Get customer_items
-    $stmtItems = $conn->prepare('SELECT * FROM customer_items WHERE customer_id = ?');
-    $stmtItems->bind_param('s', $customerId);
-    $stmtItems->execute();
-    $resultItems = $stmtItems->get_result();
+    // Get equipment rows for this customer
+    $stmtEq = $conn->prepare('SELECT * FROM equipment WHERE customer_id = ?');
+    $stmtEq->bind_param('s', $customerId);
+    $stmtEq->execute();
+    $resultEq = $stmtEq->get_result();
     $items = [];
-    while ($row = $resultItems->fetch_assoc()) {
+    while ($row = $resultEq->fetch_assoc()) {
         $items[] = $row;
     }
-    $stmtItems->close();
-    // Insert into archive table
-    $stmtArchive = $conn->prepare('INSERT INTO customer_archive (customer_id, customer_data, items_data, deleted_at) VALUES (?, ?, ?, NOW())');
-    $customerJson = json_encode($customer);
-    $itemsJson = json_encode($items);
-    $stmtArchive->bind_param('sss', $customerId, $customerJson, $itemsJson);
+    $stmtEq->close();
+    // Insert into audit_log as a soft archive (customer_archive table may not exist)
+    $stmtArchive = $conn->prepare(
+        'INSERT INTO audit_log (user_id, action, entity_type, entity_id, changes, summary, timestamp) VALUES (0, "DELETE", "customers", ?, ?, "Customer deleted", NOW())'
+    );
+    $archiveJson = json_encode(['customer' => $customer, 'equipment' => $items]);
+    $stmtArchive->bind_param('ss', $customerId, $archiveJson);
     $stmtArchive->execute();
     $stmtArchive->close();
     $conn->close();
