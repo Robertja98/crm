@@ -3,6 +3,7 @@
 require_once __DIR__ . '/layout_start.php';
 require_once __DIR__ . '/simple_auth/middleware.php';
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 
 $pageTitle = 'Discussion Log';
 
@@ -35,6 +36,7 @@ $conn->close();
           <td><?= htmlspecialchars($row['visibility']) ?></td>
           <td>
             <form method="POST" action="update_discussion_contact.php" class="d-flex align-items-center gap-2 mb-0">
+              <?php renderCSRFInput(); ?>
               <input type="hidden" name="id" value="<?= (int)$row['id'] ?>">
               <input type="text" name="manual_contact_id" value="<?= htmlspecialchars($row['manual_contact_id'] ?? '') ?>" class="form-control form-control-sm" style="max-width:120px;">
               <button type="submit" class="btn btn-sm btn-primary">Save</button>
