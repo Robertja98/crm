@@ -17,6 +17,14 @@ function ensureCSRFSessionStarted() {
         $config = require $authConfigPath;
         $security = $config['security'] ?? [];
 
+        // Match Auth::initSession() so CSRF reads/writes the same session store.
+        $localSessionDir = __DIR__ . '/simple_auth/sessions';
+        if (!is_dir($localSessionDir)) {
+            mkdir($localSessionDir, 0755, true);
+        }
+        session_save_path($localSessionDir);
+        ini_set('session.use_strict_mode', '1');
+
         if (!empty($security['session_name'])) {
             session_name($security['session_name']);
         }
