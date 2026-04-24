@@ -812,6 +812,7 @@ function getContactOpportunities($contact, $opportunities) {
         <div class="section">
           <div class="section-title">➕ Log Discussion</div>
           <form method="post" action="discussion_logger.php" style="background: #f8f9fa; padding: 15px; border-radius: 6px;">
+            <?php renderCSRFInput(); ?>
             <input type="hidden" name="contact_id" value="<?= htmlspecialchars($contact['contact_id']) ?>">
             
             <div class="form-group" style="margin-bottom: 12px;">

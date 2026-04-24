@@ -1,6 +1,7 @@
 <?php
 require_once 'layout_start.php';
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 $schema = require __DIR__ . '/equipment_schema.php';
 
 // Get equipment ID from query string
@@ -34,6 +35,7 @@ if ($equipment_id !== '') {
       </tbody>
     </table>
     <form method="POST" onsubmit="return confirm('Are you sure you want to delete this equipment? This action cannot be undone.');" style="margin-top:20px;">
+      <?php renderCSRFInput(); ?>
       <input type="hidden" name="delete_id" value="<?= htmlspecialchars($equipment_id) ?>">
       <button type="submit" style="background:#dc2626;color:#fff;padding:8px 16px;border:none;border-radius:4px;cursor:pointer;">Delete Equipment</button>
     </form>
@@ -44,6 +46,9 @@ if ($equipment_id !== '') {
 <?php
 // Handle delete POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+  if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+    die('CSRF validation failed');
+  }
   $delete_id = $_POST['delete_id'];
   $conn = get_mysql_connection();
   $stmt = $conn->prepare('DELETE FROM equipment WHERE equipment_id = ?');

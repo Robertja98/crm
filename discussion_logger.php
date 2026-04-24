@@ -1,8 +1,13 @@
 <?php
 // discussion_logger.php
 require_once 'csv_handler.php';
+require_once 'csrf_helper.php';
 
 // Use $_POST directly
+if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+  die('CSRF validation failed');
+}
+
 $data = $_POST;
 $contactId = $data['contact_id'] ?? null;
 

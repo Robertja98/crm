@@ -1,6 +1,7 @@
 <?php
 // inventory_edit.php - Edit inventory item
 require_once 'db_mysql.php';
+require_once 'csrf_helper.php';
 $schema = require __DIR__ . '/inventory_schema.php';
 
 $item_id = $_GET['item_id'] ?? '';
@@ -22,6 +23,9 @@ if (!$item) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        die('CSRF validation failed');
+    }
     $updates = [];
     $params = [];
     $types = '';
@@ -56,6 +60,7 @@ $conn->close();
 <body>
     <h2>Edit Inventory Item: <?= htmlspecialchars($item['item_id']) ?></h2>
     <form method="post">
+        <?php renderCSRFInput(); ?>
         <?php foreach ($schema as $field): ?>
             <div>
                 <label><?= htmlspecialchars($field) ?>:</label>
