@@ -414,6 +414,23 @@ function getContactOpportunities($contact, $opportunities) {
     overflow: hidden;
     resize: none;
   }
+
+  /* AI Panel */
+  .ai-panel { background: white; border: 1px solid #bfdbfe; border-radius: 8px; padding: 16px; margin: 0 0 16px 0; display: none; }
+  .ai-panel.visible { display: block; }
+  .ai-panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .ai-panel-title { font-size: 13px; font-weight: 700; color: #1d4ed8; }
+  .ai-panel-close { background: none; border: none; cursor: pointer; color: #9ca3af; font-size: 18px; padding: 0; line-height: 1; }
+  .ai-panel-body { font-size: 13px; color: #1f2937; line-height: 1.7; white-space: pre-wrap; background: #f8faff; border-radius: 6px; padding: 12px; }
+  .ai-panel-meta { font-size: 11px; color: #9ca3af; margin-top: 6px; }
+  .ai-panel-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .ai-copy-btn { background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; border-radius: 4px; padding: 5px 12px; font-size: 11px; cursor: pointer; font-weight: 600; }
+  .ai-use-btn  { background: #ecfdf5; border: 1px solid #6ee7b7; color: #065f46; border-radius: 4px; padding: 5px 12px; font-size: 11px; cursor: pointer; font-weight: 600; }
+  .ai-btn { background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; transition: opacity 0.2s; }
+  .ai-btn:hover { opacity: 0.85; }
+  .ai-btn:disabled { opacity: 0.5; cursor: default; }
+  .ai-spinner { display: inline-block; width: 11px; height: 11px; border: 2px solid rgba(255,255,255,0.35); border-top-color: white; border-radius: 50%; animation: ai-spin 0.7s linear infinite; margin-right: 4px; vertical-align: middle; }
+  @keyframes ai-spin { to { transform: rotate(360deg); } }
 </style>
 
 <div class="contact-header">
@@ -435,10 +452,20 @@ function getContactOpportunities($contact, $opportunities) {
       <?php endif; ?>
       <span class="contact-status" style="background-color: <?= $statusColor ?>;">✓ <?= $status ?></span>
       <div class="quick-actions">
-        <button onclick="alert('Email: <?= htmlspecialchars($contact['email'] ?? 'no email') ?>')">✉ Email</button>
-        <button onclick="alert('Call: <?= htmlspecialchars($contact['phone'] ?? 'no phone') ?>')">☎ Call</button>
-        <button onclick="alert('Add task for <?= htmlspecialchars($contact['first_name'] ?? 'Contact') ?>')">+ Task</button>
-        <button onclick="alert('Create opportunity for <?= htmlspecialchars($contact['company'] ?? 'this contact') ?>')">💼 Opp</button>
+        <?php if (!empty($contact['email'])): ?>
+          <a href="mailto:<?= htmlspecialchars($contact['email'])?>"><button>✉ Email</button></a>
+        <?php else: ?>
+          <button disabled>✉ Email</button>
+        <?php endif; ?>
+        <?php if (!empty($contact['phone'])): ?>
+          <a href="tel:<?= htmlspecialchars($contact['phone']) ?>"><button>☎ Call</button></a>
+        <?php else: ?>
+          <button disabled>☎ Call</button>
+        <?php endif; ?>
+        <button onclick="window.location.href='add_task.php?contact_id=<?= urlencode($contact['contact_id']) ?>'">+ Task</button>
+        <button onclick="window.location.href='add_opportunity.php?contact_id=<?= urlencode($contact['contact_id']) ?>'">💼 Opp</button>
+        <button class="ai-btn" onclick="aiAction('summarise_contact', this, 'Summary')">🤖 Summary</button>
+        <button class="ai-btn" onclick="aiAction('suggest_followup', this, 'Follow-up Draft')">✉ Follow-up</button>
       </div>
     </div>
   </div>
@@ -464,6 +491,20 @@ function getContactOpportunities($contact, $opportunities) {
     <div class="stat-card">
       <div class="stat-label">Total Value</div>
       <div class="stat-value"><?= $opportunityValue > 0 ? formatCurrency($opportunityValue) : '—' ?></div>
+    </div>
+  </div>
+
+  <!-- AI Panel -->
+  <div class="ai-panel" id="aiPanel">
+    <div class="ai-panel-header">
+      <div class="ai-panel-title" id="aiPanelTitle">🤖 AI</div>
+      <button class="ai-panel-close" onclick="closeAiPanel()" title="Close">✕</button>
+    </div>
+    <div class="ai-panel-body" id="aiPanelBody"></div>
+    <div class="ai-panel-meta" id="aiPanelMeta"></div>
+    <div class="ai-panel-actions">
+      <button class="ai-copy-btn" onclick="copyAiResult()">📋 Copy</button>
+      <button class="ai-use-btn" id="aiUseBtn" onclick="useAiAsDiscussion()" style="display:none;">📝 Paste into discussion</button>
     </div>
   </div>
 
@@ -846,12 +887,16 @@ function getContactOpportunities($contact, $opportunities) {
             </div>
 
             <button type="submit" style="margin-top: 12px; background: #3B82F6; color: white; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: 600; font-size: 13px;">💬 Log Discussion</button>
+            <button type="button" class="ai-btn" style="margin-top:12px;padding:10px 14px;font-size:13px;" onclick="aiAction('suggest_followup', this, 'Follow-up Draft', true)">🤖 AI: Draft follow-up text</button>
           </form>
         </div>
 
         <!-- Discussion History -->
         <div class="section">
-          <div class="section-title">📝 Discussion History</div>
+          <div class="section-title">📒 Activity & History</div>
+          <div style="font-size:12px;color:#666;margin-bottom:10px;">
+            Linked Tasks, Opportunities, and Discussions for this Contact
+          </div>
           <?php if (!empty($contactDiscussions)): ?>
             <?php foreach ($contactDiscussions as $disc): ?>
               <div class="timeline-item" style="padding: 15px; margin-bottom: 12px; background: #f8f9fa; border-radius: 6px; border-left: 4px solid #3B82F6;">
@@ -947,6 +992,84 @@ function getContactOpportunities($contact, $opportunities) {
     input.addEventListener('change', adjustWidth);
     adjustWidth(); // Initial adjustment
   });
+
+  // ── AI Integration ────────────────────────────────────────────────────────
+  const AI_CONTACT_ID  = <?= json_encode($contact['contact_id'] ?? '') ?>;
+  const AI_CSRF_TOKEN  = <?= json_encode(getCSRFToken()) ?>;
+
+  const AI_BTN_LABELS = {
+    'summarise_contact': '🤖 Summary',
+    'suggest_followup':  '✉ Follow-up',
+  };
+
+  function aiAction(action, btn, label, showUse) {
+    const panel = document.getElementById('aiPanel');
+    const body  = document.getElementById('aiPanelBody');
+    const meta  = document.getElementById('aiPanelMeta');
+    const title = document.getElementById('aiPanelTitle');
+    const useBtn = document.getElementById('aiUseBtn');
+
+    title.textContent = '🤖 AI: ' + label;
+    body.textContent  = 'Thinking…';
+    meta.textContent  = '';
+    if (useBtn) useBtn.style.display = 'none';
+    panel.classList.add('visible');
+    panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const origLabel = btn ? btn.innerHTML : '';
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span class="ai-spinner"></span> Thinking…'; }
+
+    const fd = new FormData();
+    fd.append('action',     action);
+    fd.append('contact_id', AI_CONTACT_ID);
+    fd.append('csrf_token', AI_CSRF_TOKEN);
+
+    fetch('ai_endpoint.php', { method: 'POST', body: fd })
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) {
+          body.textContent = '⚠️ ' + data.error;
+        } else {
+          body.textContent = data.text || '(no response)';
+          if (data.provider && data.model) {
+            var selectionLabel = data.selection_mode === 'cheapest' ? ' · chosen by cost' : ' · manual selection';
+            meta.textContent = 'via ' + data.provider + ' / ' + data.model + selectionLabel;
+          }
+          if (showUse && useBtn) useBtn.style.display = 'inline-block';
+        }
+      })
+      .catch(err => {
+        body.textContent = '⚠️ Network error: ' + err.message;
+      })
+      .finally(() => {
+        if (btn) { btn.disabled = false; btn.innerHTML = origLabel; }
+      });
+  }
+
+  function closeAiPanel() {
+    document.getElementById('aiPanel').classList.remove('visible');
+  }
+
+  function copyAiResult() {
+    const text = document.getElementById('aiPanelBody').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.ai-copy-btn');
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => { btn.textContent = orig; }, 2000);
+    });
+  }
+
+  function useAiAsDiscussion() {
+    const text = document.getElementById('aiPanelBody').textContent;
+    const ta   = document.querySelector('textarea[name="entry_text"]');
+    if (ta) {
+      ta.value = text;
+      ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      ta.focus();
+      closeAiPanel();
+    }
+  }
 </script>
 
 </body>

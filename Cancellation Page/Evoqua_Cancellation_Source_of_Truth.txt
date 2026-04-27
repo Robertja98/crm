@@ -1,0 +1,63 @@
+Evoqua Cancellation Source of Truth
+====================================
+
+1. Purpose
+----------
+Provide customers with a clear understanding of Evoqua SDI contract terms and an easy way to generate a compliant cancellation letter.
+
+2. Evoqua Contract Key Points
+-----------------------------
+- Notice Period Rules:
+  * End of Term: Notice must be given not sooner than 3 months and not later than 1 month before the end of the initial or renewal term.
+  * Material Breach: 30-day cure period before termination.
+- Customer Obligations:
+  * Continue payment if required.
+  * Return Evoqua-owned equipment.
+  * Settle outstanding invoices.
+
+3. Contact Information (Placeholders)
+--------------------------------------
+- Evoqua Canada:
+  * Email: [Insert official email]
+  * Fax: [Insert fax number]
+  * Phone: [Insert customer service number]
+
+4. Page Requirements
+---------------------
+- Sections:
+  * Simple explanation of terms (plain language + visual timeline).
+  * Input form (Account Number, Contract Date, Reason, Contact Info).
+  * Auto-generated letter with correct notice wording.
+  * Download options (Word/PDF).
+- Logic:
+  * If “End of Term” → Insert notice window text.
+  * If “Material Breach” → Insert 30-day cure period text.
+
+5. Letter Template
+-------------------
+Subject: Notice of Termination – SDI Service Agreement [Account/Quote Number]
+To: Evoqua Water Technologies Ltd.
+
+Dear Evoqua Team,
+
+[Dynamic notice text based on reason]
+
+We acknowledge our obligation to:
+- Continue payment of the monthly rental service charge for the remainder of the term, if applicable.
+- Promptly make all Evoqua-owned equipment available for removal upon expiration or termination, and grant Evoqua access for retrieval as required.
+- Settle all outstanding invoices and charges as per the agreement.
+
+Please confirm receipt of this notice and provide instructions for equipment return and final settlement. Kindly advise if there are any additional steps required to ensure compliance with the terms of our agreement.
+
+Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+[Your Position/Company]
+[Your Contact Information]
+
+6. Future Enhancements
+-----------------------
+- Add validation for date ranges.
+- Include legal disclaimer.
+- Option to email directly from the page.

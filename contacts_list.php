@@ -53,6 +53,7 @@ $sortFields = explode(',', $_GET['sort'] ?? '');
 $sortDirection = $_GET['direction'] ?? 'asc';
 $activeSort = array_flip($sortFields);
 
+<<<<<<< HEAD
 // Load contacts from MySQL
 
 function build_contacts_search_where(mysqli $conn, array $schema, string $query, string $field): string {
@@ -82,29 +83,28 @@ function build_contacts_search_where(mysqli $conn, array $schema, string $query,
 }
 
 function fetch_contacts_mysql($schema) {
+=======
+// Centralized query builder for contacts (used for both display and export)
+function build_contacts_query($schema, $params = [], $limit = null, $offset = null) {
+>>>>>>> e8fc044 (WIP: Commit all local changes before rebase/pull)
   $conn = get_mysql_connection();
-  $fields = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $schema));
+  // Validate fields
+  $fields = isset($params['fields']) && is_array($params['fields']) ?
+    array_values(array_intersect($params['fields'], $schema)) : $schema;
+  if (empty($fields)) $fields = $schema;
+  $fields_sql = implode(',', array_map(function($f) { return '`' . $f . '`'; }, $fields));
   // Sorting
-  $sortFields = explode(',', $_GET['sort'] ?? '');
-  $sortDirection = strtolower($_GET['direction'] ?? 'asc') === 'desc' ? 'DESC' : 'ASC';
-  $validSortFields = array_filter($sortFields, function($f) use ($schema) {
-    return in_array($f, $schema);
-  });
+  $sortFields = isset($params['sortFields']) ? $params['sortFields'] : explode(',', $_GET['sort'] ?? '');
+  $sortDirection = isset($params['sortDirection']) ? $params['sortDirection'] : (strtolower($_GET['direction'] ?? 'asc') === 'desc' ? 'DESC' : 'ASC');
+  $validSortFields = array_filter($sortFields, function($f) use ($schema) { return in_array($f, $schema); });
   $orderBy = '';
   if (!empty($validSortFields)) {
     $orderBy = ' ORDER BY ' . implode(', ', array_map(function($f) use ($sortDirection) {
       return "`$f` $sortDirection";
     }, $validSortFields));
   }
-  // Pagination
-  $per_page = isset($_GET['per_page']) && in_array((int)$_GET['per_page'], ALLOWED_PER_PAGE_OPTIONS)
-    ? (int)$_GET['per_page']
-    : DEFAULT_CONTACTS_PER_PAGE;
-  $current_page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-  $offset = ($current_page - 1) * $per_page;
-  $limit = $per_page;
-
   // Search logic
+<<<<<<< HEAD
   $query = strtolower(trim($_GET['query'] ?? ''));
   $field = $_GET['field'] ?? '';
   $where = build_contacts_search_where($conn, $schema, $query, $field);
@@ -113,31 +113,59 @@ function fetch_contacts_mysql($schema) {
   global $debugOutput;
   if ($debugMode) {
     $debugOutput[] = '<pre style="background:#222;color:#bada55;padding:10px;">CONTACTS DEBUG - SQL: ' . htmlspecialchars($sql) . '</pre>';
-  }
-  $result = $conn->query($sql);
-  if (!$result) {
-    if ($debugMode) {
-      $debugOutput[] = '<pre style="background:#222;color:#ff5555;padding:10px;">CONTACTS DEBUG - MySQL Error: ' . htmlspecialchars($conn->error) . '</pre>';
+=======
+  $query = isset($params['query']) ? strtolower(trim($params['query'])) : strtolower(trim($_GET['query'] ?? ''));
+  $field = isset($params['field']) ? $params['field'] : ($_GET['field'] ?? '');
+  $where = '';
+  if ($query !== '') {
+    $words = preg_split('/\s+/', $query);
+    if ($field && in_array($field, $schema)) {
+      $searchConditions = [];
+      foreach ($words as $word) {
+        $searchConditions[] = "LOWER(`$field`) LIKE '%" . $conn->real_escape_string($word) . "%'";
+      }
+      $where = ' WHERE ' . implode(' AND ', $searchConditions);
+    } else {
+      $wordConds = [];
+      foreach ($words as $word) {
+        $fieldConds = [];
+        foreach ($schema as $f) {
+          $fieldConds[] = "LOWER(`$f`) LIKE '%" . $conn->real_escape_string($word) . "%'";
+        }
+        $wordConds[] = '(' . implode(' OR ', $fieldConds) . ')';
+      }
+      $where = ' WHERE ' . implode(' AND ', $wordConds);
     }
-    return [];
+  }
+  $sql = "SELECT $fields_sql FROM contacts$where$orderBy";
+  if ($limit !== null && $offset !== null) {
+    $sql .= " LIMIT $limit OFFSET $offset";
+>>>>>>> e8fc044 (WIP: Commit all local changes before rebase/pull)
+  }
+  return [$conn, $sql, $fields];
+}
+
+// Fetch contacts for display (paginated)
+list($conn, $sql, $fields) = build_contacts_query($schema, [], $per_page, $offset);
+$contacts = [];
+$debugMode = $debugMode ?? false;
+$debugOutput = $debugOutput ?? [];
+if ($debugMode) {
+  $debugOutput[] = '<pre style="background:#222;color:#bada55;padding:10px;">CONTACTS DEBUG - SQL: ' . htmlspecialchars($sql) . '</pre>';
+}
+$result = $conn->query($sql);
+if (!$result) {
+  if ($debugMode) {
+    $debugOutput[] = '<pre style="background:#222;color:#ff5555;padding:10px;">CONTACTS DEBUG - MySQL Error: ' . htmlspecialchars($conn->error) . '</pre>';
   }
   $contacts = [];
+} else {
   while ($row = $result->fetch_assoc()) {
     $contacts[] = $row;
   }
-  if ($debugMode) {
-    $debugOutput[] = '<pre style="background:#222;color:#bada55;padding:10px;">CONTACTS DEBUG - Rows fetched: ' . count($contacts) . '</pre>';
-    $debugOutput[] = '<pre style="background:#222;color:#bada55;padding:10px;">CONTACTS DEBUG - First row: ' . htmlspecialchars(print_r($contacts[0] ?? [], true)) . '</pre>';
-  }
   $result->free();
-  $conn->close();
-  return $contacts;
 }
-
-$contacts = fetch_contacts_mysql($schema);
-if (!is_array($contacts)) {
-  $contacts = [];
-}
+$conn->close();
 
 // Only keep the debug output logic in pure PHP, not as a mixed PHP/HTML block at this location
 $showDebug = $debugMode && !empty($debugOutput);
@@ -153,14 +181,22 @@ foreach ($contacts as $c) {
 
 // Pagination calculations
 $total_contacts = 0;
+<<<<<<< HEAD
 $conn = get_mysql_connection();
 $countWhere = build_contacts_search_where($conn, $schema, $query, $field);
 $count_result = $conn->query("SELECT COUNT(*) as cnt FROM contacts$countWhere");
+=======
+// Use the same filtering logic as build_contacts_query, but for COUNT(*)
+list($countConn, $countSql, $fields) = build_contacts_query($schema, [], null, null);
+$countSql = preg_replace('/SELECT.+FROM/', 'SELECT COUNT(*) as cnt FROM', $countSql, 1);
+$count_result = $countConn->query($countSql);
+>>>>>>> e8fc044 (WIP: Commit all local changes before rebase/pull)
 if ($count_result) {
   $row = $count_result->fetch_assoc();
   $total_contacts = (int)($row['cnt'] ?? 0);
   $count_result->free();
 }
+$countConn->close();
 $total_pages = max(1, ceil($total_contacts / $per_page));
 $current_page = min($current_page, $total_pages); // Ensure current page doesn't exceed total pages
 $offset = ($current_page - 1) * $per_page;
@@ -169,23 +205,41 @@ $page_contacts = $contacts;
 
 // Export logic (exports filtered results, not just current page)
 if (isset($_GET['export']) && $_GET['export'] === '1') {
-    $filename = 'contacts_export_' . date('Ymd_His') . '.csv';
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="' . $filename . '"');
-    $output = fopen('php://output', 'w');
-    if (!$output) {
-      die('Error: Unable to open export stream.');
-    }
-    fputcsv($output, $displayFields);
-    foreach ($contacts as $contact) {
-      $row = [];
-      foreach ($displayFields as $f) {
-        $row[] = $contact[$f] ?? '';
-      }
-      fputcsv($output, $row);
-    }
-    fclose($output);
+  // Validate display fields
+  $exportFields = array_values(array_intersect($displayFields, $schema));
+  if (empty($exportFields)) $exportFields = $schema;
+  // Build query for all filtered results (no LIMIT/OFFSET)
+  list($conn, $sql, $fields) = build_contacts_query($schema, ['fields' => $exportFields], null, null);
+  $result = $conn->query($sql);
+  if (!$result) {
+    header('Content-Type: text/html');
+    echo "<div class='alert alert-danger' style='margin:40px auto;max-width:600px;'>Error: Unable to export contacts. Please try again later.</div>";
+    $conn->close();
     exit;
+  }
+  $filename = 'contacts_export_' . date('Ymd_His') . '.csv';
+  header('Content-Type: text/csv');
+  header('Content-Disposition: attachment; filename="' . $filename . '"');
+  $output = fopen('php://output', 'w');
+  if (!$output) {
+    header('Content-Type: text/html');
+    echo "<div class='alert alert-danger' style='margin:40px auto;max-width:600px;'>Error: Unable to open export stream.</div>";
+    $result->free();
+    $conn->close();
+    exit;
+  }
+  fputcsv($output, $exportFields);
+  while ($contact = $result->fetch_assoc()) {
+    $row = [];
+    foreach ($exportFields as $f) {
+      $row[] = $contact[$f] ?? '';
+    }
+    fputcsv($output, $row);
+  }
+  fclose($output);
+  $result->free();
+  $conn->close();
+  exit;
 }
 
 ?>
@@ -210,6 +264,7 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
   </div>
 
   <div class="d-flex flex-wrap align-items-center mb-3 gap-2 bg-light rounded p-3 border">
+<<<<<<< HEAD
     <form method="GET" action="contacts_list.php" class="d-flex flex-wrap gap-2 align-items-center mb-0">
       <input type="text" name="query" class="form-control" placeholder="Search" value="<?= htmlspecialchars($_GET['query'] ?? '') ?>" style="min-width:220px;">
       <?php if ($field !== ''): ?>
@@ -227,6 +282,41 @@ if (isset($_GET['export']) && $_GET['export'] === '1') {
       <?php endif; ?>
     </form>
     <span class="ms-3 text-muted" style="font-size:15px;">Showing <strong><?= $total_contacts > 0 ? ($offset + 1) : 0 ?></strong>–<strong><?= min($offset + $per_page, $total_contacts) ?></strong> of <strong><?= $total_contacts ?></strong> contacts</span>
+=======
+    <form method="GET" action="contacts_list.php" class="d-flex flex-wrap gap-2 align-items-center mb-0" id="contacts-search-form">
+      <div class="search-input-wrapper" style="position:relative;min-width:220px;">
+        <input type="text" name="query" class="form-control search-input" placeholder="Search" value="<?= htmlspecialchars($_GET['query'] ?? '') ?>" style="min-width:220px;">
+        <?php if (!empty($_GET['query'])): ?>
+        <button type="button" class="clear-search" aria-label="Clear search" onclick="document.querySelector('[name=query]').value='';document.getElementById('contacts-search-form').submit();" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:none;padding:0;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <?php endif; ?>
+      </div>
+      <input type="hidden" name="field" value="<?= htmlspecialchars($_GET['field'] ?? '') ?>">
+      <input type="hidden" name="sort" value="<?= htmlspecialchars($_GET['sort'] ?? '') ?>">
+      <input type="hidden" name="direction" value="<?= htmlspecialchars($_GET['direction'] ?? '') ?>">
+      <input type="hidden" name="per_page" value="<?= htmlspecialchars($_GET['per_page'] ?? '') ?>">
+      <?php if (isset($_GET['display']) && is_array($_GET['display'])): foreach ($_GET['display'] as $df): ?>
+        <input type="hidden" name="display[]" value="<?= htmlspecialchars($df) ?>">
+      <?php endforeach; endif; ?>
+      <button type="submit" class="btn btn-outline-primary">Search</button>
+      <span style="color:#d00;font-weight:bold;">[CRM-EXPORT-TEST]</span>
+      <button type="button" class="btn btn-success" onclick="exportContacts()">Export</button>
+    </form>
+    <script>
+    function exportContacts() {
+      const form = document.getElementById('contacts-search-form');
+      const url = new URL(form.action, window.location.origin);
+      const formData = new FormData(form);
+      for (const [key, value] of formData.entries()) {
+        url.searchParams.append(key, value);
+      }
+      url.searchParams.set('export', '1');
+      window.location.href = url.toString();
+    }
+    </script>
+    <span class="ms-3 text-muted" style="font-size:15px;">Showing <strong><?= $offset + 1 ?></strong>–<strong><?= min($offset + $per_page, $total_contacts) ?></strong> of <strong><?= $total_contacts ?></strong> contacts</span>
+>>>>>>> e8fc044 (WIP: Commit all local changes before rebase/pull)
     <?php if ($total_pages > 1): ?>
       <span class="ms-3 text-muted" style="font-size:15px;">Page <strong><?= $current_page ?></strong> of <strong><?= $total_pages ?></strong></span>
       <nav aria-label="Contacts pagination">

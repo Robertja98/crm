@@ -50,11 +50,15 @@ $tableSchemas = [
 $exported = [];
 $errors = [];
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['tables'])) {
     // CSRF check
     if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
         $errors[] = 'Invalid CSRF token. Please refresh and try again.';
     } else {
+        $csvFiles = [];
+        $tmpDir = sys_get_temp_dir() . '/crm_export_' . uniqid();
+        mkdir($tmpDir);
         foreach ($_POST['tables'] as $table) {
             if (!isset($tableSchemas[$table])) continue;
             $schemaFile = $tableSchemas[$table];
@@ -91,15 +95,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['tables'])) {
                 }
                 $stmt->close();
                 $conn->close();
-                $outputFile = __DIR__ . "/{$table}_export.csv";
+                $outputFile = "$tmpDir/{$table}_export.csv";
                 exportCSVFiltered($outputFile, $rows, $filters, $schema);
-                $exported[] = [
-                    'table' => $table,
-                    'count' => count($rows),
-                    'file' => "{$table}_export.csv"
-                ];
+                $csvFiles[] = $outputFile;
             } catch (Exception $e) {
                 $errors[] = "Export failed for $table: " . htmlspecialchars($e->getMessage());
+            }
+        }
+        if (count($csvFiles) > 0) {
+            $zipName = 'crm_export_' . date('Ymd_His') . '.zip';
+            $zipPath = "$tmpDir/$zipName";
+            $zip = new ZipArchive();
+            if ($zip->open($zipPath, ZipArchive::CREATE) === TRUE) {
+                foreach ($csvFiles as $csvFile) {
+                    $zip->addFile($csvFile, basename($csvFile));
+                }
+                $zip->close();
+                header('Content-Type: application/zip');
+                header('Content-Disposition: attachment; filename="' . $zipName . '"');
+                header('Content-Length: ' . filesize($zipPath));
+                readfile($zipPath);
+                // Cleanup temp files
+                foreach ($csvFiles as $csvFile) { unlink($csvFile); }
+                unlink($zipPath);
+                rmdir($tmpDir);
+                exit;
+            } else {
+                $errors[] = 'Failed to create ZIP archive.';
             }
         }
     }

@@ -1,4 +1,31 @@
+
 # CRM Admin Tools Guide
+
+**Version:** 1.1 (April 24, 2026)  
+**CRM Version:** 4.1+ with Nova Relay AI
+
+## Table of Contents
+
+1. [Access the Admin Dashboard](#access-the-admin-dashboard)
+2. [Admin Dashboard](#admin-dashboard-admin_dashboardphp)
+3. [Admin Tools Summary Table](#admin-tools-summary-table)
+4. [Backup Manager](#1-backup-manager-admin_backupsphp)
+5. [Audit Log Viewer](#2-audit-log-viewer-admin_auditphp)
+6. [Contact Timeline](#3-contact-timeline-admin_timelinephp)
+7. [Deduplication Tool](#4-deduplication-tool-admin_deduplicatephp)
+8. [Bulk Operations](#5-bulk-operations-admin_bulk_opsphp)
+9. [Advanced Search](#6-advanced-search-admin_searchphp)
+10. [System Maintenance](#7-system-maintenance-admin_maintenancephp)
+11. [Reports & Analytics](#8-reports--analytics-admin_reportsphp)
+12. [Admin Helper Functions](#admin-helper-functions-admin_helperphp)
+13. [Security &amp; Access Control](#security--access-control)
+14. [Common Tasks](#common-tasks)
+15. [Troubleshooting](#troubleshooting)
+16. [Additional Resources](#additional-resources)
+17. [Support](#support)
+18. [Nova Relay AI Widget](#nova-relay-ai-widget)
+
+---
 
 This guide explains how to use each admin tool available in the CRM system. All admin tools require authentication and provide comprehensive management, monitoring, and maintenance capabilities.
 
@@ -6,13 +33,12 @@ This guide explains how to use each admin tool available in the CRM system. All 
 
 Click the **⚙️ Admin** link in the navigation bar to access the admin dashboard. This is your central hub for all administrative functions.
 
----
-
 ## Admin Dashboard (`admin_dashboard.php`)
 
-The main admin hub provides an overview of your CRM system at a glance.
+The main admin hub provides an overview of your CRM system at a glance. **Nova Relay AI Widget** is now available on every page, including the dashboard, for instant AI-powered help and workflow assistance.
 
-### Features:
+### Features 6
+
 - **Data Integrity Alert** - Shows if your database has any issues that need attention
 - **System Overview** - 8 key statistics:
   - Total Contacts - Number of contact records
@@ -24,6 +50,27 @@ The main admin hub provides an overview of your CRM system at a glance.
   - Audit Log Size - Size of activity tracking log
   - Error Log Size - Size of error log
 - **Admin Tools** - Quick links to all 8 specialized admin tools
+- **Nova Relay Widget** - Global AI assistant for help, summaries, and automation (see [Nova Relay AI Widget](#nova-relay-ai-widget))
+
+---
+
+## Admin Tools Summary Table
+
+| Tool               | Main Function              | Key Features / Notes              |
+
+|--------------------|---------------------------|-----------------------------------|
+| Backup Manager     | Manage/restore backups     | Auto-backup, retention policy     |
+| Audit Log Viewer   | View system activity logs  | Filter by user/action/date        |
+| Contact Timeline   | Track changes to a contact | Visual timeline, before/after diff|
+| Deduplication Tool | Merge duplicate contacts   | Fuzzy matching, side-by-side merge|
+| Bulk Operations    | Mass update/delete contacts| Tagging, select all, batch actions|
+| Advanced Search    | Search all contact fields  | Partial/exact match, direct links |
+| System Maintenance | Data integrity, cleanup    | Audit log cleanup, error log clear|
+| Reports & Analytics| Usage/statistics reports   | Activity, contacts, users, errors |
+| Nova Relay Widget  | AI-powered help/automation | Universal, cost-controlled, admin |
+
+---
+
 - **Recent Activity** - Last 10 actions with timestamps and status
 - **Active Users** - Users with action counts
 
@@ -35,7 +82,8 @@ The main admin hub provides an overview of your CRM system at a glance.
 
 Manage backup copies of your contact database. Automatic backups are created whenever contacts are modified.
 
-### Features:
+## Features 1
+
 - **List Backups** - View all backup copies with:
   - Timestamp (when created)
   - File size
@@ -45,7 +93,8 @@ Manage backup copies of your contact database. Automatic backups are created whe
 - **Delete** - Remove old backups to save space
 - **Info Section** - Explains backup retention policy (50 backups kept, 30-day retention)
 
-### How to Use:
+### How to Use 1
+
 1. Go to Admin → Manage Backups
 2. Review backup list with timestamps
 3. To restore a backup:
@@ -65,7 +114,8 @@ Manage backup copies of your contact database. Automatic backups are created whe
 
 View detailed activity logs of all actions in the CRM system.
 
-### Features:
+### Features 2
+
 - **Filter by User** - See actions by specific user
 - **Filter by Action** - See specific types of actions (create, update, delete, etc.)
 - **Filter by Date** - See activity on a specific date
@@ -79,7 +129,8 @@ View detailed activity logs of all actions in the CRM system.
   - Status - Success ✓ or Failed ✗ (color coded)
   - Summary - Brief description of the change
 
-### How to Use:
+### How to Use 2
+
 1. Go to Admin → View Audit Log
 2. Select filters (optional):
    - Choose a user from dropdown
@@ -97,7 +148,8 @@ View detailed activity logs of all actions in the CRM system.
 
 View the complete modification history of a single contact.
 
-### Features:
+### Features 3
+
 - **Search by Contact ID** - Enter a contact ID to view its history
 - **Visual Timeline** - Chronological display with:
   - Green dots = successful changes
@@ -115,7 +167,8 @@ View the complete modification history of a single contact.
     - ✗ Removed
     - ~ Modified
 
-### How to Use:
+### How to Use 3
+
 1. Go to Admin → Contact Timeline
 2. Enter the contact ID
 3. Click "View Timeline"
@@ -130,13 +183,15 @@ View the complete modification history of a single contact.
 
 Find and merge duplicate or similar contact records.
 
-### Features:
+### Features 4
+
 - **Exact Duplicate Emails** - Contacts with identical email addresses
 - **Similar Names** - Contacts with similar names (70%+ match using fuzzy matching)
 - **Side-by-Side Comparison** - View duplicate records side by side
 - **Merge Function** - Combine records with data preferences
 
-### How to Use:
+### How to Use 4
+
 1. Go to Admin → Deduplicate
 2. Two sections appear:
    - **Duplicates by Email** - Groups of contacts with same email
@@ -158,7 +213,8 @@ Find and merge duplicate or similar contact records.
 
 Perform operations on multiple contacts at once.
 
-### Features:
+### Features 5
+
 - **Bulk Delete**:
   - Select multiple contacts with checkboxes
   - Click "Select All" for convenience
@@ -170,7 +226,8 @@ Perform operations on multiple contacts at once.
   - Select contacts to update
   - Apply to all selected at once
 
-### How to Use - Delete:
+### How to Use 5 - Delete
+
 1. Go to Admin → Bulk Operations
 2. Scroll to "Bulk Delete" section
 3. Check boxes next to contacts to delete
@@ -178,7 +235,8 @@ Perform operations on multiple contacts at once.
 5. Click "Delete Selected"
 6. Confirm the deletion
 
-### How to Use - Update:
+### How to Use 5 - Update
+
 1. Go to Admin → Bulk Operations
 2. Scroll to "Bulk Update" section
 3. Select the field to update (company, province, etc.)
@@ -197,35 +255,34 @@ Perform operations on multiple contacts at once.
 
 Search contacts across all fields with flexible matching options.
 
-### Features:
+### Features 7
+
 - **Multi-Field Search** - Search across all contact fields
 - **Partial Match** - Find partial text matches (e.g., "Smith" finds "Smith", "Smithson")
 - **Exact Match** - Find exact matches only
 - **Results Table** - Shows:
   - Name (first + last)
   - Company
-  - Email
-  - Phone
-  - City
-  - Province
-  - Direct link to view/edit contact
 
-### How to Use:
-1. Go to Admin → Advanced Search
-2. Choose search mode:
-   - **Partial** = contains text (DEFAULT)
-   - **Exact** = exact match
-3. Fill in search fields (leave empty to skip):
-   - First Name
-   - Last Name
-   - Company
-   - Email
-   - Phone
-   - City
-   - Province
-4. Click "Search"
-5. Results shown in table
-6. Click contact name to view/edit full record
+  This guide explains how to use each admin tool available in the CRM system. All admin tools require authentication and provide comprehensive management, monitoring, and maintenance capabilities.
+
+  ## Access the Admin Dashboard 2
+
+  Click the **⚙️ Admin** link in the navigation bar to access the admin dashboard. This is your central hub for all administrative functions.
+
+  ---
+
+  ## Admin Dashboard 2 (`admin_dashboard.php`)
+
+  The main admin hub provides an overview of your CRM system at a glance. **Nova Relay AI Widget** is now available on every page, including the dashboard, for instant AI-powered help and workflow assistance.
+
+  ### Features 9
+
+  - Province
+
+1. Click "Search"
+2. Results shown in table
+3. Click contact name to view/edit full record
 
 **When to use:** Finding contacts by partial information, searching by location, locating companies.
 
@@ -235,7 +292,8 @@ Search contacts across all fields with flexible matching options.
 
 Manage system health, cleanup old data, and verify integrity.
 
-### Features:
+### Features
+
 - **Data Integrity Check**:
   - Verifies all contacts have unique IDs
   - Checks for missing required fields
@@ -265,7 +323,8 @@ Manage system health, cleanup old data, and verify integrity.
   - Companies, Provinces
   - Backup info
 
-### How to Use:
+### How to Use 6
+
 1. Go to Admin → Maintenance
 2. Run **Data Integrity Check**:
    - Click button
@@ -290,9 +349,10 @@ Manage system health, cleanup old data, and verify integrity.
 
 Generate statistical reports and analyze system usage.
 
-### Report Types:
+### Report Types
 
 #### Activity Report
+
 - Date range selector (default: last 30 days)
 - **Statistics**:
   - Total actions performed
@@ -304,6 +364,7 @@ Generate statistical reports and analyze system usage.
   - Top users (who's most active)
 
 #### Contacts Report
+
 - **Statistics**:
   - Total contacts
   - Contacts with email
@@ -314,6 +375,7 @@ Generate statistical reports and analyze system usage.
   - Top 10 provinces
 
 #### Users Report
+
 - **Statistics**:
   - Total active users
   - Total actions across all users
@@ -322,11 +384,13 @@ Generate statistical reports and analyze system usage.
   - Visual bar chart
 
 #### Errors Report
+
 - Error log size
 - Recent errors (last 20)
 - Full error messages for debugging
 
-### How to Use:
+### How to Use
+
 1. Go to Admin → Reports
 2. Click report type button (Activity, Contacts, Users, Errors)
 3. For date-range reports:
@@ -355,17 +419,20 @@ All admin tools use a shared library of helper functions. While you don't need t
 
 ## Security & Access Control
 
-### Admin Access:
+### Admin Access
+
 - Any authenticated user can access admin tools
 - Future versions will support role-based permissions
 
-### Data Protection:
+### Data Protection
+
 - All operations logged to audit trail
 - CSRF tokens protect against attacks
 - File locking prevents concurrent conflicts
 - Backups created automatically during changes
 
-### Best Practices:
+### Best Practices
+
 1. **Regular Backups** - Check admin dashboard weekly
 2. **Monitor Activity** - Review audit logs
 3. **Clean Up** - Monthly maintenance and log cleanup
@@ -376,35 +443,40 @@ All admin tools use a shared library of helper functions. While you don't need t
 
 ## Common Tasks
 
-### Removing Duplicate Email After Import:
+### Removing Duplicate Email After Import
+
 1. Go to **Deduplicate**
 2. Find the email duplicates
 3. Review side-by-side
 4. Click **Merge**, confirm
 5. Verify in **Audit Log**
 
-### Finding All Contacts from a Company:
+### Finding All Contacts from a Company
+
 1. Go to **Advanced Search**
 2. Leave Match as "Partial"
 3. Enter company name
 4. Click **Search**
 5. All matching contacts shown
 
-### Recovering Accidentally Deleted Contact:
+### Recovering Accidentally Deleted Contact
+
 1. Go to **Backup Manager**
 2. Find a backup before deletion
 3. Click **Restore**
 4. Confirm (current contacts replaced!)
 5. Check **Contact Timeline** to verify
 
-### Generating Monthly Activity Report:
+### Generating Monthly Activity Report
+
 1. Go to **Reports**
 2. Click **Activity**
 3. Set date range (e.g., last month)
 4. Review charts and stats
 5. Share with management
 
-### Fixing Data Quality Issues:
+### Fixing Data Quality Issues
+
 1. Go to **Maintenance**
 2. Click "Data Integrity Check"
 3. Review issues listed
@@ -415,25 +487,29 @@ All admin tools use a shared library of helper functions. While you don't need t
 
 ## Troubleshooting
 
-### Issues Loading Admin Tools:
+### Issues Loading Admin Tools
+
 - Ensure you're logged in (admin tools require authentication)
 - Check browser console for errors (F12 Developer Tools)
 - Clear browser cache and reload
 
-### Import Went Wrong:
+### Import Went Wrong
+
 1. Go to **Backup Manager**
 2. Find backup before import
 3. Restore it
 4. Review **Audit Log** to see what happened
 5. Retry import with corrections
 
-### Need to Find Where Something Changed:
+### Need to Find Where Something Changed
+
 1. Go to **Contact Timeline**
 2. Enter contact ID
 3. Review complete history
 4. See exact before/after values
 
-### System Feels Slow:
+### System Feels Slow
+
 1. Go to **Maintenance**
 2. Check "Data Integrity" for issues
 3. Run "Cleanup Audit Logs" (keep 1000)
@@ -453,6 +529,7 @@ All admin tools use a shared library of helper functions. While you don't need t
 ## Support
 
 If you encounter issues or have questions:
+
 1. Check this guide first
 2. Review the **Audit Log** for what happened
 3. Check error log in **Maintenance** → **Errors Report**
@@ -461,6 +538,44 @@ If you encounter issues or have questions:
 
 ---
 
-**Last Updated:** February 13, 2026
-**Admin Tools Version:** 1.0
-**CRM Version:** 4.0+ with security hardening
+---
+
+## Nova Relay AI Widget
+
+**Nova Relay** is a global AI assistant widget available on every page of the CRM system. It provides context-aware help, quick answers, and workflow assistance directly within the interface.
+
+### Features 8
+
+- **Universal Presence:** Nova Relay appears on all pages, always accessible in the interface.
+- **AI-Powered Help:** Ask questions, get summaries, or request CRM actions using natural language.
+- **Cost Control:** AI usage is governed by admin settings, with a no-spend mode and full request logging.
+- **Multi-Provider Support:** Supports multiple AI providers (OpenAI, Anthropic, Gemini) with cost-based selection.
+- **Admin Controls:** Enable/disable AI, view usage logs, and configure providers in admin settings.
+
+### How to Use 7
+
+1. Click the Nova Relay widget on any page.
+2. Type your question or request.
+3. Review the AI's response and take suggested actions.
+
+**When to use:** Whenever you need help, want to automate a task, or have a question about CRM data or features.
+
+---
+
+---
+
+## Troubleshooting Nova Relay
+
+**Nova Relay widget missing or not working?**
+
+- Ensure you are logged in and have not disabled AI in Admin → AI Settings.
+- Check that your browser allows JavaScript and popups for this site.
+- If the widget is not visible on a page, reload or clear your browser cache.
+- Review Admin → AI Activity Log for errors or cost guard triggers.
+- If issues persist, contact your administrator or check the error log in Maintenance → Errors Report.
+
+---
+
+**Last Updated:** April 24, 2026
+**Admin Tools Version:** 1.1
+**CRM Version:** 4.1+ with Nova Relay AI
